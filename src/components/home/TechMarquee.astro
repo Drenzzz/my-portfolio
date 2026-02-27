@@ -1,0 +1,44 @@
+---
+import { techStack } from "@/data/techStack"
+---
+
+<section class="w-full border-y-[3px] border-black bg-[#E6A627] py-5 overflow-hidden">
+  <div class="relative">
+    <div class="absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-[#E6A627] to-transparent"></div>
+    <div class="absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-[#E6A627] to-transparent"></div>
+
+    <div class="marquee-track flex gap-12">
+      {[...techStack, ...techStack].map((tech) => (
+        <div class="flex items-center gap-3 shrink-0 group cursor-default">
+          <img
+            src={`https://cdn.simpleicons.org/${tech.id}/000000`}
+            alt={tech.name}
+            width="28"
+            height="28"
+            class="opacity-70 group-hover:opacity-100 transition-opacity duration-300"
+            loading="lazy"
+          />
+          <span class="text-base font-bold font-head whitespace-nowrap group-hover:underline transition-colors">
+            {tech.name}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee-track {
+    animation: marquee 35s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+</style>
