@@ -2,9 +2,41 @@ import type { Project } from "@/types";
 
 export const projects: Project[] = [
   {
+    slug: "adb-kit",
+    title: "ADBKit",
+    summary: "Cross-platform desktop app for Android device management via ADB & Fastboot.",
+    description: "Built with Wails (Go + React) for native-level performance. Features device dashboard, app manager, file explorer, universal flasher, and integrated shell.",
+    coverImage: "/projects/adbkit.png",
+    tags: ["Go", "React", "Wails", "TypeScript", "Tailwind"],
+    githubUrl: "https://github.com/drenzzz/adb-gui-kit",
+    featured: true,
+  },
+  {
+    slug: "mrpack-converter",
+    title: "MRPack Converter",
+    summary: "CLI tool to convert Minecraft modpack formats between CurseForge and Modrinth.",
+    description: "Automates the tedious process of converting modpacks between platforms. Supports batch processing and preserves mod metadata during conversion.",
+    coverImage: "/projects/mrpack-converter.png",
+    tags: ["Go", "CLI", "Minecraft"],
+    githubUrl: "https://github.com/drenzzz/mrpack-converter",
+    featured: false,
+  },
+  {
+    slug: "techyst",
+    title: "Techyst",
+    summary: "Community platform for tech enthusiasts with forums, articles, and project showcases.",
+    description: "Full-stack web application with user authentication, markdown-powered articles, and real-time discussions. Built for the Indonesian tech community.",
+    coverImage: "/projects/techyst.png",
+    tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Tailwind"],
+    githubUrl: "https://github.com/drenzzz/techyst",
+    liveUrl: "https://techyst.dev",
+    featured: true,
+  },
+  {
     slug: "just-weather",
     title: "Just Weather",
     summary: "A minimal weather dashboard with neobrutalism design, real-time data, and responsive UI.",
+    description: "Clean weather app with current conditions, hourly forecast, and location-based data. Features a retro-inspired UI with bold shadows and vibrant colors.",
     coverImage: "/projects/just-weather.png",
     tags: ["React", "Astro", "Tailwind", "API"],
     githubUrl: "https://github.com/drenzzz",
@@ -15,6 +47,7 @@ export const projects: Project[] = [
     slug: "minecraft-manager",
     title: "Minecraft Manager",
     summary: "Server manager dashboard for Minecraft networks with real-time monitoring and admin controls.",
+    description: "WebSocket-powered dashboard for managing multiple Minecraft servers. Features player tracking, resource monitoring, and one-click server controls.",
     coverImage: "/projects/minecraft-manager.png",
     tags: ["Go", "React", "WebSocket"],
     githubUrl: "https://github.com/drenzzz",
@@ -24,6 +57,7 @@ export const projects: Project[] = [
     slug: "drenzzz-portfolio",
     title: "Portfolio v2",
     summary: "This very portfolio — rebuilt from Next.js to Astro with neobrutalism design system.",
+    description: "Personal portfolio site built with Astro Islands architecture, React islands for interactivity, RetroUI components, and a bold neobrutalist aesthetic.",
     coverImage: "/projects/portfolio-v2.png",
     tags: ["Astro", "React", "RetroUI", "Tailwind"],
     githubUrl: "https://github.com/drenzzz",
@@ -31,4 +65,3 @@ export const projects: Project[] = [
     featured: true,
   },
 ];
-
