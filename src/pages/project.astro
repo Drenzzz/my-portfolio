@@ -3,11 +3,13 @@ import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import ProjectGrid from "@/components/project/ProjectGrid.astro"
+import { TagFilter } from "@/components/project/TagFilter"
 import { projects } from "@/data/projects"
 
 const title = "Projects | Drenzzz"
 const description = "Explore my portfolio of web applications, backend systems, and open-source contributions."
 const totalProjects = projects.length
+const uniqueTags = [...new Set(projects.flatMap((p) => p.tags))].sort()
 ---
 
 <Layout title={title} description={description}>
@@ -28,8 +30,11 @@ const totalProjects = projects.length
       </div>
     </div>
 
+    <TagFilter tags={uniqueTags} client:load />
+
     <ProjectGrid />
   </main>
 
   <Footer />
 </Layout>
+
