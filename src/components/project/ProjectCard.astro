@@ -1,0 +1,79 @@
+---
+import type { Project } from "@/types"
+import { Github, ExternalLink, Folder } from "lucide-react"
+
+interface Props {
+  project: Project
+}
+
+const { project } = Astro.props
+---
+
+<article
+  class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all"
+  data-tags={project.tags.join(",")}
+>
+  <div class="relative w-full h-44 bg-muted overflow-hidden border-b-[3px] border-black">
+    {project.coverImage ? (
+      <img
+        src={project.coverImage}
+        alt={project.title}
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+      />
+    ) : (
+      <div class="w-full h-full flex items-center justify-center bg-[#E6A627]/20">
+        <Folder className="w-12 h-12 text-muted-foreground/30" />
+      </div>
+    )}
+
+    {project.featured && (
+      <span class="absolute top-3 left-3 text-xs font-bold font-head px-2.5 py-1 bg-[#E6A627] border-2 border-black rounded shadow-brutal-sm uppercase">
+        Featured
+      </span>
+    )}
+  </div>
+
+  <div class="p-5 flex flex-col gap-3">
+    <h3 class="font-head text-xl font-bold group-hover:text-primary transition-colors leading-tight">
+      {project.title}
+    </h3>
+
+    <p class="text-sm text-muted-foreground font-medium line-clamp-2 leading-relaxed">
+      {project.summary}
+    </p>
+
+    <div class="flex flex-wrap gap-1.5">
+      {project.tags.map((tag) => (
+        <span class="text-xs font-bold font-head px-2 py-0.5 border-2 border-black bg-background rounded shadow-brutal-sm">
+          {tag}
+        </span>
+      ))}
+    </div>
+
+    <div class="flex gap-3 pt-2 border-t-2 border-black/10">
+      {project.githubUrl && (
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center gap-1.5 text-xs font-bold font-head hover:text-primary transition-colors"
+        >
+          <Github className="w-3.5 h-3.5" />
+          Source Code
+        </a>
+      )}
+      {project.liveUrl && (
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center gap-1.5 text-xs font-bold font-head text-primary hover:underline"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          Live Demo
+        </a>
+      )}
+    </div>
+  </div>
+</article>
