@@ -85,3 +85,20 @@ export interface SkillCategory {
   items: string[];
 }
 
+export interface LocalDonation {
+  name: string;
+  type: string;
+  icon: string;
+  number?: string;
+  link?: string;
+  imageKey?: string;
+  description?: string;
+}
+
+export interface InternationalDonation {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+
