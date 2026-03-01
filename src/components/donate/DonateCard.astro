@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets"
+import type { LocalDonation } from "@/types"
+
+interface Props {
+  method: LocalDonation;
+}
+
+const { method } = Astro.props
+
+// Import images dynamically based on imageKey
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*-qr.png')
+
+let qrImageAsset: ImageMetadata | null = null
+if (method.imageKey) {
+  const imagePath = `/src/assets/images/${method.imageKey}-qr.png`
+  if (images[imagePath]) {
+    qrImageAsset = (await images[imagePath]()).default
+  }
+}
+---
+
+<div class="h-full p-5 bg-white border-4 border-black rounded-xl shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center group hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all">
+  <div class="w-16 h-16 bg-[#F4F4F5] rounded-xl flex items-center justify-center p-2 mb-4 border-2 border-black">
+    <img src={method.icon} alt={method.name} class="w-10 h-10 object-contain" loading="lazy" />
+  </div>
+  
+  <h4 class="font-head text-lg font-black mb-1 leading-tight">{method.name}</h4>
+  
+  {method.description ? (
+    <p class="text-xs font-medium text-muted-foreground mb-4 leading-relaxed">{method.description}</p>
+  ) : (
+    <p class="text-xs font-medium text-muted-foreground mb-4">Transfer via {method.name}</p>
+  )}
+
+  <div class="mt-auto w-full pt-4 border-t-2 border-dashed border-black/20 flex flex-col gap-3">
+    {method.number && (
+      <div class="bg-[#F4F4F5] border-2 border-black rounded px-3 py-2 flex items-center justify-between group/copy relative cursor-pointer" onclick={`navigator.clipboard.writeText('${method.number}')`}>
+        <code class="text-sm font-bold truncate">{method.number}</code>
+        <span class="text-[10px] font-bold uppercase tracking-wider bg-black text-white px-1.5 py-0.5 rounded opacity-0 group-hover/copy:opacity-100 transition-opacity absolute right-2">Copy</span>
+      </div>
+    )}
+    
+    {method.link && (
+      <a href={method.link} target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#E6A627] border-2 border-black rounded-sm font-bold text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all">
+        Pay via Link
+      </a>
+    )}
+
+    {qrImageAsset && (
+      <details class="w-full">
+        <summary class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-black text-white border-2 border-black rounded-sm font-bold text-sm cursor-pointer hover:bg-black/80 transition-colors list-none [&::-webkit-details-marker]:hidden">
+          Show QR Code
+        </summary>
+        <div class="mt-3 p-2 bg-white border-2 border-black rounded-lg">
+          <Image src={qrImageAsset} alt={`QR Code for ${method.name}`} class="w-full h-auto rounded" />
+        </div>
+      </details>
+    )}
+  </div>
+</div>

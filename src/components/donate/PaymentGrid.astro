@@ -1,0 +1,57 @@
+---
+import { Wallet, Globe, ExternalLink } from "lucide-react"
+import { donationMethods } from "@/data/donation"
+import DonateCard from "./DonateCard.astro"
+---
+
+<div class="w-full flex flex-col gap-10">
+  <!-- Domestic Support -->
+  <div class="w-full">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="p-3 bg-black text-white rounded-sm border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+        <Wallet className="w-6 h-6" />
+      </div>
+      <div>
+        <h3 class="font-head text-2xl font-black uppercase tracking-tight">Domestik (Indonesia)</h3>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {donationMethods.local.map((method) => (
+        <DonateCard method={method} />
+      ))}
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="w-full border-t-4 border-black border-dashed"></div>
+
+  <!-- International Support -->
+  <div class="w-full">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="p-3 bg-[#E6A627] text-black border-2 border-black rounded-sm shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+        <Globe className="w-6 h-6" />
+      </div>
+      <div>
+        <h3 class="font-head text-2xl font-black uppercase tracking-tight">International Support</h3>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {donationMethods.international.map((method) => (
+        <div class="flex items-center justify-between p-4 bg-white border-4 border-black rounded-xl shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-[#F4F4F5] border-2 border-black rounded-lg flex items-center justify-center p-1.5">
+              <img src={method.icon} alt={method.name} class="w-full h-full object-contain" loading="lazy" />
+            </div>
+            <span class="font-bold text-lg">{method.name}</span>
+          </div>
+          
+          <a href={method.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-1.5 bg-[#E6A627] border-2 border-black rounded-sm font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-[#F4F4F5] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all text-xs">
+            Open <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
