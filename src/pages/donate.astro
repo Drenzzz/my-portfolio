@@ -2,6 +2,7 @@
 import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
+import PaymentGrid from "@/components/donate/PaymentGrid.astro"
 
 const title = "Donate | Drenzzz"
 const description = "Support my open-source work and content creation."
@@ -10,17 +11,15 @@ const description = "Support my open-source work and content creation."
 <Layout title={title} description={description}>
   <Navbar />
   
-  <main class="flex-1 container mx-auto py-12 px-4 flex flex-col items-center justify-center min-h-[60vh]">
-    <h1 class="font-head text-4xl md:text-6xl font-black uppercase text-center mb-6">Support My Work</h1>
-    <p class="text-lg text-muted-foreground font-medium text-center max-w-2xl mb-12">
-      If you find my projects or articles helpful, consider buying me a coffee. Your support helps me maintain open-source projects and create more content.
-    </p>
-    
-    <div class="w-full max-w-md bg-white border-4 border-black shadow-brutal p-8 text-center rounded-lg">
-      <h2 class="font-head text-2xl font-bold mb-4">Donate Options</h2>
-      <p class="font-medium">Details coming soon...</p>
-      {/* Donation embed/info will go here */}
+  <main class="flex-1 container mx-auto py-12 md:py-20 px-4 min-h-[80vh] flex flex-col items-center">
+    <div class="text-center space-y-4 mb-12 max-w-2xl">
+      <h1 class="font-head text-4xl md:text-5xl font-black uppercase tracking-tight">☕ Buy Me a Coffee</h1>
+      <p class="text-lg text-muted-foreground font-medium leading-relaxed">
+        Dukungan Anda sangat berarti untuk keberlangsungan server dan pengembangan project open source kedepannya.
+      </p>
     </div>
+    
+    <PaymentGrid />
   </main>
 
   <Footer />
