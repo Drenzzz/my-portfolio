@@ -2,6 +2,9 @@
 import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
+import AboutHero from "@/components/about/AboutHero.astro"
+import Timeline from "@/components/about/Timeline.astro"
+import SkillStack from "@/components/about/SkillStack.astro"
 
 const title = "About | Drenzzz"
 const description = "Learn more about my background, skills, and experience as a Fullstack Developer."
@@ -10,16 +13,21 @@ const description = "Learn more about my background, skills, and experience as a
 <Layout title={title} description={description}>
   <Navbar />
   
-  <main class="flex-1 container mx-auto py-12 px-4">
-    <h1 class="font-head text-4xl md:text-6xl font-black uppercase mb-8">About Me //</h1>
-    
-    <div class="max-w-3xl prose prose-lg dark:prose-invert">
-      <p class="font-medium text-lg text-muted-foreground">
-        Hi, I'm Drenzzz. I specialize in building efficient and scalable web applications.
-        I transition between frontend wizardry using React/Astro and backend architecture using Go.
+  <main class="flex-1 container mx-auto py-12 md:py-20 px-4">
+    <div class="mb-10">
+      <h1 class="font-head text-4xl md:text-6xl font-black uppercase tracking-tight">
+        About Me
+      </h1>
+      <p class="text-lg text-muted-foreground font-medium max-w-2xl mt-2">
+        Get to know more about my background and coding journey.
       </p>
-      {/* About content will go here in Phase 4 */}
-      <h2 class="font-head font-bold mt-8">More details coming soon.</h2>
+    </div>
+    
+    <AboutHero />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Timeline />
+      <SkillStack />
     </div>
   </main>
 
