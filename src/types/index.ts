@@ -73,3 +73,15 @@ export interface GithubStats {
   topLanguages: { name: string; color: string; percentage: number }[];
 }
 
+export interface Education {
+  school: string;
+  degree: string;
+  date: string;
+  description?: string;
+}
+
+export interface SkillCategory {
+  category: string;
+  items: string[];
+}
+
