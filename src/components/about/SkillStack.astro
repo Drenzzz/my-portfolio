@@ -1,0 +1,33 @@
+---
+import { Code2 } from "lucide-react"
+import { skills } from "@/data/skills"
+---
+
+<div class="h-full p-6 bg-white border-4 border-black rounded-xl shadow-brutal relative overflow-hidden">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="p-3 bg-black text-white rounded-sm border-2 border-black">
+      <Code2 class="w-6 h-6" />
+    </div>
+    <div>
+      <h3 class="font-head font-black text-2xl leading-none uppercase">Skills</h3>
+      <p class="font-bold text-muted-foreground mt-1 text-sm tracking-wider uppercase">Technologies I use</p>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    {skills.map((category) => (
+      <div class="space-y-3">
+        <h4 class="font-head text-lg font-bold border-b-4 border-black inline-block pr-4 pb-1">
+          {category.category}
+        </h4>
+        <div class="flex flex-wrap gap-2">
+          {category.items.map((skill) => (
+            <span class="px-3 py-1 font-bold text-sm bg-[#F4F4F5] border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none hover:bg-[#E6A627] transition-all cursor-default">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
