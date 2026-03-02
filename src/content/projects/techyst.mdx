@@ -1,0 +1,41 @@
+---
+title: Techyst
+description: Asisten digital berbasis Hybrid AI (Vision & Reasoning) untuk membantu teknisi HP UMKM mendiagnosa kerusakan hardware. Juara 5 Hackathon IMPHNEN 2025.
+publishDate: 2025-12-07
+tags:
+  - Next.js
+  - AI Engineering
+  - TypeScript
+  - Tailwind CSS
+  - IndexedDB
+link: https://techyst.vercel.app/
+github: https://github.com/Ambanet-Corporation/techyst
+image: "/images/projects/techyst.png"
+featured: true
+---
+
+**Techyst** adalah proyek pemenang (Top 5) dalam Hackathon Inovasi AI IMPHNEN 2025. Aplikasi ini lahir dari keresahan ribuan teknisi HP otodidak di Indonesia yang kesulitan menangani _motherboard_ modern tanpa skema resmi.
+
+Berbeda dengan aplikasi diagnosa biasa, Techyst bertindak sebagai "Mata Kedua" digital. Dibangun dengan pendekatan **Privacy-First**, aplikasi ini memungkinkan teknisi melakukan diagnosa visual tingkat tinggi tanpa perlu khawatir data servis pelanggan mereka bocor ke cloud database pihak ketiga.
+
+### Fitur Utama
+
+1.  **Hybrid AI Engine**: Mengorkestrasi model AI **Claude 4.5 Sonnet** untuk ketelitian visual (Vision) dan penalaran logis (Reasoning) guna memberikan hasil diagnosa yang presisi.
+2.  **Visual PCB Diagnosis**: Mendeteksi komponen mikroskopis (IC, Jalur, Resistor) pada foto mesin HP yang buram sekalipun, lalu memberikan _overlay_ indikasi kerusakan.
+3.  **Context-Aware Technician Chat**: Chatbot cerdas yang telah dilatih dengan "Bahasa Bengkel" lokal untuk memandu proses perbaikan langkah demi langkah.
+4.  **Local-First Storage**: Menggunakan IndexedDB untuk menyimpan riwayat diagnosa dan foto resolusi tinggi secara lokal di browser, menjamin keamanan privasi data UMKM.
+5.  **Optimistic UI**: Pengalaman pengguna yang instan dan responsif meski melakukan pemrosesan AI yang berat.
+
+### Tantangan Teknis & Solusi
+
+Tantangan terbesar dalam proyek ini adalah menyeimbangkan **Akurasi Vision AI** dengan **Privasi & Performa**. Mengirim foto resolusi tinggi ke server AI biasanya memakan bandwidth besar dan berisiko menyimpan data sensitif.
+
+Solusinya adalah dengan menerapkan **Client-Side Processing** yang agresif. Saya menggunakan algoritma kompresi cerdas di browser sebelum upload, serta memanfaatkan arsitektur **Serverless** yang hanya bertindak sebagai _proxy_ aman ke API Kolosal tanpa menyimpan data di database persisten. Data state disimpan menggunakan `idb-keyval` (IndexedDB wrapper), sehingga aplikasi terasa sangat cepat (snappy) dan data tetap 100% milik pengguna.
+
+### Tech Stack Detail
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript (Strict Mode)
+- **AI Core:** Kolosal AI SDK (Claude 4.5 Sonnet)
+- **Styling:** Tailwind CSS v4, Shadcn UI, Framer Motion
+- **State/Storage:** React Hooks, IDB-Keyval (NoSQL Local)

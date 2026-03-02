@@ -1,0 +1,40 @@
+---
+title: ADBKit
+description: Aplikasi desktop cross-platform untuk manajemen perangkat Android via ADB & Fastboot. Dibangun dengan Wails (Go + Astro + React) untuk performa native yang ringan.
+publishDate: 2024-03-15
+tags:
+  - Go
+  - React
+  - Wails
+  - TypeScript
+  - Tailwind CSS
+github: https://github.com/drenzzz/adb-gui-kit
+image: "/images/projects/adbkit.png"
+featured: true
+---
+
+**ADBKit** adalah solusi modern untuk para *Android Enthusiast* dan Developer yang lelah mengetik perintah terminal berulang kali. Aplikasi ini membungkus *power* dari **Android Debug Bridge (ADB)** dan **Fastboot** ke dalam antarmuka grafis yang intuitif dan responsif.
+
+Berbeda dengan tool sejenis yang seringkali berat (berbasis Electron), aplikasi ini dibangun menggunakan **Wails**, yang menggabungkan performa backend **Go** dengan fleksibilitas frontend **React**. Hasilnya adalah aplikasi yang sangat ringan (ukuran installer < 20MB) namun tetap kaya fitur.
+
+### Fitur Utama
+
+1.  **Device Manager & Dashboard**: Visualisasi status perangkat (baterai, model, status root) secara real-time.
+2.  **Advanced App Manager**: Hapus *bloatware*, backup APK, dan manajemen izin aplikasi sistem dengan satu klik.
+3.  **File Explorer**: Jelajahi, salin, dan hapus file di dalam sistem Android layaknya menggunakan Windows Explorer.
+4.  **Universal Flasher**: Antarmuka aman untuk flashing partisi (boot, recovery, system) via Fastboot.
+5.  **Integrated Shell**: Terminal bawaan untuk eksekusi perintah ADB kustom tanpa perlu membuka CMD terpisah.
+
+### Tantangan Teknis & Solusi
+
+Tantangan terbesar dalam pengembangan ini adalah menangani **konkurensi** saat mengeksekusi perintah ADB yang panjang (seperti *logcat* atau *file transfer* besar) agar tidak membekukan UI.
+
+Solusinya adalah dengan memanfaatkan **Goroutines** di sisi backend Go untuk menangani proses I/O secara *asynchronous*, lalu mengirimkan update status ke frontend React melalui *events* Wails secara real-time. Arsitektur ini memastikan UI tetap *smooth* 60fps meskipun sedang melakukan transfer file bergiga-giga.
+
+### Tech Stack Detail
+
+* **Core:** Wails v2 (Go + Webview2)
+* **Frontend:** Astro 5, React 18, TypeScript, Vite
+* **UI Framework:** Tailwind CSS, Shadcn UI
+* **Backend Logic:** Go (Golang) standard library
+* **State Management:** Zustand (Frontend)

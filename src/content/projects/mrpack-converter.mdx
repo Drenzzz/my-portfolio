@@ -1,0 +1,41 @@
+---
+title: MrPack Converter
+description: Web tool modern untuk mengekstrak dan mengonversi file modpack Minecraft (.mrpack) langsung di browser. Dibangun dengan Astro, React, dan Web Workers untuk performa tanpa lag.
+publishDate: 2024-05-20
+tags:
+  - Astro
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Shadcn UI
+link: https://mrpack-converter.vercel.app/
+github: https://github.com/drenzzz/mrpack-converter
+image: "/images/projects/mrpack-converter.png"
+featured: true
+---
+
+**MrPack Converter** adalah alat utilitas web yang dirancang untuk komunitas Minecraft Modding. Alat ini memecahkan masalah kerumitan dalam membuka file format `.mrpack` (standar Modrinth) dengan menyediakan antarmuka *drag-and-drop* yang sederhana untuk mengekstrak atau mengonversi isinya.
+
+Fokus utama pengembangan aplikasi ini adalah **Performa** dan **Privasi**. Tidak seperti konverter online konvensional yang mengharuskan upload file ke server, aplikasi ini memproses data GB-an secara lokal di browser pengguna.
+
+### Fitur Unggulan
+
+1.  **Zero-Server Upload**: Menggunakan arsitektur *client-side processing*, menjamin file pengguna tidak pernah meninggalkan perangkat mereka.
+2.  **Multithreaded Processing**: Memanfaatkan teknologi **Web Workers** untuk menangani proses ekstraksi file ZIP yang berat di *background thread*, menjaga UI tetap responsif 60fps selama proses berlangsung.
+3.  **Interactive UI**: Dibangun dengan **Shadcn UI** dan animasi framer-motion untuk pengalaman pengguna yang halus.
+4.  **Metadata Parsing**: Secara cerdas membaca file `modrinth.index.json` di dalam paket untuk menampilkan informasi versi, loader, dan dependensi modpack.
+
+### Tantangan Teknis: Main Thread Blocking
+
+Saat menangani file `.mrpack` yang berukuran besar (ratusan MB), proses *unzipping* menggunakan JavaScript di *main thread* akan membuat browser "beku" (not responding).
+
+**Solusi:**
+Saya mengimplementasikan **Web Worker** (`converter.worker.ts`) untuk memisahkan logika pemrosesan file dari thread UI utama. Komunikasi antara UI dan Worker dilakukan melalui *message passing*, memungkinkan *progress bar* terupdate secara real-time tanpa mengganggu interaksi pengguna.
+
+### Tech Stack
+
+* **Framework:** Astro (untuk *static shell* yang cepat)
+* **Interactive UI:** React 18
+* **Styling:** Tailwind CSS + Shadcn UI
+* **File Handling:** JSZip + Web Workers API
+* **Validation:** Zod
