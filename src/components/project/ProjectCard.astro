@@ -1,23 +1,25 @@
 ---
-import type { Project } from "@/types"
+import { type CollectionEntry } from "astro:content"
 import { Github, ExternalLink, Folder } from "lucide-react"
 
 interface Props {
-  project: Project
+  project: CollectionEntry<"projects">
 }
 
 const { project } = Astro.props
+const data = project.data
 ---
 
 <article
-  class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all"
-  data-tags={project.tags.join(",")}
+  class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all cursor-pointer flex flex-col"
+  data-tags={data.tags.join(",")}
+  onclick={`window.location.href='/project/${project.slug}'`}
 >
-  <div class="relative w-full h-44 bg-muted overflow-hidden border-b-[3px] border-black">
-    {project.coverImage ? (
+  <div class="relative w-full h-44 bg-muted overflow-hidden border-b-[3px] border-black shrink-0">
+    {data.image ? (
       <img
-        src={project.coverImage}
-        alt={project.title}
+        src={data.image}
+        alt={data.title}
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         loading="lazy"
       />
@@ -27,48 +29,50 @@ const { project } = Astro.props
       </div>
     )}
 
-    {project.featured && (
+    {data.featured && (
       <span class="absolute top-3 left-3 text-xs font-bold font-head px-2.5 py-1 bg-[#E6A627] border-2 border-black rounded shadow-brutal-sm uppercase">
         Featured
       </span>
     )}
   </div>
 
-  <div class="p-5 flex flex-col gap-3">
+  <div class="p-5 flex flex-col flex-1 gap-3">
     <h3 class="font-head text-xl font-bold group-hover:text-primary transition-colors leading-tight">
-      {project.title}
+      {data.title}
     </h3>
 
     <p class="text-sm text-muted-foreground font-medium line-clamp-2 leading-relaxed">
-      {project.summary}
+      {data.description}
     </p>
 
-    <div class="flex flex-wrap gap-1.5">
-      {project.tags.map((tag) => (
+    <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+      {data.tags.map((tag) => (
         <span class="text-xs font-bold font-head px-2 py-0.5 border-2 border-black bg-background rounded shadow-brutal-sm">
           {tag}
         </span>
       ))}
     </div>
 
-    <div class="flex gap-3 pt-2 border-t-2 border-black/10">
-      {project.githubUrl && (
+    <div class="flex gap-3 pt-3 mt-1 border-t-2 border-black/10">
+      {data.github && (
         <a
-          href={project.githubUrl}
+          href={data.github}
           target="_blank"
           rel="noreferrer"
           class="inline-flex items-center gap-1.5 text-xs font-bold font-head hover:text-primary transition-colors"
+          onclick="event.stopPropagation()"
         >
           <Github className="w-3.5 h-3.5" />
           Source Code
         </a>
       )}
-      {project.liveUrl && (
+      {data.link && (
         <a
-          href={project.liveUrl}
+          href={data.link}
           target="_blank"
           rel="noreferrer"
           class="inline-flex items-center gap-1.5 text-xs font-bold font-head text-primary hover:underline"
+          onclick="event.stopPropagation()"
         >
           <ExternalLink className="w-3.5 h-3.5" />
           Live Demo
