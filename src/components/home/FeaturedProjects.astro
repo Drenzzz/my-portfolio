@@ -1,10 +1,12 @@
 ---
-import { projects } from "@/data/projects"
-import { Card } from "@/components/retroui/Card"
-import { Badge } from "@/components/retroui/Badge"
-import { ArrowUpRight, Folder } from "lucide-react"
+import { getCollection } from "astro:content"
+import { Folder, ArrowUpRight } from "lucide-react"
 
-const featured = projects.filter((p) => p.featured).slice(0, 3)
+const allProjects = await getCollection("projects")
+const featured = allProjects
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .filter((p) => p.data.featured)
+  .slice(0, 3)
 ---
 
 <section class="container mx-auto px-4 py-12 md:py-20">
@@ -25,12 +27,12 @@ const featured = projects.filter((p) => p.featured).slice(0, 3)
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {featured.map((project) => (
-      <div class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all">
-        <div class="relative w-full h-40 bg-muted overflow-hidden border-b-[3px] border-black">
-          {project.coverImage ? (
+      <a href={`/project/${project.slug}`} class="group cursor-pointer border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all flex flex-col">
+        <div class="relative w-full h-40 bg-muted overflow-hidden border-b-[3px] border-black shrink-0">
+          {project.data.image ? (
             <img
-              src={project.coverImage}
-              alt={project.title}
+              src={project.data.image}
+              alt={project.data.title}
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
             />
@@ -41,40 +43,42 @@ const featured = projects.filter((p) => p.featured).slice(0, 3)
           )}
         </div>
 
-        <div class="p-5 flex flex-col gap-3">
+        <div class="p-5 flex flex-col flex-1 gap-3">
           <div class="flex items-start justify-between gap-2">
-            <h3 class="font-head text-lg font-bold group-hover:text-primary transition-colors">{project.title}</h3>
+            <h3 class="font-head text-lg font-bold group-hover:text-primary transition-colors">{project.data.title}</h3>
             <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0 mt-1" />
           </div>
-          <p class="text-sm text-muted-foreground font-medium line-clamp-2">{project.summary}</p>
-          <div class="flex flex-wrap gap-1.5">
-            {project.tags.slice(0, 4).map((tag) => (
+          <p class="text-sm text-muted-foreground font-medium line-clamp-2">{project.data.description}</p>
+          <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+            {project.data.tags.slice(0, 4).map((tag) => (
               <span class="text-xs font-bold font-head px-2 py-0.5 border-2 border-black bg-background rounded shadow-brutal-sm">
                 {tag}
               </span>
             ))}
-            {project.tags.length > 4 && (
+            {project.data.tags.length > 4 && (
               <span class="text-xs font-bold font-head px-2 py-0.5 border-2 border-black bg-muted rounded shadow-brutal-sm">
-                +{project.tags.length - 4}
+                +{project.data.tags.length - 4}
               </span>
             )}
           </div>
-          <div class="flex gap-3 pt-1">
-            {project.githubUrl && (
-              <a href={project.githubUrl} target="_blank" rel="noreferrer"
-                 class="text-xs font-bold font-head hover:underline">
-                GitHub →
-              </a>
+          <div class="flex gap-3 pt-3 mt-1 border-t-2 border-black/10">
+            {project.data.github && (
+              <div onclick="event.stopPropagation()">
+                <a href={project.data.github} target="_blank" rel="noreferrer" class="text-xs font-bold font-head hover:underline">
+                  GitHub →
+                </a>
+              </div>
             )}
-            {project.liveUrl && (
-              <a href={project.liveUrl} target="_blank" rel="noreferrer"
-                 class="text-xs font-bold font-head text-primary hover:underline">
-                Live Demo →
-              </a>
+            {project.data.link && (
+              <div onclick="event.stopPropagation()">
+                <a href={project.data.link} target="_blank" rel="noreferrer" class="text-xs font-bold font-head text-primary hover:underline">
+                  Live Demo →
+                </a>
+              </div>
             )}
           </div>
         </div>
-      </div>
+      </a>
     ))}
   </div>
 </section>
