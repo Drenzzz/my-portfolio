@@ -7,6 +7,8 @@ import TechMarquee from "@/components/home/TechMarquee.astro"
 import FeaturedProjects from "@/components/home/FeaturedProjects.astro"
 import { DiscordStatus } from "@/components/home/DiscordStatus"
 import { GitHubStats } from "@/components/home/GitHubStats"
+import { LocationCard } from "@/components/home/LocationCard"
+import { MusicPlayer } from "@/components/home/MusicPlayer"
 import { fetchGithubStats } from "@/lib/github"
 
 const githubStats = await fetchGithubStats()
@@ -16,22 +18,36 @@ const githubStats = await fetchGithubStats()
   <Navbar />
 
   <main class="flex-1">
-    <HeroSection />
+    <section class="container mx-auto px-4 py-8 md:py-12 flex flex-col gap-6">
+      
+      <!-- Top Row: Hero (3 cols) + Location (1 col) -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div class="lg:col-span-3 min-h-[400px]">
+          <HeroSection />
+        </div>
+        <div class="lg:col-span-1 min-h-[350px] lg:min-h-[400px]">
+          <LocationCard client:load />
+        </div>
+      </div>
 
-    <TechMarquee />
+      <TechMarquee />
 
-    <FeaturedProjects />
-
-    <section class="container mx-auto px-4 py-12 md:py-20">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-1 min-h-[320px]">
+      <!-- Middle Row: Music Player (1 col), Discord (1 col), Github (2 cols) -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div class="lg:col-span-1 min-h-[300px]">
+          <MusicPlayer client:load />
+        </div>
+        <div class="lg:col-span-1 min-h-[300px]">
           <DiscordStatus client:idle />
         </div>
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2 min-h-[300px]">
           <GitHubStats client:visible initialData={githubStats} />
         </div>
       </div>
+
     </section>
+
+    <FeaturedProjects />
   </main>
 
   <Footer />
