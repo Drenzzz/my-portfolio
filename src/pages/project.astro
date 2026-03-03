@@ -4,12 +4,14 @@ import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import ProjectGrid from "@/components/project/ProjectGrid.astro"
 import { TagFilter } from "@/components/project/TagFilter"
-import { projects } from "@/data/projects"
+import { getCollection } from "astro:content"
 
 const title = "Projects | Drenzzz"
 const description = "Explore my portfolio of web applications, backend systems, and open-source contributions."
-const totalProjects = projects.length
-const uniqueTags = [...new Set(projects.flatMap((p) => p.tags))].sort()
+
+const allProjects = await getCollection("projects")
+const totalProjects = allProjects.length
+const uniqueTags = [...new Set(allProjects.flatMap((p) => p.data.tags))].sort()
 ---
 
 <Layout title={title} description={description}>
