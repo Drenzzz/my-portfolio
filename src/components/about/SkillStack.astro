@@ -1,6 +1,15 @@
 ---
 import { Code2 } from "lucide-react"
 import { skills } from "@/data/skills"
+
+const categoryColors: Record<string, string> = {
+  "Languages": "bg-[#E6A627]",          // Yellow
+  "Frameworks & Libraries": "bg-[#38BDF8]", // Cyan
+  "Database & ORM": "bg-[#4ADE80]",      // Green
+  "Tools & Environment": "bg-[#F472B6]",   // Pink
+  "Runtimes & Package Managers": "bg-[#FBBF24]", // Amber
+  "Design": "bg-[#A78BFA]"              // Purple
+};
 ---
 
 <div class="h-full p-6 bg-white border-4 border-black rounded-xl shadow-brutal relative overflow-hidden transition-transform hover:rotate-1">
@@ -21,11 +30,14 @@ import { skills } from "@/data/skills"
           {category.category}
         </h4>
         <div class="flex flex-wrap gap-2">
-          {category.items.map((skill) => (
-            <span class="px-3 py-1 font-bold text-sm bg-[#F4F4F5] border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none hover:bg-[#E6A627] transition-all cursor-default">
-              {skill}
-            </span>
-          ))}
+          {category.items.map((skill) => {
+            const bgColor = categoryColors[category.category] || "bg-[#F4F4F5]";
+            return (
+              <span class={`px-3 py-1 font-bold text-sm ${bgColor} border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-default`}>
+                {skill}
+              </span>
+            );
+          })}
         </div>
       </div>
     ))}
