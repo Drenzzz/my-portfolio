@@ -7,21 +7,27 @@ import Timeline from "@/components/about/Timeline.astro"
 import SkillStack from "@/components/about/SkillStack.astro"
 
 const title = "About | Drenzzz"
-const description = "Learn more about my background, skills, and experience as a Fullstack Developer."
+const description = "Get to know more about my background, education, and the tech stack I use to build robust applications."
 ---
 
 <Layout title={title} description={description}>
   <Navbar />
   
-  <main class="flex-1 container mx-auto py-12 md:py-20 px-4">
-    <div class="mb-10">
-      <h1 class="font-head text-4xl md:text-6xl font-black uppercase tracking-tight">
-        About Me
-      </h1>
-      <p class="text-lg text-muted-foreground font-medium max-w-2xl mt-2">
-        Get to know more about my background and coding journey.
-      </p>
-    </div>
+  <main class="flex-1 w-full bg-[#f8f9fa] relative">
+    {/* Subtle Dot Pattern Background */}
+    <div class="absolute inset-0 z-0 opacity-[0.15]" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
+    
+    <div class="container mx-auto py-12 md:py-20 px-4 relative z-10">
+      <div class="mb-12">
+        <div class="inline-block bg-white text-black border-4 border-black px-6 py-2 shadow-brutal transform -rotate-2 hover:rotate-0 transition-transform cursor-default">
+          <h1 class="font-head text-4xl md:text-6xl font-black uppercase tracking-tight">
+            About Me
+          </h1>
+        </div>
+        <p class="text-lg text-muted-foreground font-medium max-w-2xl mt-4 bg-white/80 p-2 inline-block rounded">
+          Get to know more about my background and coding journey.
+        </p>
+      </div>
     
     <AboutHero />
 
