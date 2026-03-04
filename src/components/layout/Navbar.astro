@@ -1,18 +1,48 @@
 ---
 import { navItems } from "@/data/navigation"
+import { Menu, X } from "lucide-react"
 ---
 
-<header class="sticky top-0 z-50 w-full border-b-[3px] border-black bg-background p-4 shadow-brutal">
-  <div class="container mx-auto flex h-14 items-center justify-between">
-    <a href="/" class="flex flex-col gap-0.5">
-      <span class="font-head text-xl font-bold uppercase tracking-wider">Drenzzz</span>
+<header class="sticky top-0 z-50 w-full border-b-[3px] border-black bg-background p-4 shadow-brutal transition-all duration-300 relative">
+  <div class="container mx-auto flex h-14 items-center justify-between relative z-50 bg-background">
+    <a href="/" class="flex flex-col gap-0.5 hover:-translate-y-[2px] hover:translate-x-[2px] transition-transform">
+      <span class="font-head text-2xl font-black uppercase tracking-widest text-black drop-shadow-[2px_2px_0px_#E6A627]">Drenzzz</span>
     </a>
 
-    <nav class="hidden md:flex items-center justify-end gap-6 font-head font-medium text-sm ml-auto">
+    {/* Desktop Navigation */}
+    <nav class="hidden md:flex items-center justify-end gap-2 font-head font-bold text-sm ml-auto">
       {navItems.map((item) => (
         <a 
           href={item.path}
-          class="hover:underline hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+          class="px-4 py-2 border-2 border-transparent hover:border-black hover:bg-[#E6A627] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black uppercase tracking-wide"
+        >
+          {item.title}
+        </a>
+      ))}
+    </nav>
+
+    {/* Mobile Toggle Button */}
+    <button 
+      id="mobile-menu-toggle"
+      class="md:hidden flex items-center justify-center p-2 border-2 border-black rounded-lg bg-[#E6A627] shadow-[2px_2px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all z-50"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <Menu className="w-6 h-6 menu-icon-open" />
+      <X className="w-6 h-6 menu-icon-close hidden" />
+    </button>
+  </div>
+
+  {/* Mobile Menu Overlay */}
+  <div 
+    id="mobile-menu-overlay"
+    class="fixed inset-0 top-[83px] bg-background/80 backdrop-blur-md flex-col z-40 hidden border-t-[3px] border-black transition-opacity duration-300 opacity-0"
+  >
+    <nav class="flex flex-col items-center justify-center p-8 gap-6 h-full font-head font-black text-3xl overflow-y-auto pb-32">
+      {navItems.map((item) => (
+        <a 
+          href={item.path}
+          class="w-full text-center py-4 border-4 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-[#E6A627] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-all uppercase tracking-widest menu-item"
         >
           {item.title}
         </a>
@@ -20,3 +50,67 @@ import { navItems } from "@/data/navigation"
     </nav>
   </div>
 </header>
+
+<script>
+  const setupMobileMenu = () => {
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const iconOpen = toggleBtn?.querySelector('.menu-icon-open');
+    const iconClose = toggleBtn?.querySelector('.menu-icon-close');
+    const menuItems = overlay?.querySelectorAll('.menu-item');
+    let isMenuOpen = false;
+
+    if (!toggleBtn || !overlay) return;
+
+    const toggleMenu = () => {
+      isMenuOpen = !isMenuOpen;
+      toggleBtn.setAttribute('aria-expanded', isMenuOpen.toString());
+      
+      if (isMenuOpen) {
+        // Open menu
+        overlay.classList.remove('hidden');
+        // Small delay to allow display block to apply before opacity transition
+        setTimeout(() => {
+          overlay.classList.remove('opacity-0');
+          overlay.classList.add('opacity-100');
+        }, 10);
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        
+        iconOpen?.classList.add('hidden');
+        iconClose?.classList.remove('hidden');
+        toggleBtn.classList.replace('bg-[#E6A627]', 'bg-[#F31260]');
+        toggleBtn.classList.add('text-white');
+      } else {
+        // Close menu
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
+        
+        // Wait for transition to finish before hiding
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+        }, 300);
+        document.body.style.overflow = ''; // Restore scrolling
+        
+        iconOpen?.classList.remove('hidden');
+        iconClose?.classList.add('hidden');
+        toggleBtn.classList.replace('bg-[#F31260]', 'bg-[#E6A627]');
+        toggleBtn.classList.remove('text-white');
+      }
+    };
+
+    toggleBtn.addEventListener('click', toggleMenu);
+
+    // Close menu when a link is clicked
+    menuItems?.forEach(item => {
+      item.addEventListener('click', () => {
+        if (isMenuOpen) toggleMenu();
+      });
+    });
+  };
+
+  // Run on first load
+  setupMobileMenu();
+
+  // Run on Astro View Transitions navigation
+  document.addEventListener('astro:page-load', setupMobileMenu);
+</script>
