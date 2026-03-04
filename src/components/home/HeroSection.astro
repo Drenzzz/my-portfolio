@@ -4,48 +4,55 @@ import { Badge } from "@/components/retroui/Badge"
 import { Github, Mail, Linkedin, Twitter, ArrowUpRight } from "lucide-react"
 ---
 
-<div class="w-full h-full bg-[#F4F4F5] border-4 border-black rounded-xl shadow-[8px_8px_0px_rgba(0,0,0,1)] p-8 md:p-12 flex flex-col justify-center relative overflow-hidden group">
+<div class="w-full h-full bg-[#F4F4F5] border-4 border-black rounded-xl shadow-[8px_8px_0px_rgba(0,0,0,1)] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden group gap-8">
   <!-- Subtle pattern -->
   <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-  <Badge client:load variant="default" className="w-fit text-sm font-bold px-4 py-1.5 mb-6 z-10">
-    Hello World! 👋
-  </Badge>
+  <div class="flex-1 flex flex-col justify-center relative z-10 w-full">
+    <Badge client:load variant="default" className="w-fit text-sm font-bold px-4 py-1.5 mb-6">
+      Hello World! 👋
+    </Badge>
 
-  <h1 class="font-head text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4 z-10">
-    I'm <span class="text-primary">Drenzzz</span>.
-  </h1>
-  <p class="font-head text-lg md:text-xl font-bold text-muted-foreground mb-6 z-10">
-    Fullstack Developer · System Enthusiast · Open Source
-  </p>
+    <h1 class="font-head text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4">
+      I'm <span class="text-primary">Drenzzz</span>.
+    </h1>
+    <p class="font-head text-lg md:text-xl font-bold text-muted-foreground mb-6">
+      Fullstack Developer · System Enthusiast · Open Source
+    </p>
 
-  <p class="text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl font-medium mb-8 z-10">
-    Cuma seseorang Developer pemula yang selalu ingin mencari tahu dan ingin belajar. Building robust systems and brutalist interfaces with Go, React, and Astro.
-  </p>
+    <p class="text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl font-medium mb-8">
+      Cuma seseorang Developer pemula yang selalu ingin mencari tahu dan ingin belajar. Building robust systems and brutalist interfaces with Go, React, and Astro.
+    </p>
 
-  <div class="flex flex-wrap items-center gap-4 z-10">
-    <a href="/project">
-      <Button variant="default" size="lg" className="shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all" client:load>
-        Explore Projects <ArrowUpRight className="ml-2 w-4 h-4" />
-      </Button>
-    </a>
-    <div class="flex items-center gap-3 md:ml-4">
-      <a href="https://github.com/drenzzz" target="_blank" rel="noreferrer" aria-label="GitHub"
-         class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
-        <Github className="w-5 h-5" />
+    <div class="flex flex-wrap items-center gap-4">
+      <a href="/project">
+        <Button variant="default" size="lg" className="shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all" client:load>
+          Explore Projects <ArrowUpRight className="ml-2 w-4 h-4" />
+        </Button>
       </a>
-      <a href="mailto:naufalnazya@gmail.com" aria-label="Email"
-         class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
-        <Mail className="w-5 h-5" />
-      </a>
-      <a href="https://linkedin.com/in/drenzzz" target="_blank" rel="noreferrer" aria-label="LinkedIn"
-         class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
-        <Linkedin className="w-5 h-5" />
-      </a>
-      <a href="https://twitter.com/drenzzz" target="_blank" rel="noreferrer" aria-label="Twitter"
-         class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
-        <Twitter className="w-5 h-5" />
-      </a>
+      <div class="flex items-center gap-3 md:ml-4">
+        <a href="https://github.com/drenzzz" target="_blank" rel="noreferrer" aria-label="GitHub"
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
+          <Github className="w-5 h-5" />
+        </a>
+        <a href="mailto:naufalnazya@gmail.com" aria-label="Email"
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
+          <Mail className="w-5 h-5" />
+        </a>
+        <a href="https://linkedin.com/in/drenzzz" target="_blank" rel="noreferrer" aria-label="LinkedIn"
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
+          <Linkedin className="w-5 h-5" />
+        </a>
+        <a href="https://twitter.com/drenzzz" target="_blank" rel="noreferrer" aria-label="Twitter"
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#E6A627] hover:-translate-y-[2px] hover:shadow-none transition-all">
+          <Twitter className="w-5 h-5" />
+        </a>
+      </div>
     </div>
+  </div>
+
+  <div class="hidden md:block relative z-10 w-48 h-48 lg:w-64 lg:h-64 shrink-0 transition-transform duration-500 hover:-translate-y-2 hover:translate-x-2 group-hover:rotate-2">
+    <div class="absolute inset-0 bg-[#E6A627] border-4 border-black translate-x-3 translate-y-3 rounded-2xl"></div>
+    <img src="https://github.com/drenzzz.png" alt="Drenzzz" class="relative w-full h-full object-cover border-4 border-black rounded-2xl bg-white grayscale-[20%] hover:grayscale-0 transition-all duration-300" loading="lazy" />
   </div>
 </div>
