@@ -20,25 +20,25 @@ const githubStats = await fetchGithubStats()
   <main class="flex-1">
     <section class="container mx-auto px-4 py-8 md:py-12 flex flex-col gap-6">
       
-      <!-- Top Row: Hero (3 cols) + Location (1 col) -->
+      <!-- Top Row: Hero (3 cols) + Discord (1 col) -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div class="lg:col-span-3 min-h-[400px]">
           <HeroSection />
         </div>
         <div class="lg:col-span-1 min-h-[350px] lg:min-h-[400px]">
-          <LocationCard client:load />
+          <DiscordStatus client:idle />
         </div>
       </div>
 
       <TechMarquee />
 
-      <!-- Middle Row: Music Player (1 col), Discord (1 col), Github (2 cols) -->
+      <!-- Middle Row: Music Player (1 col), Location (1 col), Github (2 cols) -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div class="lg:col-span-1 min-h-[300px]">
           <MusicPlayer client:load />
         </div>
         <div class="lg:col-span-1 min-h-[300px]">
-          <DiscordStatus client:idle />
+          <LocationCard client:load />
         </div>
         <div class="lg:col-span-2 min-h-[300px]">
           <GitHubStats client:visible initialData={githubStats} />

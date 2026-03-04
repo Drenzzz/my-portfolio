@@ -119,60 +119,61 @@ export function LocationCard() {
   // Neobrutalism design: strict solid colors, harsh borders, prominent bold fonts
   return (
     <div className="h-full relative overflow-hidden bg-white border-4 border-black rounded-xl shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-all group">
-      <div className="flex flex-col md:flex-row h-full">
-        {/* Left Side: Location & Weather */}
-        <div className="w-full md:w-[60%] h-full bg-[#F4F4F5] p-5 flex flex-col justify-between border-b-4 md:border-b-0 md:border-r-4 border-black relative">
+      <div className="flex flex-col h-full">
+        {/* Top Side: Location & Weather */}
+        <div className="w-full h-[60%] bg-[#F4F4F5] p-5 flex flex-col justify-between border-b-4 border-black relative">
           
           <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="square">
-              <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="8" x2="12" y2="12"></line>
               <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg>
           </div>
 
-          <div className="z-10">
+          <div className="z-10 flex justify-between items-start">
+            <div>
+              <h3 className="font-head text-2xl font-black text-black leading-tight uppercase tracking-tight">Padang</h3>
+              <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest mt-1">West Sumatra, ID</p>
+            </div>
             <a
               href="https://www.google.com/maps/place/Padang,+West+Sumatra"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center p-2 mb-3 bg-black text-white hover:bg-[#E6A627] hover:text-black border-2 border-transparent hover:border-black rounded shadow-[2px_2px_0px_rgba(100,100,100,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all"
+              className="inline-flex items-center justify-center p-2 bg-black text-white hover:bg-[#E6A627] hover:text-black border-2 border-transparent hover:border-black rounded shadow-[2px_2px_0px_rgba(100,100,100,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all"
               aria-label="View location on Google Maps"
             >
               <MapPin className="w-4 h-4" />
             </a>
-            <h3 className="font-head text-2xl font-black text-black leading-tight uppercase tracking-tight">Padang</h3>
-            <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest mt-1">West Sumatra, ID</p>
           </div>
 
           {weather && (
-            <div className="flex items-center gap-4 mt-6 z-10">
-              <div className="p-3 bg-white border-2 border-black rounded shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-4 mt-auto z-10 pt-4">
+              <div className="p-3 bg-white border-2 border-black rounded shadow-[4px_4px_0px_rgba(0,0,0,1)] shrink-0">
                 {getWeatherIcon(weather.weatherCode, weather.isDay)}
               </div>
               <div>
-                <div className="text-4xl font-black text-black leading-none">{Math.round(weather.temperature)}°</div>
-                <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-1">{getWeatherDescription(weather.weatherCode)}</div>
+                <div className="text-3xl lg:text-4xl font-black text-black leading-none">{Math.round(weather.temperature)}°</div>
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-1 truncate">{getWeatherDescription(weather.weatherCode)}</div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Right Side: Time & Date */}
-        <div className="w-full md:w-[40%] h-full bg-[#E6A627] p-5 flex flex-row md:flex-col justify-center items-center gap-4 md:gap-6 relative overflow-hidden">
+        {/* Bottom Side: Time & Date */}
+        <div className="w-full h-[40%] bg-[#E6A627] p-4 flex flex-row justify-around items-center gap-4 relative overflow-hidden">
           {/* Subtle brutalist background pattern */}
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2px)', backgroundSize: '16px 16px' }}></div>
 
-          <div className="flex flex-col items-center gap-1 text-center w-full z-10">
-            <Clock className="w-5 h-5 text-black mb-1 hidden md:block" />
-            <div className="text-2xl md:text-3xl font-black text-black tabular-nums tracking-tighter leading-none bg-white px-2 py-1 border-2 border-black rounded shadow-brutal-sm">{time.split(" ")[0]}</div>
-            <div className="text-[10px] font-bold text-black uppercase tracking-widest mt-1 bg-white/50 px-2 py-0.5 rounded-sm border border-black">{time.split(" ")[1] || "WIB"}</div>
+          <div className="flex flex-col items-center gap-1 text-center z-10">
+            <Clock className="w-4 h-4 text-black mb-0.5 hidden sm:block" />
+            <div className="text-xl sm:text-2xl font-black text-black tabular-nums tracking-tighter leading-none bg-white px-2 py-1 border-2 border-black rounded shadow-brutal-sm">{time.split(" ")[0]}</div>
+            <div className="text-[10px] font-bold text-black uppercase tracking-widest bg-white/50 px-2 py-0.5 rounded-sm border border-black mt-1">{time.split(" ")[1] || "WIB"}</div>
           </div>
 
-          <div className="h-8 w-1 md:w-8 md:h-1 bg-black/20 rounded-full z-10 hidden md:block" />
+          <div className="h-8 w-1 bg-black/20 rounded-full z-10" />
 
-          <div className="flex flex-col items-center gap-1 text-center w-full z-10">
-            <Calendar className="w-5 h-5 text-black hidden md:block" strokeWidth={2.5} />
+          <div className="flex flex-col items-center gap-1 text-center z-10">
+            <Calendar className="w-4 h-4 text-black hidden sm:block mb-0.5" strokeWidth={2.5} />
             <div className="text-sm font-black text-black uppercase tracking-wider">{date.split(",")[0]}</div>
             <div className="text-xs font-bold text-black/70 uppercase tracking-widest">{date.split(",")[1]}</div>
           </div>
