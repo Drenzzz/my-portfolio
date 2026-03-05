@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions"
 import { KeyboardShortcuts } from "@/components/islands/KeyboardShortcuts"
+import SEO from "@/components/global/SEO.astro"
 import "@/styles/global.css"
 
 interface Props {
@@ -10,9 +11,9 @@ interface Props {
 }
 
 const {
-  title = "Drenzzz | Portfolio",
-  description = "A minimal weather dashboard with neobrutalism design.",
-  ogImage = "/og-image.png",
+  title,
+  description,
+  ogImage,
 } = Astro.props
 ---
 
@@ -22,18 +23,9 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{title || "Drenzzz | Portfolio"}</title>
     
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site || Astro.url)} />
-    
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, Astro.site || Astro.url)} />
+    <SEO title={title} description={description} image={ogImage} />
     
     <ClientRouter />
     <slot name="head" />

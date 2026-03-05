@@ -1,0 +1,35 @@
+---
+interface Props {
+  title?: string
+  description?: string
+  image?: string
+  canonicalURL?: string | URL
+}
+
+const {
+  title = "Drenzzz",
+  description = "Muhammad Naufal Nazya Azzharif just a developer who likes to build things.",
+  image = "/og-image.png",
+  canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url),
+} = Astro.props
+---
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Fallback theme color for Neobrutalism match -->
+<meta name="theme-color" content="#E6A627" />
