@@ -7,6 +7,7 @@ export const techStack: TechItem[] = [
   { id: "react", name: "React" },
   { id: "nextdotjs", name: "Next.js" },
   { id: "astro", name: "Astro" },
+  { id: "wails", name: "Wails" },
   { id: "tailwindcss", name: "Tailwind CSS" },
   { id: "shadcnui", name: "shadcn/ui" },
   { id: "hono", name: "Hono.js" },
