@@ -26,7 +26,13 @@ const githubStats = await fetchGithubStats()
           <HeroSection />
         </div>
         <div class="lg:col-span-1 min-h-[350px] lg:min-h-[400px]">
-          <DiscordStatus client:visible />
+          <DiscordStatus client:visible>
+            <div
+              slot="fallback"
+              class="h-full w-full rounded-xl border-[3px] border-black bg-zinc-900 animate-pulse"
+              aria-hidden="true"
+            ></div>
+          </DiscordStatus>
         </div>
       </div>
 
@@ -35,10 +41,22 @@ const githubStats = await fetchGithubStats()
       <!-- Middle Row: Music Player (1 col), Location (1 col), Github (2 cols) -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div class="lg:col-span-1 min-h-[300px]">
-          <MusicPlayer client:visible />
+          <MusicPlayer client:visible>
+            <div
+              slot="fallback"
+              class="h-full w-full rounded-xl border-4 border-black bg-[#F4F4F5] animate-pulse"
+              aria-hidden="true"
+            ></div>
+          </MusicPlayer>
         </div>
         <div class="lg:col-span-1 min-h-[300px]">
-          <LocationCard client:visible />
+          <LocationCard client:visible>
+            <div
+              slot="fallback"
+              class="h-full w-full rounded-xl border-4 border-black bg-[#F4F4F5] animate-pulse"
+              aria-hidden="true"
+            ></div>
+          </LocationCard>
         </div>
         <div class="lg:col-span-2 min-h-[300px]">
           <GitHubStats initialData={githubStats} />
