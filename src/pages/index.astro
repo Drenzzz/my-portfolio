@@ -26,7 +26,7 @@ const githubStats = await fetchGithubStats()
           <HeroSection />
         </div>
         <div class="lg:col-span-1 min-h-[350px] lg:min-h-[400px]">
-          <DiscordStatus client:idle />
+          <DiscordStatus client:visible />
         </div>
       </div>
 
@@ -35,10 +35,10 @@ const githubStats = await fetchGithubStats()
       <!-- Middle Row: Music Player (1 col), Location (1 col), Github (2 cols) -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div class="lg:col-span-1 min-h-[300px]">
-          <MusicPlayer client:load />
+          <MusicPlayer client:visible />
         </div>
         <div class="lg:col-span-1 min-h-[300px]">
-          <LocationCard client:load />
+          <LocationCard client:visible />
         </div>
         <div class="lg:col-span-2 min-h-[300px]">
           <GitHubStats client:visible initialData={githubStats} />
