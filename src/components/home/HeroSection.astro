@@ -9,7 +9,7 @@ import { Github, Mail, Linkedin, Twitter, ArrowUpRight } from "lucide-react"
   <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
 
   <div class="flex-1 flex flex-col justify-center relative z-10 w-full">
-    <Badge client:load variant="default" className="w-fit text-sm font-bold px-4 py-1.5 mb-6">
+    <Badge variant="default" className="w-fit text-sm font-bold px-4 py-1.5 mb-6">
       Hello World!
     </Badge>
 
@@ -26,7 +26,7 @@ import { Github, Mail, Linkedin, Twitter, ArrowUpRight } from "lucide-react"
 
     <div class="flex flex-wrap items-center gap-4">
       <a href="/project">
-        <Button variant="default" size="lg" className="shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all" client:load>
+        <Button variant="default" size="lg" className="shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
           Explore Projects <ArrowUpRight className="ml-2 w-4 h-4" />
         </Button>
       </a>
@@ -57,6 +57,15 @@ import { Github, Mail, Linkedin, Twitter, ArrowUpRight } from "lucide-react"
 
   <div class="hidden md:block relative z-10 w-48 h-48 lg:w-64 lg:h-64 shrink-0 transition-transform duration-500 hover:-translate-y-2 hover:translate-x-2 group-hover:rotate-2">
     <div class="absolute inset-0 bg-[#E6A627] border-4 border-black translate-x-3 translate-y-3 rounded-2xl"></div>
-    <img src="https://github.com/drenzzz.png" alt="Drenzzz" class="relative w-full h-full object-cover border-4 border-black rounded-2xl bg-white grayscale-[20%] hover:grayscale-0 transition-all duration-300" loading="lazy" />
+    <img
+      src="https://github.com/drenzzz.png"
+      alt="Drenzzz"
+      width="512"
+      height="512"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+      class="relative w-full h-full object-cover border-4 border-black rounded-2xl bg-white grayscale-[20%] hover:grayscale-0 transition-all duration-300"
+    />
   </div>
 </div>
