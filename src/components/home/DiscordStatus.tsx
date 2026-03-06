@@ -112,15 +112,31 @@ const getConnectionLabel = (status: string, error: string | null) => {
 export function DiscordStatus() {
   const { data, status, error, lastUpdated } = useLanyard()
   const [now, setNow] = useState(0)
+  const [isPageVisible, setIsPageVisible] = useState(true)
 
   useEffect(() => {
     setNow(Date.now())
-    const interval = setInterval(() => {
-      setNow(Date.now())
-    }, 1000)
+    const onVisibilityChange = () => {
+      const visible = !document.hidden
+      setIsPageVisible(visible)
+      if (visible) setNow(Date.now())
+    }
 
-    return () => clearInterval(interval)
-  }, [])
+    document.addEventListener("visibilitychange", onVisibilityChange)
+
+    if (!isPageVisible) {
+      return () => {
+        document.removeEventListener("visibilitychange", onVisibilityChange)
+      }
+    }
+
+    const interval = setInterval(() => setNow(Date.now()), 1000)
+
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener("visibilitychange", onVisibilityChange)
+    }
+  }, [isPageVisible])
 
   const discordStatus = data?.discord_status || "offline"
   const statusColor = STATUS_COLORS[discordStatus] || STATUS_COLORS.offline
@@ -188,6 +204,11 @@ export function DiscordStatus() {
     [data]
   )
 
+  const gameImage = useMemo(() => {
+    if (!gameActivity) return null
+    return getActivityImage(gameActivity) || getGameFallback(gameActivity.name)
+  }, [gameActivity])
+
   const avatarUrl = data
     ? `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=512`
     : null
@@ -197,12 +218,16 @@ export function DiscordStatus() {
       : null
 
   return (
-    <div className="group/discord relative w-full overflow-hidden rounded-xl border-[3px] border-black bg-black shadow-brutal">
+    <div className="group/discord relative h-full w-full overflow-hidden rounded-xl border-[3px] border-black bg-black shadow-brutal">
       <div className="absolute inset-0 z-0">
         {avatarUrl ? (
           <img
             src={avatarUrl}
             alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
             className="h-full w-full object-cover opacity-60 blur-[2px] transition-transform duration-700 group-hover/discord:scale-105"
           />
         ) : (
@@ -211,7 +236,7 @@ export function DiscordStatus() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/35" />
       </div>
 
-      <div className="relative z-10 p-4">
+      <div className="relative z-10 flex h-full flex-col justify-end p-4">
         <div className="flex flex-col rounded-xl border border-white/10 bg-white/10 p-4 shadow-lg backdrop-blur-md">
           <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3">
             {PROFILE_DISCORD_ID ? (
@@ -246,7 +271,10 @@ export function DiscordStatus() {
             </span>
           </div>
 
-          <div className="mb-3 flex items-center gap-2 border-b border-white/10 pb-3">
+          <div
+            className="mb-3 flex items-center gap-2 border-b border-white/10 pb-3"
+            aria-live="polite"
+          >
             <span
               className={cn(
                 "h-2.5 w-2.5 animate-pulse rounded-full",
@@ -283,15 +311,14 @@ export function DiscordStatus() {
               <div className="w-full rounded-lg border border-white/10 bg-black/40 p-3">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    {getActivityImage(gameActivity) ||
-                    getGameFallback(gameActivity.name) ? (
+                    {gameImage ? (
                       <img
-                        src={
-                          getActivityImage(gameActivity) ||
-                          getGameFallback(gameActivity.name)!
-                        }
+                        src={gameImage}
                         className="h-12 w-12 rounded-md bg-black/30 object-cover"
                         alt="Game activity"
+                        loading="lazy"
+                        decoding="async"
+                        referrerPolicy="no-referrer"
                         onError={(event) => {
                           const target = event.currentTarget
                           target.style.display = "none"
@@ -302,9 +329,7 @@ export function DiscordStatus() {
                     <Gamepad2
                       className={cn(
                         "h-12 w-12 rounded-md bg-purple-500/25 p-2 text-purple-300",
-                        (getActivityImage(gameActivity) ||
-                          getGameFallback(gameActivity.name)) &&
-                          "hidden"
+                        gameImage && "hidden"
                       )}
                     />
                   </div>
@@ -332,6 +357,9 @@ export function DiscordStatus() {
                       src={getActivityImage(codingActivity)!}
                       className="h-10 w-10 rounded-md bg-black/30"
                       alt="Coding activity"
+                      loading="lazy"
+                      decoding="async"
+                      referrerPolicy="no-referrer"
                     />
                   ) : (
                     <Code2 className="h-10 w-10 rounded-md bg-blue-500/25 p-2 text-blue-300" />
@@ -368,6 +396,9 @@ export function DiscordStatus() {
                       src={spotify.album_art_url}
                       className="h-12 w-12 rounded-md shadow-md"
                       alt="Album art"
+                      loading="lazy"
+                      decoding="async"
+                      referrerPolicy="no-referrer"
                     />
                   ) : (
                     <div className="h-12 w-12 rounded-md bg-white/10" />

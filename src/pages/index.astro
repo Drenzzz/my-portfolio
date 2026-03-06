@@ -25,11 +25,11 @@ const githubStats = await fetchGithubStats()
         <div class="lg:col-span-3 min-h-[400px]">
           <HeroSection />
         </div>
-        <div class="lg:col-span-1 lg:self-start">
+        <div class="lg:col-span-1 min-h-[350px] lg:min-h-[400px]">
           <DiscordStatus client:visible>
             <div
               slot="fallback"
-              class="h-[240px] w-full rounded-xl border-[3px] border-black bg-zinc-900 animate-pulse"
+              class="h-full w-full rounded-xl border-[3px] border-black bg-zinc-900 animate-pulse"
               aria-hidden="true"
             ></div>
           </DiscordStatus>
