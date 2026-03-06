@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import type { LanyardData } from "@/types"
+import type { Activity, LanyardData } from "@/types"
 
 const DISCORD_ID = import.meta.env.PUBLIC_DISCORD_ID
 const MAX_ATTEMPTS = Number(import.meta.env.PUBLIC_LANYARD_MAX_ATTEMPTS || 6)
@@ -10,21 +10,105 @@ const isObject = (value: unknown): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null
 }
 
+const toSafeString = (value: unknown) => {
+  if (typeof value !== "string") return ""
+  return value
+}
+
+const toSafeNumber = (value: unknown) => {
+  if (typeof value !== "number" || !Number.isFinite(value)) return undefined
+  return value
+}
+
+const toSafeActivity = (value: unknown): Activity | null => {
+  if (!isObject(value)) return null
+
+  const name = toSafeString(value.name)
+  const type = toSafeNumber(value.type)
+  if (!name || type === undefined) return null
+
+  const timestamps = isObject(value.timestamps)
+    ? {
+        start: toSafeNumber(value.timestamps.start),
+        end: toSafeNumber(value.timestamps.end),
+      }
+    : undefined
+
+  return {
+    name,
+    type,
+    state: toSafeString(value.state) || undefined,
+    details: toSafeString(value.details) || undefined,
+    application_id: toSafeString(value.application_id) || undefined,
+    sync_id: toSafeString(value.sync_id) || undefined,
+    timestamps,
+    assets: isObject(value.assets)
+      ? {
+          large_image: toSafeString(value.assets.large_image) || undefined,
+          large_text: toSafeString(value.assets.large_text) || undefined,
+          small_image: toSafeString(value.assets.small_image) || undefined,
+          small_text: toSafeString(value.assets.small_text) || undefined,
+        }
+      : undefined,
+  }
+}
+
 const toSafeLanyardData = (value: unknown): LanyardData | null => {
   if (!isObject(value)) return null
 
   const discordUser = value.discord_user
-  const activities = value.activities
-  if (!isObject(discordUser) || !Array.isArray(activities)) return null
+  if (!isObject(discordUser)) return null
 
-  if (
-    typeof discordUser.id !== "string" ||
-    typeof discordUser.username !== "string"
-  ) {
-    return null
+  const discordId = toSafeString(discordUser.id)
+  const username = toSafeString(discordUser.username)
+  if (!discordId || !username) return null
+
+  const activitiesRaw = Array.isArray(value.activities) ? value.activities : []
+  const activities = activitiesRaw
+    .map((activity) => toSafeActivity(activity))
+    .filter((activity): activity is Activity => activity !== null)
+
+  const spotify = isObject(value.spotify)
+    ? {
+        track_id: toSafeString(value.spotify.track_id),
+        song: toSafeString(value.spotify.song) || "Listening on Spotify",
+        artist: toSafeString(value.spotify.artist),
+        album_art_url: toSafeString(value.spotify.album_art_url),
+        album: toSafeString(value.spotify.album),
+        timestamps:
+          isObject(value.spotify.timestamps) &&
+          toSafeNumber(value.spotify.timestamps.start) !== undefined &&
+          toSafeNumber(value.spotify.timestamps.end) !== undefined
+            ? {
+                start: toSafeNumber(value.spotify.timestamps.start)!,
+                end: toSafeNumber(value.spotify.timestamps.end)!,
+              }
+            : null,
+      }
+    : null
+
+  const status = toSafeString(value.discord_status)
+  const discordStatus =
+    status === "online" ||
+    status === "idle" ||
+    status === "dnd" ||
+    status === "offline"
+      ? status
+      : "offline"
+
+  return {
+    discord_user: {
+      id: discordId,
+      username,
+      avatar: toSafeString(discordUser.avatar),
+    },
+    discord_status: discordStatus,
+    activities,
+    spotify,
+    active_on_discord_mobile: Boolean(value.active_on_discord_mobile),
+    active_on_discord_desktop: Boolean(value.active_on_discord_desktop),
+    active_on_discord_web: Boolean(value.active_on_discord_web),
   }
-
-  return value as unknown as LanyardData
 }
 
 export function useLanyard() {
@@ -47,22 +131,40 @@ export function useLanyard() {
     let heartbeatInterval: ReturnType<typeof setInterval> | null = null
     let reconnectTimeout: ReturnType<typeof setTimeout> | null = null
     let stopped = false
+
     const maxAttempts = Number.isFinite(MAX_ATTEMPTS)
       ? Math.min(Math.max(Math.floor(MAX_ATTEMPTS), 1), 20)
       : 6
 
-    const connect = () => {
-      if (stopped) return
-      if (attemptRef.current >= maxAttempts) {
+    const clearTimers = () => {
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval)
+        heartbeatInterval = null
+      }
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout)
+        reconnectTimeout = null
+      }
+    }
+
+    const scheduleReconnect = () => {
+      if (stopped || attemptRef.current >= maxAttempts) {
         setStatus("error")
-        setError("Failed to connect to Lanyard after multiple attempts")
+        setError("Unable to connect to Lanyard after multiple attempts")
         return
       }
 
+      const delay = Math.min(3000 * 1.5 ** attemptRef.current, 20000)
+      reconnectTimeout = setTimeout(connect, delay)
+    }
+
+    const connect = () => {
+      if (stopped) return
+
+      clearTimers()
       setStatus("connecting")
       setError(null)
       attemptRef.current += 1
-
       socket = new WebSocket("wss://api.lanyard.rest/socket")
 
       socket.onmessage = (event) => {
@@ -73,12 +175,11 @@ export function useLanyard() {
           return
         }
 
-        const { op, d } = message
-
-        if (op === 1) {
+        if (message.op === 1) {
           const heartbeatIntervalMs =
-            isObject(d) && typeof d.heartbeat_interval === "number"
-              ? d.heartbeat_interval
+            isObject(message.d) &&
+            typeof message.d.heartbeat_interval === "number"
+              ? Math.max(message.d.heartbeat_interval, 5000)
               : 30000
 
           heartbeatInterval = setInterval(() => {
@@ -91,33 +192,33 @@ export function useLanyard() {
               d: { subscribe_to_id: DISCORD_ID },
             })
           )
-        } else if (op === 0) {
-          if (message.t === "INIT_STATE" || message.t === "PRESENCE_UPDATE") {
-            const safeData = toSafeLanyardData(d)
-            if (!safeData) return
+          return
+        }
 
-            setStatus("open")
-            setData(safeData)
-            setLastUpdated(Date.now())
-            attemptRef.current = 0
+        if (message.op === 0) {
+          if (message.t !== "INIT_STATE" && message.t !== "PRESENCE_UPDATE") {
+            return
           }
+
+          const safeData = toSafeLanyardData(message.d)
+          if (!safeData) return
+
+          setStatus("open")
+          setData(safeData)
+          setLastUpdated(Date.now())
+          attemptRef.current = 0
         }
       }
 
       socket.onerror = () => {
-        setStatus("error")
-        setError("WebSocket error")
+        setStatus("closed")
+        setError("WebSocket connection failed")
       }
 
       socket.onclose = () => {
-        if (heartbeatInterval) {
-          clearInterval(heartbeatInterval)
-          heartbeatInterval = null
-        }
         if (stopped) return
         setStatus("closed")
-        const delay = Math.min(5000 * Math.pow(1.5, attemptRef.current), 30000)
-        reconnectTimeout = setTimeout(connect, delay)
+        scheduleReconnect()
       }
     }
 
@@ -125,8 +226,7 @@ export function useLanyard() {
 
     return () => {
       stopped = true
-      if (heartbeatInterval) clearInterval(heartbeatInterval)
-      if (reconnectTimeout) clearTimeout(reconnectTimeout)
+      clearTimers()
       socket?.close()
     }
   }, [])
