@@ -12,6 +12,9 @@ import {
   Music,
   Pause,
   Play,
+  Repeat,
+  Repeat1,
+  Shuffle,
   SkipBack,
   SkipForward,
   Volume2,
@@ -24,7 +27,11 @@ const STORAGE_KEYS = {
   volume: "drenzzz-volume",
   muted: "drenzzz-muted",
   trackIndex: "drenzzz-track-idx",
+  shuffle: "drenzzz-shuffle",
+  repeatMode: "drenzzz-repeat-mode",
 } as const
+
+type RepeatMode = "off" | "all" | "one"
 
 const clamp = (value: number, min: number, max: number) => {
   return Math.min(Math.max(value, min), max)
@@ -75,6 +82,18 @@ const savePreference = (key: string, value: string) => {
   }
 }
 
+const readRepeatMode = () => {
+  if (typeof window === "undefined") return "off" as RepeatMode
+
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEYS.repeatMode)
+    if (raw === "off" || raw === "all" || raw === "one") return raw
+    return "off"
+  } catch {
+    return "off"
+  }
+}
+
 export function MusicPlayer() {
   const [currentTrackIdx, setCurrentTrackIdx] = useState(() => {
     const saved = readNumber(STORAGE_KEYS.trackIndex, 0)
@@ -90,6 +109,12 @@ export function MusicPlayer() {
     readBoolean(STORAGE_KEYS.muted, false)
   )
   const [hasInteracted, setHasInteracted] = useState(false)
+  const [isShuffle, setIsShuffle] = useState(() =>
+    readBoolean(STORAGE_KEYS.shuffle, false)
+  )
+  const [repeatMode, setRepeatMode] = useState<RepeatMode>(() =>
+    readRepeatMode()
+  )
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const currentTrack = useMemo(
@@ -108,6 +133,14 @@ export function MusicPlayer() {
   useEffect(() => {
     savePreference(STORAGE_KEYS.trackIndex, currentTrackIdx.toString())
   }, [currentTrackIdx])
+
+  useEffect(() => {
+    savePreference(STORAGE_KEYS.shuffle, isShuffle.toString())
+  }, [isShuffle])
+
+  useEffect(() => {
+    savePreference(STORAGE_KEYS.repeatMode, repeatMode)
+  }, [repeatMode])
 
   useEffect(() => {
     if (!audioRef.current) return
@@ -136,8 +169,22 @@ export function MusicPlayer() {
 
   const handleNext = useCallback(() => {
     setHasInteracted(true)
-    setCurrentTrackIdx((prev) => (prev + 1) % playlist.length)
-  }, [])
+    setCurrentTrackIdx((prev) => {
+      if (isShuffle && playlist.length > 1) {
+        let next = prev
+        while (next === prev) {
+          next = Math.floor(Math.random() * playlist.length)
+        }
+        return next
+      }
+
+      if (repeatMode === "off" && prev === playlist.length - 1) {
+        return prev
+      }
+
+      return (prev + 1) % playlist.length
+    })
+  }, [isShuffle, repeatMode])
 
   const handlePlayPause = useCallback(() => {
     if (!audioRef.current) return
@@ -178,10 +225,53 @@ export function MusicPlayer() {
       if (event.code === "KeyM") {
         event.preventDefault()
         setIsMuted((prev) => !prev)
+        return
+      }
+
+      if (event.code === "KeyS") {
+        event.preventDefault()
+        setIsShuffle((prev) => !prev)
+        return
+      }
+
+      if (event.code === "KeyR") {
+        event.preventDefault()
+        setRepeatMode((prev) => {
+          if (prev === "off") return "all"
+          if (prev === "all") return "one"
+          return "off"
+        })
       }
     },
     [handleNext, handlePlayPause, handlePrev]
   )
+
+  const handleSeek = useCallback(
+    (value: number) => {
+      if (!audioRef.current || duration <= 0 || !Number.isFinite(duration))
+        return
+
+      const nextProgress = clamp(value, 0, duration)
+      audioRef.current.currentTime = nextProgress
+      setProgress(nextProgress)
+    },
+    [duration]
+  )
+
+  const handleCycleRepeatMode = useCallback(() => {
+    setRepeatMode((prev) => {
+      if (prev === "off") return "all"
+      if (prev === "all") return "one"
+      return "off"
+    })
+  }, [])
+
+  const repeatLabel =
+    repeatMode === "off"
+      ? "Repeat Off"
+      : repeatMode === "all"
+        ? "Repeat All"
+        : "Repeat One"
 
   return (
     <div
@@ -258,15 +348,72 @@ export function MusicPlayer() {
           <span className="text-[10px] font-black tabular-nums">
             {formatTime(progress)}
           </span>
-          <div className="relative h-2 flex-grow overflow-hidden rounded-full border border-white/30 bg-white/20">
-            <div
-              className="absolute top-0 left-0 h-full bg-[#E6A627] transition-all"
-              style={{ width: `${(progress / (duration || 1)) * 100}%` }}
-            ></div>
+          <div className="relative flex-grow">
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border border-white/30 bg-white/20">
+              <div
+                className="h-full bg-[#E6A627] transition-all"
+                style={{ width: `${(progress / (duration || 1)) * 100}%` }}
+              ></div>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={duration || 0}
+              step={0.1}
+              value={progress}
+              onChange={(event) => handleSeek(Number(event.target.value))}
+              className="relative z-10 h-5 w-full cursor-pointer appearance-none bg-transparent"
+              aria-label="Seek track"
+            />
           </div>
           <span className="text-[10px] font-black tabular-nums">
             {formatTime(duration)}
           </span>
+        </div>
+
+        <div className="mb-2 flex items-center justify-between px-1">
+          <button
+            type="button"
+            onClick={() => setIsShuffle((prev) => !prev)}
+            className={cn(
+              "rounded border px-1.5 py-0.5 text-[10px] font-bold transition-colors",
+              isShuffle
+                ? "border-[#E6A627] bg-[#E6A627] text-black"
+                : "border-white/30 text-white/80 hover:bg-white/10"
+            )}
+            aria-label="Toggle shuffle"
+            aria-pressed={isShuffle}
+          >
+            <span className="inline-flex items-center gap-1">
+              <Shuffle className="h-3 w-3" />
+              Shuffle
+            </span>
+          </button>
+
+          <span className="text-[10px] font-semibold text-white/70">
+            {currentTrackIdx + 1}/{playlist.length}
+          </span>
+
+          <button
+            type="button"
+            onClick={handleCycleRepeatMode}
+            className={cn(
+              "rounded border px-1.5 py-0.5 text-[10px] font-bold transition-colors",
+              repeatMode !== "off"
+                ? "border-[#E6A627] bg-[#E6A627] text-black"
+                : "border-white/30 text-white/80 hover:bg-white/10"
+            )}
+            aria-label={repeatLabel}
+          >
+            <span className="inline-flex items-center gap-1">
+              {repeatMode === "one" ? (
+                <Repeat1 className="h-3 w-3" />
+              ) : (
+                <Repeat className="h-3 w-3" />
+              )}
+              {repeatMode === "one" ? "One" : "Repeat"}
+            </span>
+          </button>
         </div>
 
         <div className="flex items-center justify-center gap-6">
@@ -314,7 +461,26 @@ export function MusicPlayer() {
           if (!audioRef.current) return
           setDuration(audioRef.current.duration)
         }}
-        onEnded={handleNext}
+        onEnded={() => {
+          if (repeatMode === "one" && audioRef.current) {
+            audioRef.current.currentTime = 0
+            audioRef.current.play().catch(() => {
+              setIsPlaying(false)
+            })
+            return
+          }
+
+          if (
+            repeatMode === "off" &&
+            currentTrackIdx === playlist.length - 1 &&
+            !isShuffle
+          ) {
+            setIsPlaying(false)
+            return
+          }
+
+          handleNext()
+        }}
       />
     </div>
   )
