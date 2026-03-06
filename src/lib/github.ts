@@ -2,8 +2,24 @@ import type { GithubStats } from "@/types"
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN
 const GITHUB_USERNAME = "drenzzz"
-const CACHE_TTL_MS = 10 * 60 * 1000
-const REQUEST_TIMEOUT_MS = 8000
+
+const toSafeNumber = (value: string | undefined, fallback: number) => {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return fallback
+  return parsed
+}
+
+const CACHE_TTL_MS = Math.min(
+  Math.max(
+    toSafeNumber(import.meta.env.GITHUB_STATS_CACHE_TTL_MS, 10 * 60 * 1000),
+    60_000
+  ),
+  60 * 60 * 1000
+)
+const REQUEST_TIMEOUT_MS = Math.min(
+  Math.max(toSafeNumber(import.meta.env.GITHUB_REQUEST_TIMEOUT_MS, 8000), 3000),
+  30000
+)
 
 const EMPTY_STATS: GithubStats = {
   stars: 0,
@@ -11,6 +27,11 @@ const EMPTY_STATS: GithubStats = {
   prs: 0,
   issues: 0,
   topLanguages: [],
+}
+
+const toSafeInt = (value: unknown) => {
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0
+  return Math.max(Math.trunc(value), 0)
 }
 
 let githubStatsCache: { value: GithubStats; expiresAt: number } | null = null
@@ -70,7 +91,9 @@ export async function fetchGithubStats(): Promise<GithubStats> {
     }
 
     const stars = user.repositories.nodes.reduce(
-      (sum: number, r: { stargazerCount: number }) => sum + r.stargazerCount,
+      (sum: number, r: { stargazerCount: number }) => {
+        return sum + toSafeInt(r.stargazerCount)
+      },
       0
     )
 
@@ -99,9 +122,11 @@ export async function fetchGithubStats(): Promise<GithubStats> {
 
     const nextStats = {
       stars,
-      commits: user.contributionsCollection.totalCommitContributions,
-      prs: user.contributionsCollection.totalPullRequestContributions,
-      issues: user.contributionsCollection.totalIssueContributions,
+      commits: toSafeInt(user.contributionsCollection.totalCommitContributions),
+      prs: toSafeInt(
+        user.contributionsCollection.totalPullRequestContributions
+      ),
+      issues: toSafeInt(user.contributionsCollection.totalIssueContributions),
       topLanguages,
     }
 

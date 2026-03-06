@@ -6,61 +6,61 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: #FFFBF0;
-    --foreground: #000000;
-    --card: #FFFFFF;
-    --card-foreground: #000000;
-    --popover: #FFFFFF;
-    --popover-foreground: #000000;
-    --primary: #FDE047;
-    --primary-foreground: #000000;
-    --secondary: #E4E4E7;
-    --secondary-foreground: #000000;
-    --muted: #E4E4E7;
-    --muted-foreground: #52525B;
-    --accent: #E4E4E7;
-    --accent-foreground: #000000;
-    --destructive: #EF4444;
-    --destructive-foreground: #FFFFFF;
-    --border: #000000;
-    --input: #000000;
-    --ring: #000000;
-    --radius: 0.25rem;
-    
-    --shadow-brutal: 3px 3px 0px 0px rgba(0,0,0,1);
-    --shadow-brutal-sm: 2px 2px 0px 0px rgba(0,0,0,1);
-    --shadow-brutal-lg: 5px 5px 0px 0px rgba(0,0,0,1);
+  --background: #fffbf0;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #fde047;
+  --primary-foreground: #000000;
+  --secondary: #e4e4e7;
+  --secondary-foreground: #000000;
+  --muted: #e4e4e7;
+  --muted-foreground: #52525b;
+  --accent: #e4e4e7;
+  --accent-foreground: #000000;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #000000;
+  --input: #000000;
+  --ring: #000000;
+  --radius: 0.25rem;
 
-    --tag-go: #93C5FD;
-    --tag-kotlin: #C084FC;
-    --tag-ts: #93C5FD;
-    --tag-astro: #F97316;
+  --shadow-brutal: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-lg: 5px 5px 0px 0px rgba(0, 0, 0, 1);
+
+  --tag-go: #93c5fd;
+  --tag-kotlin: #c084fc;
+  --tag-ts: #93c5fd;
+  --tag-astro: #f97316;
 }
 
 .dark {
-    --background: #18181B;
-    --foreground: #FAFAFA;
-    --card: #27272A;
-    --card-foreground: #FAFAFA;
-    --popover: #27272A;
-    --popover-foreground: #FAFAFA;
-    --primary: #FDE047;
-    --primary-foreground: #18181B;
-    --secondary: #3F3F46;
-    --secondary-foreground: #FAFAFA;
-    --muted: #3F3F46;
-    --muted-foreground: #A1A1AA;
-    --accent: #3F3F46;
-    --accent-foreground: #FAFAFA;
-    --destructive: #7F1D1D;
-    --destructive-foreground: #FAFAFA;
-    --border: #FAFAFA;
-    --input: #FAFAFA;
-    --ring: #FAFAFA;
-    
-    --shadow-brutal: 3px 3px 0px 0px rgba(255,255,255,1);
-    --shadow-brutal-sm: 2px 2px 0px 0px rgba(255,255,255,1);
-    --shadow-brutal-lg: 5px 5px 0px 0px rgba(255,255,255,1);
+  --background: #18181b;
+  --foreground: #fafafa;
+  --card: #27272a;
+  --card-foreground: #fafafa;
+  --popover: #27272a;
+  --popover-foreground: #fafafa;
+  --primary: #fde047;
+  --primary-foreground: #18181b;
+  --secondary: #3f3f46;
+  --secondary-foreground: #fafafa;
+  --muted: #3f3f46;
+  --muted-foreground: #a1a1aa;
+  --accent: #3f3f46;
+  --accent-foreground: #fafafa;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fafafa;
+  --border: #fafafa;
+  --input: #fafafa;
+  --ring: #fafafa;
+
+  --shadow-brutal: 3px 3px 0px 0px rgba(255, 255, 255, 1);
+  --shadow-brutal-sm: 2px 2px 0px 0px rgba(255, 255, 255, 1);
+  --shadow-brutal-lg: 5px 5px 0px 0px rgba(255, 255, 255, 1);
 }
 
 @theme inline {
@@ -83,12 +83,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  
+
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --font-sans: 'Figtree Variable', sans-serif;
-  
+  --font-sans: "Figtree Variable", sans-serif;
+
   --shadow-brutal: var(--shadow-brutal);
   --shadow-brutal-sm: var(--shadow-brutal-sm);
   --shadow-brutal-lg: var(--shadow-brutal-lg);
@@ -98,7 +98,24 @@
   * {
     @apply border-border;
   }
+
+  :focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground;
+    @apply bg-background font-sans text-foreground selection:bg-primary selection:text-primary-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
