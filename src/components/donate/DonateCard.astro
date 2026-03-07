@@ -27,7 +27,7 @@ const modalId = `modal-${method.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
   class="w-full h-full p-6 bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_rgba(0,0,0,1)] flex flex-col items-center justify-center text-center group hover:-translate-y-2 hover:shadow-[10px_10px_0px_rgba(0,0,0,1)] transition-all cursor-pointer"
   onclick={`document.getElementById('${modalId}').showModal()`}
 >
-  <div class="w-20 h-20 bg-[#F4F4F5] rounded-xl flex items-center justify-center p-3 mb-5 border-4 border-black group-hover:bg-[#5F4FE6] transition-colors">
+  <div class="w-20 h-20 bg-[#F4F4F5] rounded-xl flex items-center justify-center p-3 mb-5 border-4 border-black group-hover:bg-[#C4A1FF] transition-colors">
     <img src={method.icon} alt={method.name} class="w-12 h-12 object-contain" loading="lazy" />
   </div>
   
@@ -39,7 +39,7 @@ const modalId = `modal-${method.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
 
 <dialog id={modalId} class="backdrop:bg-black/70 backdrop:backdrop-blur-sm bg-transparent p-4 md:p-0 m-auto fixed inset-0 z-50 overflow-visible max-w-sm w-full outline-none open:animate-in open:fade-in open:zoom-in-95">
   <div class="bg-white border-[4px] border-black rounded-2xl shadow-[12px_12px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col relative max-h-[90vh]">
-    <div class="border-b-[4px] border-black p-5 bg-[#5F4FE6] flex items-center justify-between shrink-0">
+    <div class="border-b-[4px] border-black p-5 bg-[#C4A1FF] flex items-center justify-between shrink-0">
       <h3 class="font-head text-2xl font-black uppercase tracking-tight">{method.name}</h3>
       <form method="dialog">
         <button class="p-1.5 bg-white border-2 border-black rounded-lg hover:bg-black hover:text-white hover:-translate-y-0.5 shadow-brutal-sm hover:shadow-none transition-all">
@@ -64,9 +64,9 @@ const modalId = `modal-${method.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
       <div class="w-full pt-6 border-t-4 border-dashed border-black/20 flex flex-col gap-5">
         {method.number && (
           <div class="w-full flex flex-col gap-2">
-            <span class="text-xs font-black uppercase tracking-widest text-[#5F4FE6] bg-black px-2 py-1 rounded w-fit self-center border-2 border-black">Account Number</span>
+            <span class="text-xs font-black uppercase tracking-widest text-[#C4A1FF] bg-black px-2 py-1 rounded w-fit self-center border-2 border-black">Account Number</span>
             <div 
-              class="w-full bg-[#F4F4F5] border-4 border-black rounded-xl px-4 py-4 flex items-center justify-between group/copy relative cursor-pointer hover:bg-[#5F4FE6]/20 transition-colors shadow-brutal-sm" 
+              class="w-full bg-[#F4F4F5] border-4 border-black rounded-xl px-4 py-4 flex items-center justify-between group/copy relative cursor-pointer hover:bg-[#C4A1FF]/20 transition-colors shadow-brutal-sm" 
               onclick={`navigator.clipboard.writeText('${method.number}')`}
             >
               <code class="text-lg md:text-xl font-black tracking-widest">{method.number}</code>
@@ -76,7 +76,7 @@ const modalId = `modal-${method.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
         )}
         
         {method.link && (
-          <a href={method.link} target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#5F4FE6] border-[4px] border-black rounded-xl font-black text-lg shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+          <a href={method.link} target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#C4A1FF] border-[4px] border-black rounded-xl font-black text-lg shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
             Pay via Link <ExternalLink className="w-5 h-5" />
           </a>
         )}

@@ -328,7 +328,7 @@ export function MusicPlayer() {
           )}
           style={{ animationDuration: "3s" }}
         >
-          <div className="h-5 w-5 rounded-full border-2 border-black bg-[#5F4FE6]"></div>
+          <div className="h-5 w-5 rounded-full border-2 border-black bg-[#C4A1FF]"></div>
         </div>
 
         <div className="w-full overflow-hidden">
@@ -351,7 +351,7 @@ export function MusicPlayer() {
           <div className="relative flex-grow">
             <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border border-white/30 bg-white/20">
               <div
-                className="h-full bg-[#5F4FE6] transition-all"
+                className="h-full bg-[#C4A1FF] transition-all"
                 style={{ width: `${(progress / (duration || 1)) * 100}%` }}
               ></div>
             </div>
@@ -378,7 +378,7 @@ export function MusicPlayer() {
             className={cn(
               "rounded border px-1.5 py-0.5 text-[10px] font-bold transition-colors",
               isShuffle
-                ? "border-[#5F4FE6] bg-[#5F4FE6] text-black"
+                ? "border-[#C4A1FF] bg-[#C4A1FF] text-black"
                 : "border-white/30 text-white/80 hover:bg-white/10"
             )}
             aria-label="Toggle shuffle"
@@ -400,7 +400,7 @@ export function MusicPlayer() {
             className={cn(
               "rounded border px-1.5 py-0.5 text-[10px] font-bold transition-colors",
               repeatMode !== "off"
-                ? "border-[#5F4FE6] bg-[#5F4FE6] text-black"
+                ? "border-[#C4A1FF] bg-[#C4A1FF] text-black"
                 : "border-white/30 text-white/80 hover:bg-white/10"
             )}
             aria-label={repeatLabel}
@@ -428,7 +428,7 @@ export function MusicPlayer() {
           <button
             type="button"
             onClick={handlePlayPause}
-            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#5F4FE6] text-black shadow-[2px_2px_0px_rgba(255,255,255,1)] transition-transform hover:scale-110"
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(255,255,255,1)] transition-transform hover:scale-110"
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (

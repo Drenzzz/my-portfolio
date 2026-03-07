@@ -25,7 +25,7 @@ export function GitHubStats({ initialData }: Props) {
   return (
     <div className="flex h-full flex-col gap-4 rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal">
       <div className="flex items-center gap-3">
-        <div className="rounded-lg border-2 border-black bg-[#5F4FE6] p-2 shadow-brutal-sm">
+        <div className="rounded-lg border-2 border-black bg-[#C4A1FF] p-2 shadow-brutal-sm">
           <span className="text-lg">📊</span>
         </div>
         <div>

@@ -18,14 +18,14 @@ import { education } from "@/data/education"
     {education.map((item, index) => (
       <div class="relative pl-8 group">
         <!-- Timeline Marker -->
-        <span class="absolute -left-[14px] top-1 h-6 w-6 rounded-full bg-[#5F4FE6] border-4 border-black group-hover:scale-125 transition-transform" />
+        <span class="absolute -left-[14px] top-1 h-6 w-6 rounded-full bg-[#C4A1FF] border-4 border-black group-hover:scale-125 transition-transform" />
         
         <div class="flex flex-wrap items-center gap-x-2 text-sm font-bold bg-black text-white px-2 py-0.5 rounded-sm w-fit mb-2 shadow-[2px_2px_0px_rgba(230,166,39,1)]">
           <Calendar className="w-3.5 h-3.5" />
           <span>{item.date}</span>
         </div>
         
-        <h4 class="font-head text-xl font-bold leading-tight mb-1 group-hover:underline decoration-4 decoration-[#5F4FE6] underline-offset-4">{item.degree}</h4>
+        <h4 class="font-head text-xl font-bold leading-tight mb-1 group-hover:underline decoration-4 decoration-[#C4A1FF] underline-offset-4">{item.degree}</h4>
         <p class="font-medium text-muted-foreground">{item.school}</p>
         
         {item.description && (
