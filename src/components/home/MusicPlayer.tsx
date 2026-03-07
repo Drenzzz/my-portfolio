@@ -341,17 +341,17 @@ export function MusicPlayer() {
         </div>
       </div>
 
-      <div className="relative z-10 rounded-xl border-4 border-black bg-black p-3 text-[#F4F4F5]">
-        <div className="absolute inset-0 -z-10 translate-x-1 translate-y-1 rounded-xl border-4 border-black bg-white"></div>
+      <div className="relative z-10 rounded-xl border-4 border-black bg-white p-3 text-black">
+        <div className="absolute inset-0 -z-10 translate-x-1 translate-y-1 rounded-xl border-4 border-black bg-[#C4A1FF]"></div>
 
         <div className="mb-2 flex items-center gap-2 px-1">
           <span className="text-[10px] font-black tabular-nums">
             {formatTime(progress)}
           </span>
           <div className="relative flex-grow">
-            <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border border-white/30 bg-white/20">
+            <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border-2 border-black bg-[#F4F4F5]">
               <div
-                className="h-full bg-[#C4A1FF] transition-all"
+                className="h-full bg-[#C4A1FF] transition-all border-r-2 border-black"
                 style={{ width: `${(progress / (duration || 1)) * 100}%` }}
               ></div>
             </div>
@@ -376,10 +376,10 @@ export function MusicPlayer() {
             type="button"
             onClick={() => setIsShuffle((prev) => !prev)}
             className={cn(
-              "rounded border px-1.5 py-0.5 text-[10px] font-bold transition-colors",
+              "rounded border-2 px-1.5 py-0.5 text-[10px] font-bold transition-all",
               isShuffle
-                ? "border-[#C4A1FF] bg-[#C4A1FF] text-black"
-                : "border-white/30 text-white/80 hover:bg-white/10"
+                ? "border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
+                : "border-transparent text-black/70 hover:border-black hover:bg-black hover:text-white"
             )}
             aria-label="Toggle shuffle"
             aria-pressed={isShuffle}
@@ -390,7 +390,7 @@ export function MusicPlayer() {
             </span>
           </button>
 
-          <span className="text-[10px] font-semibold text-white/70">
+          <span className="text-[10px] font-black text-black">
             {currentTrackIdx + 1}/{playlist.length}
           </span>
 
@@ -398,10 +398,10 @@ export function MusicPlayer() {
             type="button"
             onClick={handleCycleRepeatMode}
             className={cn(
-              "rounded border px-1.5 py-0.5 text-[10px] font-bold transition-colors",
+              "rounded border-2 px-1.5 py-0.5 text-[10px] font-bold transition-all",
               repeatMode !== "off"
-                ? "border-[#C4A1FF] bg-[#C4A1FF] text-black"
-                : "border-white/30 text-white/80 hover:bg-white/10"
+                ? "border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
+                : "border-transparent text-black/70 hover:border-black hover:bg-black hover:text-white"
             )}
             aria-label={repeatLabel}
           >
@@ -428,7 +428,7 @@ export function MusicPlayer() {
           <button
             type="button"
             onClick={handlePlayPause}
-            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(255,255,255,1)] transition-transform hover:scale-110"
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform hover:scale-110"
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
