@@ -152,9 +152,6 @@ export function MusicPlayer() {
   useEffect(() => {
     if (!audioRef.current) return
 
-    setProgress(0)
-    setDuration(0)
-
     if (!hasInteracted || !isPlaying) return
 
     audioRef.current.play().catch(() => {
@@ -362,7 +359,7 @@ export function MusicPlayer() {
               step={0.1}
               value={progress}
               onChange={(event) => handleSeek(Number(event.target.value))}
-              className="relative z-10 h-5 w-full cursor-pointer appearance-none bg-transparent"
+              className="relative z-10 h-5 w-full cursor-pointer appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-0 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-0 [&::-webkit-slider-thumb]:appearance-none"
               aria-label="Seek track"
             />
           </div>
