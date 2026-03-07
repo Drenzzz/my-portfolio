@@ -150,6 +150,11 @@ export function MusicPlayer() {
   }, [volume, isMuted])
 
   useEffect(() => {
+    setProgress(0)
+    setDuration(0)
+  }, [currentTrackIdx])
+
+  useEffect(() => {
     if (!audioRef.current) return
 
     if (!hasInteracted || !isPlaying) return
