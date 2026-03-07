@@ -11,7 +11,7 @@ interface WeatherData {
 
 const getWeatherIcon = (code: number, isDay: boolean) => {
   if (code === 0 || code === 1) {
-    return isDay ? <Sun className="w-8 h-8 text-[#E6A627] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" /> : <Moon className="w-8 h-8 text-blue-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" />;
+    return isDay ? <Sun className="w-8 h-8 text-[#5F4FE6] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" /> : <Moon className="w-8 h-8 text-blue-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]" />;
   }
   if (code === 2 || code === 3) {
     return <Cloud className="w-8 h-8 text-black opacity-80" />;
@@ -39,7 +39,7 @@ function LocationSkeleton() {
         <div className="w-24 h-6 bg-black/20 rounded mb-1"></div>
         <div className="w-32 h-4 bg-black/20 rounded mt-4"></div>
       </div>
-      <div className="w-full md:w-[40%] bg-[#E6A627] p-5 flex flex-col justify-center items-center gap-4">
+      <div className="w-full md:w-[40%] bg-[#5F4FE6] p-5 flex flex-col justify-center items-center gap-4">
         <div className="w-16 h-6 bg-black/20 rounded"></div>
         <div className="w-20 h-4 bg-black/20 rounded"></div>
       </div>
@@ -139,7 +139,7 @@ export function LocationCard() {
               href="https://www.google.com/maps/place/Padang,+West+Sumatra"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center p-2 bg-black text-white hover:bg-[#E6A627] hover:text-black border-2 border-transparent hover:border-black rounded shadow-[2px_2px_0px_rgba(100,100,100,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all"
+              className="inline-flex items-center justify-center p-2 bg-black text-white hover:bg-[#5F4FE6] hover:text-black border-2 border-transparent hover:border-black rounded shadow-[2px_2px_0px_rgba(100,100,100,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all"
               aria-label="View location on Google Maps"
             >
               <MapPin className="w-4 h-4" />
@@ -160,7 +160,7 @@ export function LocationCard() {
         </div>
 
         {/* Bottom Side: Time & Date */}
-        <div className="w-full h-[40%] bg-[#E6A627] p-4 flex flex-row justify-around items-center gap-4 relative overflow-hidden">
+        <div className="w-full h-[40%] bg-[#5F4FE6] p-4 flex flex-row justify-around items-center gap-4 relative overflow-hidden">
           {/* Subtle brutalist background pattern */}
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2px)', backgroundSize: '16px 16px' }}></div>
 

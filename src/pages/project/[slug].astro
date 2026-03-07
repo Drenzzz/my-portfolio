@@ -50,7 +50,7 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
                 {entry.data.image ? (
                   <img src={entry.data.image} alt={entry.data.title} class="w-full h-full object-cover" />
                 ) : (
-                  <div class="flex h-full w-full flex-col items-center justify-center gap-3 text-muted-foreground bg-[#E6A627]/20">
+                  <div class="flex h-full w-full flex-col items-center justify-center gap-3 text-muted-foreground bg-[#5F4FE6]/20">
                     <Info className="h-10 w-10 opacity-70" />
                     <span class="text-sm font-bold font-head uppercase">Tidak ada preview</span>
                   </div>
@@ -77,7 +77,7 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
               {!entry.data.link && !entry.data.github && <p class="text-sm font-medium text-muted-foreground">Belum ada tautan yang dibagikan.</p>}
 
               {entry.data.link && (
-                <a href={entry.data.link} target="_blank" rel="noreferrer" class="w-full inline-flex items-center justify-between gap-2 px-4 py-3 bg-[#E6A627] border-2 border-black rounded-sm font-bold text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+                <a href={entry.data.link} target="_blank" rel="noreferrer" class="w-full inline-flex items-center justify-between gap-2 px-4 py-3 bg-[#5F4FE6] border-2 border-black rounded-sm font-bold text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                   <span class="flex items-center gap-2">
                     <Globe className="h-5 w-5" /> Visit Live Site
                   </span>

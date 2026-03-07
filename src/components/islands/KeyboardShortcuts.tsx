@@ -37,7 +37,7 @@ export function KeyboardShortcuts() {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 animate-in fade-in slide-in-from-bottom-4">
-      <div className="flex items-center gap-3 bg-[#E6A627] border-[3px] border-black px-4 py-3 shadow-brutal font-head">
+      <div className="flex items-center gap-3 bg-[#5F4FE6] border-[3px] border-black px-4 py-3 shadow-brutal font-head">
         <div className="bg-white border-2 border-black px-2 py-0.5 font-bold rounded text-sm shadow-brutal-sm">
           {pressedKey}
         </div>
