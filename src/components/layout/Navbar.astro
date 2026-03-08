@@ -1,0 +1,36 @@
+---
+import { navItems } from "@/data/navigation"
+import { Button } from "@/components/retroui/Button"
+import { Github } from "lucide-react"
+---
+
+<header class="sticky top-0 z-50 w-full border-b-[3px] border-black bg-background p-4 shadow-brutal">
+  <div class="container mx-auto flex h-14 items-center justify-between">
+    <a href="/" class="flex flex-col gap-0.5">
+      <span class="font-head text-xl font-bold uppercase tracking-wider">Drenzzz</span>
+      <span class="text-xs font-semibold leading-none text-muted-foreground">Portfolio_v2</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6 font-head font-medium text-sm">
+      {navItems.map((item) => (
+        <a 
+          href={item.path}
+          class="hover:underline hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+        >
+          {item.title}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <a href="https://github.com/drenzzz" target="_blank" rel="noreferrer" aria-label="GitHub">
+        <Button variant="outline" size="icon" client:load>
+          <Github class="h-5 w-5" />
+        </Button>
+      </a>
+      <a href="/donate">
+        <Button variant="default" client:load>Support</Button>
+      </a>
+    </div>
+  </div>
+</header>
