@@ -40,7 +40,7 @@ const githubStats = await fetchGithubStats()
 
       <!-- Middle Row: Music Player (1 col), Location (1 col), Github (2 cols) -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div class="lg:col-span-1 min-h-[300px]">
+        <div class="lg:col-span-1 min-h-[220px] max-h-min">
           <MusicPlayer client:visible>
             <div
               slot="fallback"
@@ -49,7 +49,7 @@ const githubStats = await fetchGithubStats()
             ></div>
           </MusicPlayer>
         </div>
-        <div class="lg:col-span-1 min-h-[300px]">
+        <div class="lg:col-span-1 min-h-[220px] max-h-min">
           <LocationCard client:visible>
             <div
               slot="fallback"
@@ -58,7 +58,7 @@ const githubStats = await fetchGithubStats()
             ></div>
           </LocationCard>
         </div>
-        <div class="lg:col-span-2 min-h-[300px]">
+        <div class="lg:col-span-2 min-h-[220px] max-h-min">
           <GitHubStats initialData={githubStats} />
         </div>
       </div>

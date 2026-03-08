@@ -277,7 +277,7 @@ export function MusicPlayer() {
 
   return (
     <div
-      className="group relative flex h-full flex-col overflow-hidden rounded-xl border-4 border-black bg-[#F4F4F5] p-5 shadow-[8px_8px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)]"
+      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl border-4 border-black bg-[#F4F4F5] p-3 shadow-[8px_8px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)]"
       tabIndex={0}
       onKeyDown={handleKeyDown}
       aria-label="Music player"
@@ -286,10 +286,10 @@ export function MusicPlayer() {
         <Music className="h-48 w-48" />
       </div>
 
-      <div className="z-10 mb-4 flex items-center justify-between">
-        <h3 className="font-head flex items-center gap-2 text-2xl font-black tracking-tight text-black uppercase">
+      <div className="z-10 mb-2.5 flex items-center justify-between">
+        <h3 className="font-head flex items-center gap-1.5 text-xl font-black tracking-tight text-black uppercase">
           <span
-            className="h-3 w-3 animate-pulse rounded-full bg-black"
+            className="h-2.5 w-2.5 animate-pulse rounded-full bg-black"
             style={{ animationDuration: isPlaying ? "1s" : "0s" }}
           ></span>
           Now Playing
@@ -322,31 +322,31 @@ export function MusicPlayer() {
         </div>
       </div>
 
-      <div className="z-10 mb-4 flex flex-1 items-center gap-4 rounded-xl border-4 border-black bg-white p-4 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+      <div className="z-10 mb-2.5 flex flex-1 items-center gap-3 rounded-xl border-4 border-black bg-white p-2.5 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
         <div
           className={cn(
-            "flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-black bg-neutral-900 shadow-inner",
+            "flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-[3px] border-black bg-neutral-900 shadow-inner",
             isPlaying && "animate-spin"
           )}
           style={{ animationDuration: "3s" }}
         >
-          <div className="h-5 w-5 rounded-full border-2 border-black bg-[#C4A1FF]"></div>
+          <div className="h-4 w-4 rounded-full border-[2px] border-black bg-[#C4A1FF]"></div>
         </div>
 
         <div className="w-full overflow-hidden">
-          <div className="mb-1 truncate text-xl leading-none font-black text-black">
+          <div className="mb-0.5 truncate text-lg leading-none font-black text-black">
             {currentTrack.title}
           </div>
-          <div className="truncate text-sm font-bold tracking-widest text-muted-foreground uppercase">
+          <div className="truncate text-xs font-bold tracking-widest text-muted-foreground uppercase">
             {currentTrack.artist}
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 rounded-xl border-4 border-black bg-white p-3 text-black">
+      <div className="relative z-10 rounded-xl border-4 border-black bg-white p-2 text-black">
         <div className="absolute inset-0 -z-10 translate-x-1 translate-y-1 rounded-xl border-4 border-black bg-[#C4A1FF]"></div>
 
-        <div className="mb-2 flex items-center gap-2 px-1">
+        <div className="mb-1.5 flex items-center gap-2 px-1">
           <span className="text-[10px] font-black tabular-nums">
             {formatTime(progress)}
           </span>
@@ -373,7 +373,7 @@ export function MusicPlayer() {
           </span>
         </div>
 
-        <div className="mb-2 flex items-center justify-between px-1">
+        <div className="mb-1.5 flex items-center justify-between px-1">
           <button
             type="button"
             onClick={() => setIsShuffle((prev) => !prev)}
@@ -418,25 +418,25 @@ export function MusicPlayer() {
           </button>
         </div>
 
-        <div className="flex items-center justify-center gap-6">
+        <div className="flex items-center justify-center gap-4">
           <button
             type="button"
             onClick={handlePrev}
             className="transition-transform hover:-translate-x-1"
             aria-label="Previous Track"
           >
-            <SkipBack className="h-5 w-5 fill-current" />
+            <SkipBack className="h-4 w-4 fill-current" />
           </button>
           <button
             type="button"
             onClick={handlePlayPause}
-            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform hover:scale-110"
+            className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform hover:scale-110"
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
-              <Pause className="h-5 w-5 fill-black" />
+              <Pause className="h-4 w-4 fill-black" />
             ) : (
-              <Play className="ml-1 h-5 w-5 fill-black" />
+              <Play className="ml-1 h-4 w-4 fill-black" />
             )}
           </button>
           <button
@@ -445,7 +445,7 @@ export function MusicPlayer() {
             className="transition-transform hover:translate-x-1"
             aria-label="Next Track"
           >
-            <SkipForward className="h-5 w-5 fill-current" />
+            <SkipForward className="h-4 w-4 fill-current" />
           </button>
         </div>
       </div>

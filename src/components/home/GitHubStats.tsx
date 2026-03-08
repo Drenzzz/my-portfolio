@@ -24,31 +24,31 @@ export function GitHubStats({ initialData }: Props) {
   ]
 
   return (
-    <div className="flex h-full flex-col justify-between gap-5 rounded-xl border-[3px] border-black bg-white p-5 xl:p-6 shadow-brutal">
+    <div className="flex h-full flex-col justify-between gap-4 rounded-xl border-[3px] border-black bg-white p-4 xl:p-5 shadow-brutal">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] text-black shadow-brutal-sm">
-            <Github className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] text-black shadow-brutal-sm">
+            <Github className="h-5 w-5" />
           </div>
           <div className="flex flex-col">
-            <h3 className="font-head text-xl leading-none font-black text-black">GitHub</h3>
-            <p className="mt-1 text-sm font-bold text-muted-foreground">
+            <h3 className="font-head text-lg leading-none font-black text-black">GitHub</h3>
+            <p className="mt-0.5 text-xs font-bold text-muted-foreground">
               Live Statistics
             </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 flex-grow">
+      <div className="grid grid-cols-2 gap-2.5 flex-grow">
         {statItems.map((item) => (
           <div
             key={item.label}
-            className="flex flex-col justify-center gap-2 rounded-xl border-2 border-black bg-[#F4F4F5] p-4 shadow-brutal-sm hover:-translate-y-1 hover:shadow-brutal transition-all"
+            className="flex flex-col justify-center gap-1.5 rounded-xl border-2 border-black bg-[#F4F4F5] p-3 shadow-brutal-sm hover:-translate-y-1 hover:shadow-brutal transition-all"
           >
             <div className="font-head flex items-center gap-1.5 text-xs font-bold tracking-widest text-muted-foreground uppercase">
               {item.icon} <span className="pt-0.5">{item.label}</span>
             </div>
-            <p className="font-head text-3xl leading-none font-black text-black">
+            <p className="font-head text-2xl leading-none font-black text-black">
               {item.value}
             </p>
           </div>
@@ -56,8 +56,8 @@ export function GitHubStats({ initialData }: Props) {
       </div>
 
       {stats.topLanguages.length > 0 && (
-        <div className="mt-2 space-y-3 rounded-xl border-2 border-black bg-white p-4 shadow-brutal-sm">
-          <div className="flex h-3 w-full overflow-hidden rounded-full border-2 border-black bg-neutral-100">
+        <div className="mt-2 space-y-2 rounded-xl border-2 border-black bg-white p-3 shadow-brutal-sm">
+          <div className="flex h-2.5 w-full overflow-hidden rounded-full border-2 border-black bg-neutral-100">
             {stats.topLanguages.map((lang) => (
               <div
                 key={lang.name}
