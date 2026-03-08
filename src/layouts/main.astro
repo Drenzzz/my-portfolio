@@ -1,15 +1,45 @@
 ---
+import { ClientRouter } from "astro:transitions"
 import "@/styles/global.css"
+
+interface Props {
+  title?: string
+  description?: string
+  ogImage?: string
+}
+
+const {
+  title = "Drenzzz | Portfolio",
+  description = "A minimal weather dashboard with neobrutalism design.",
+  ogImage = "/og-image.png",
+} = Astro.props
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Astro App</title>
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site || Astro.url)} />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site || Astro.url)} />
+    
+    <ClientRouter />
+    <slot name="head" />
   </head>
-  <body>
-    <slot />
+  <body class="min-h-screen antialiased selection:bg-primary selection:text-primary-foreground font-sans">
+    <div class="relative flex min-h-screen flex-col">
+      <slot />
+    </div>
   </body>
 </html>
