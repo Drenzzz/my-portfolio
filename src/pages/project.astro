@@ -1,0 +1,26 @@
+---
+import Layout from "@/layouts/main.astro"
+import Navbar from "@/components/layout/Navbar.astro"
+import Footer from "@/components/layout/Footer.astro"
+
+const title = "Projects | Drenzzz"
+const description = "Explore my portfolio of web applications, backend systems, and open-source contributions."
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+  
+  <main class="flex-1 container mx-auto py-12 px-4">
+    <h1 class="font-head text-4xl md:text-6xl font-black uppercase mb-8">Projects //</h1>
+    <p class="text-lg text-muted-foreground font-medium max-w-2xl mb-12">
+      A collection of things I've built, ranging from full-stack web applications to backend CLI tools.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Project content will go here in Phase 2 */}
+      <h2 class="font-head text-2xl font-bold">Coming Soon</h2>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,27 @@
+---
+import Layout from "@/layouts/main.astro"
+import Navbar from "@/components/layout/Navbar.astro"
+import Footer from "@/components/layout/Footer.astro"
+
+const title = "About | Drenzzz"
+const description = "Learn more about my background, skills, and experience as a Fullstack Developer."
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+  
+  <main class="flex-1 container mx-auto py-12 px-4">
+    <h1 class="font-head text-4xl md:text-6xl font-black uppercase mb-8">About Me //</h1>
+    
+    <div class="max-w-3xl prose prose-lg dark:prose-invert">
+      <p class="font-medium text-lg text-muted-foreground">
+        Hi, I'm Drenzzz. I specialize in building efficient and scalable web applications.
+        I transition between frontend wizardry using React/Astro and backend architecture using Go.
+      </p>
+      {/* About content will go here in Phase 4 */}
+      <h2 class="font-head font-bold mt-8">More details coming soon.</h2>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
