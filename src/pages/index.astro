@@ -11,6 +11,8 @@ import { LocationCard } from "@/components/home/LocationCard"
 import { MusicPlayer } from "@/components/home/MusicPlayer"
 import { fetchGithubStats } from "@/lib/github"
 
+export const prerender = true
+
 const githubStats = await fetchGithubStats()
 ---
 

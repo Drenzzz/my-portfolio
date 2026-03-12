@@ -62,11 +62,18 @@ import { Menu, X } from "lucide-react"
 
     if (!toggleBtn || !overlay) return;
 
+    let closeTimeout = null;
+
     const toggleMenu = () => {
       isMenuOpen = !isMenuOpen;
       toggleBtn.setAttribute('aria-expanded', isMenuOpen.toString());
       
       if (isMenuOpen) {
+        if (closeTimeout !== null) {
+          clearTimeout(closeTimeout);
+          closeTimeout = null;
+        }
+
         // Open menu
         overlay.classList.remove('hidden');
         // Small delay to allow display block to apply before opacity transition
@@ -86,8 +93,9 @@ import { Menu, X } from "lucide-react"
         overlay.classList.add('opacity-0');
         
         // Wait for transition to finish before hiding
-        setTimeout(() => {
+        closeTimeout = window.setTimeout(() => {
           overlay.classList.add('hidden');
+          closeTimeout = null;
         }, 300);
         document.body.style.overflow = ''; // Restore scrolling
         
@@ -108,9 +116,5 @@ import { Menu, X } from "lucide-react"
     });
   };
 
-  // Run on first load
   setupMobileMenu();
-
-  // Run on Astro View Transitions navigation
-  document.addEventListener('astro:page-load', setupMobileMenu);
 </script>

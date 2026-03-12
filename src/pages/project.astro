@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer.astro"
 import ProjectGrid from "@/components/project/ProjectGrid.astro"
 import { getCollection } from "astro:content"
 
+export const prerender = true
+
 const title = "Projects | Drenzzz"
 const description = "Explore my portfolio of web applications, backend systems, and open-source contributions."
 
@@ -35,4 +37,3 @@ const totalProjects = allProjects.length
 
   <Footer />
 </Layout>
-
