@@ -1,7 +1,8 @@
 import type { GithubStats } from "@/types"
+import { buildKvKey, getJson, setJson } from "@/lib/kv"
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN
-const GITHUB_USERNAME = "drenzzz"
+const GITHUB_USERNAME = import.meta.env.GITHUB_USERNAME || "drenzzz"
 
 const toSafeNumber = (value: string | undefined, fallback: number) => {
   const parsed = Number(value)
@@ -138,5 +139,38 @@ export async function fetchGithubStats(): Promise<GithubStats> {
     return nextStats
   } catch {
     return EMPTY_STATS
+  }
+}
+
+interface GithubStatsCachePayload {
+  stats: GithubStats
+  updatedAt: number
+}
+
+export async function fetchGithubStatsWithCache(): Promise<GithubStats> {
+  const cacheKey = buildKvKey("github", "stats", GITHUB_USERNAME)
+  const cached = await getJson<GithubStatsCachePayload>(cacheKey)
+  const now = Date.now()
+
+  if (cached && now - cached.updatedAt < CACHE_TTL_MS) {
+    return cached.stats
+  }
+
+  try {
+    const fresh = await fetchGithubStats()
+
+    const ttlSeconds = Math.max(Math.floor(CACHE_TTL_MS / 1000), 60)
+    await setJson(
+      cacheKey,
+      {
+        stats: fresh,
+        updatedAt: Date.now(),
+      },
+      ttlSeconds
+    )
+
+    return fresh
+  } catch {
+    return cached?.stats || EMPTY_STATS
   }
 }

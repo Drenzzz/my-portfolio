@@ -1,5 +1,14 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import type { GithubStats } from "@/types"
-import { Github, Star, GitCommitVertical, GitPullRequest, CircleDot } from "lucide-react"
+import {
+  Github,
+  Star,
+  GitCommitVertical,
+  GitPullRequest,
+  CircleDot,
+} from "lucide-react"
 
 interface Props {
   initialData?: GithubStats
@@ -14,36 +23,68 @@ const FALLBACK: GithubStats = {
 }
 
 export function GitHubStats({ initialData }: Props) {
-  const stats = initialData || FALLBACK
+  const [stats, setStats] = useState<GithubStats>(initialData || FALLBACK)
+
+  useEffect(() => {
+    fetch("/api/github/stats")
+      .then(async (response) => {
+        if (!response.ok) return null
+        const json = (await response.json()) as { stats?: GithubStats }
+        if (!json.stats) return null
+        return json.stats
+      })
+      .then((nextStats) => {
+        if (nextStats) {
+          setStats(nextStats)
+        }
+      })
+      .catch(() => {
+        return
+      })
+  }, [])
 
   const statItems = [
     { label: "Stars", value: stats.stars, icon: <Star className="h-4 w-4" /> },
-    { label: "Commits", value: stats.commits, icon: <GitCommitVertical className="h-4 w-4" /> },
-    { label: "PRs", value: stats.prs, icon: <GitPullRequest className="h-4 w-4" /> },
-    { label: "Issues", value: stats.issues, icon: <CircleDot className="h-4 w-4" /> },
+    {
+      label: "Commits",
+      value: stats.commits,
+      icon: <GitCommitVertical className="h-4 w-4" />,
+    },
+    {
+      label: "PRs",
+      value: stats.prs,
+      icon: <GitPullRequest className="h-4 w-4" />,
+    },
+    {
+      label: "Issues",
+      value: stats.issues,
+      icon: <CircleDot className="h-4 w-4" />,
+    },
   ]
 
   return (
-    <div className="flex h-full flex-col justify-between gap-4 rounded-xl border-[3px] border-black bg-white p-4 xl:p-5 shadow-brutal">
+    <div className="flex h-full flex-col justify-between gap-4 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal xl:p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] text-black shadow-brutal-sm">
             <Github className="h-5 w-5" />
           </div>
           <div className="flex flex-col">
-            <h3 className="font-head text-lg leading-none font-black text-black">GitHub</h3>
+            <h3 className="font-head text-lg leading-none font-black text-black">
+              GitHub
+            </h3>
             <p className="mt-0.5 text-xs font-bold text-muted-foreground">
-              Live Statistics
+              Cached Live Statistics
             </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5 flex-grow">
+      <div className="grid flex-grow grid-cols-2 gap-2.5">
         {statItems.map((item) => (
           <div
             key={item.label}
-            className="flex flex-col justify-center gap-1.5 rounded-xl border-2 border-black bg-[#F4F4F5] p-3 shadow-brutal-sm hover:-translate-y-1 hover:shadow-brutal transition-all"
+            className="flex flex-col justify-center gap-1.5 rounded-xl border-2 border-black bg-[#F4F4F5] p-3 shadow-brutal-sm transition-all hover:-translate-y-1 hover:shadow-brutal"
           >
             <div className="font-head flex items-center gap-1.5 text-xs font-bold tracking-widest text-muted-foreground uppercase">
               {item.icon} <span className="pt-0.5">{item.label}</span>
@@ -77,7 +118,7 @@ export function GitHubStats({ initialData }: Props) {
                   className="h-3 w-3 rounded-full border-2 border-black shadow-[1px_1px_0px_rgba(0,0,0,1)]"
                   style={{ backgroundColor: lang.color }}
                 />
-                <span className="font-head text-[11px] font-bold text-black uppercase tracking-wider">
+                <span className="font-head text-[11px] font-bold tracking-wider text-black uppercase">
                   {lang.name}{" "}
                   <span className="text-muted-foreground opacity-80">
                     {lang.percentage}%

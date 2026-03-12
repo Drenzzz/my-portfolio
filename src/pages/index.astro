@@ -9,12 +9,9 @@ import { DiscordStatus } from "@/components/home/DiscordStatus"
 import { GitHubStats } from "@/components/home/GitHubStats"
 import { LocationCard } from "@/components/home/LocationCard"
 import { MusicPlayer } from "@/components/home/MusicPlayer"
-import { fetchGithubStats } from "@/lib/github"
 import { ViewCounter } from "@/components/islands/ViewCounter"
 
 export const prerender = true
-
-const githubStats = await fetchGithubStats()
 ---
 
 <Layout>
@@ -65,7 +62,7 @@ const githubStats = await fetchGithubStats()
           </LocationCard>
         </div>
         <div class="lg:col-span-2 min-h-[220px] max-h-min">
-          <GitHubStats initialData={githubStats} />
+          <GitHubStats client:visible />
         </div>
       </div>
 
