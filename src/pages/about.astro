@@ -6,6 +6,7 @@ import AboutHero from "@/components/about/AboutHero.astro"
 import Timeline from "@/components/about/Timeline.astro"
 import SkillStack from "@/components/about/SkillStack.astro"
 import { ViewCounter } from "@/components/islands/ViewCounter"
+import { Guestbook } from "@/components/islands/Guestbook"
 
 export const prerender = true
 
@@ -40,6 +41,10 @@ const description = "Get to know more about my background, education, and the te
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Timeline />
       <SkillStack />
+    </div>
+
+    <div class="mt-8">
+      <Guestbook pageKey="page:/about" client:visible />
     </div>
   </main>
 

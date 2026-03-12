@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
 import { ArrowLeft, Calendar, Layers, Globe, Github, ExternalLink, Info } from "lucide-react";
 import { ViewCounter } from "@/components/islands/ViewCounter";
+import { ReactionBar } from "@/components/islands/ReactionBar";
 
 export const prerender = true;
 
@@ -125,6 +126,8 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
               </div>
             </div>
           </div>
+
+          <ReactionBar pageKey={`project:${entry.slug}`} client:visible />
         </aside>
       </div>
     </div>

@@ -2,14 +2,6 @@ import { Redis } from "@upstash/redis"
 
 const memoryStore = new Map<string, string>()
 
-type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonValue[]
-  | { [key: string]: JsonValue }
-
 const readEnv = (key: string) => {
   if (typeof process !== "undefined" && process.env[key]) {
     return process.env[key]
@@ -81,7 +73,7 @@ export const getJson = async <T>(key: string): Promise<T | null> => {
 
 export const setJson = async (
   key: string,
-  value: JsonValue,
+  value: unknown,
   ttlSeconds?: number
 ) => {
   const client = getKvClient()
