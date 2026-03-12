@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import ProjectGrid from "@/components/project/ProjectGrid.astro"
 import { getCollection } from "astro:content"
+import { ViewCounter } from "@/components/islands/ViewCounter"
 
 export const prerender = true
 
@@ -28,7 +29,10 @@ const totalProjects = allProjects.length
         </p>
       </div>
       <div class="shrink-0 text-sm font-bold font-head px-3 py-1.5 border-2 border-black bg-[#C4A1FF] rounded shadow-brutal-sm">
-        {totalProjects} Projects
+        <div class="flex items-center gap-2">
+          <span>{totalProjects} Projects</span>
+          <ViewCounter pageKey="page:/project" client:visible />
+        </div>
       </div>
     </div>
 

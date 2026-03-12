@@ -10,6 +10,7 @@ import { GitHubStats } from "@/components/home/GitHubStats"
 import { LocationCard } from "@/components/home/LocationCard"
 import { MusicPlayer } from "@/components/home/MusicPlayer"
 import { fetchGithubStats } from "@/lib/github"
+import { ViewCounter } from "@/components/islands/ViewCounter"
 
 export const prerender = true
 
@@ -21,6 +22,9 @@ const githubStats = await fetchGithubStats()
 
   <main class="flex-1">
     <section class="container mx-auto px-4 py-8 md:py-12 flex flex-col gap-6">
+      <div class="flex justify-end">
+        <ViewCounter pageKey="page:/" client:visible />
+      </div>
       
       <!-- Top Row: Hero (3 cols) + Discord (1 col) -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">

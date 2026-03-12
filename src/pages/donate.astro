@@ -3,6 +3,7 @@ import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import PaymentGrid from "@/components/donate/PaymentGrid.astro"
+import { ViewCounter } from "@/components/islands/ViewCounter"
 
 export const prerender = true
 
@@ -19,6 +20,9 @@ const description = "Support my open-source work and content creation."
       <p class="text-lg text-muted-foreground font-medium leading-relaxed">
         Dukungan Anda sangat berarti untuk keberlangsungan server dan pengembangan project open source kedepannya.
       </p>
+      <div class="pt-2">
+        <ViewCounter pageKey="page:/donate" client:visible />
+      </div>
     </div>
     
     <PaymentGrid />
