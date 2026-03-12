@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="QRIS">
+  <rect width="128" height="128" fill="#ffffff"/>
+  <rect x="8" y="8" width="112" height="112" rx="16" fill="#e5f7ed" stroke="#000" stroke-width="6"/>
+  <rect x="24" y="24" width="24" height="24" fill="#000"/>
+  <rect x="56" y="24" width="16" height="16" fill="#000"/>
+  <rect x="80" y="24" width="24" height="24" fill="#000"/>
+  <rect x="24" y="56" width="16" height="16" fill="#000"/>
+  <rect x="48" y="56" width="32" height="32" fill="#000"/>
+  <rect x="88" y="64" width="16" height="16" fill="#000"/>
+  <text x="64" y="108" text-anchor="middle" font-size="16" font-family="Arial, sans-serif" font-weight="700" fill="#000">QRIS</text>
+</svg>

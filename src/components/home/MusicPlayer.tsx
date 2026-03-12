@@ -452,6 +452,7 @@ export function MusicPlayer() {
       <audio
         ref={audioRef}
         src={currentTrack.src}
+        preload="none"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onTimeUpdate={() => {
