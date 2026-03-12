@@ -1,22 +1,17 @@
-"use client";
+"use client"
 
-import * as ReactDialog from "@radix-ui/react-dialog";
-import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
-import React, { type HTMLAttributes, type ReactNode } from "react";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { X } from "lucide-react";
+import * as ReactDialog from "@radix-ui/react-dialog"
+import { cn } from "@/lib/utils"
+import { cva, type VariantProps } from "class-variance-authority"
+import React, { type HTMLAttributes, type ReactNode } from "react"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import { X } from "lucide-react"
 
-const Dialog = ReactDialog.Root;
-const DialogTrigger = ReactDialog.Trigger;
+const Dialog = ReactDialog.Root
+const DialogTrigger = ReactDialog.Trigger
 
 const overlayVariants = cva(
-  ` fixed bg-black/80 font-head
-    data-[state=open]:fade-in-0
-    data-[state=open]:animate-in 
-    data-[state=closed]:animate-out 
-    data-[state=closed]:fade-out-0 
-  `,
+  `font-head data-[state=open]:fade-in-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 fixed bg-black/80`,
   {
     variants: {
       variant: {
@@ -27,16 +22,17 @@ const overlayVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  },
-);
+  }
+)
 
 interface IDialogBackgroupProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends
+    HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof overlayVariants> {}
 
 const DialogBackdrop = React.forwardRef<HTMLDivElement, IDialogBackgroupProps>(
   function DialogBackdrop(inputProps: IDialogBackgroupProps, forwardedRef) {
-    const { variant = "default", className, ...props } = inputProps;
+    const { variant = "default", className, ...props } = inputProps
 
     return (
       <ReactDialog.Overlay
@@ -44,19 +40,13 @@ const DialogBackdrop = React.forwardRef<HTMLDivElement, IDialogBackgroupProps>(
         ref={forwardedRef}
         {...props}
       />
-    );
-  },
-);
-DialogBackdrop.displayName = "DialogBackdrop";
+    )
+  }
+)
+DialogBackdrop.displayName = "DialogBackdrop"
 
 const dialogVariants = cva(
-  `fixed left-[50%] top-[50%] z-50 grid rounded overflow-hidden w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border-2 bg-background shadow-lg duration-200 
-  data-[state=open]:animate-in 
-  data-[state=open]:fade-in-0 
-  data-[state=open]:zoom-in-95 
-  data-[state=closed]:animate-out 
-  data-[state=closed]:fade-out-0 
-  data-[state=closed]:zoom-out-95`,
+  `data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 overflow-hidden rounded border-2 bg-background shadow-lg duration-200`,
   {
     variants: {
       size: {
@@ -74,24 +64,17 @@ const dialogVariants = cva(
     defaultVariants: {
       size: "auto",
     },
-  },
-);
+  }
+)
 
 interface IDialogContentProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof dialogVariants> {
-  overlay?: IDialogBackgroupProps;
+  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof dialogVariants> {
+  overlay?: IDialogBackgroupProps
 }
 
 const DialogContent = React.forwardRef<HTMLDivElement, IDialogContentProps>(
   function DialogContent(inputProps: IDialogContentProps, forwardedRef) {
-    const {
-      children,
-      size = "auto",
-      className,
-      overlay,
-      ...props
-    } = inputProps;
+    const { children, size = "auto", className, overlay, ...props } = inputProps
 
     return (
       <ReactDialog.Portal>
@@ -104,15 +87,15 @@ const DialogContent = React.forwardRef<HTMLDivElement, IDialogContentProps>(
           <VisuallyHidden>
             <ReactDialog.Title />
           </VisuallyHidden>
-          <div className="flex flex-col relative">{children}</div>
+          <div className="relative flex flex-col">{children}</div>
         </ReactDialog.Content>
       </ReactDialog.Portal>
-    );
-  },
-);
-DialogContent.displayName = "DialogContent";
+    )
+  }
+)
+DialogContent.displayName = "DialogContent"
 
-interface IDialogDescriptionProps extends HTMLAttributes<HTMLDivElement> {}
+type IDialogDescriptionProps = HTMLAttributes<HTMLDivElement>
 const DialogDescription = ({
   children,
   className,
@@ -122,11 +105,11 @@ const DialogDescription = ({
     <ReactDialog.Description className={cn(className)} {...props}>
       {children}
     </ReactDialog.Description>
-  );
-};
+  )
+}
 
 const dialogFooterVariants = cva(
-  "flex items-center justify-end border-t-2 min-h-12 gap-4 px-4 py-2",
+  "flex min-h-12 items-center justify-end gap-4 border-t-2 px-4 py-2",
   {
     variants: {
       variant: {
@@ -140,11 +123,12 @@ const dialogFooterVariants = cva(
     defaultVariants: {
       position: "fixed",
     },
-  },
-);
+  }
+)
 
 export interface IDialogFooterProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends
+    HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof dialogFooterVariants> {}
 
 const DialogFooter = ({
@@ -161,11 +145,11 @@ const DialogFooter = ({
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 const dialogHeaderVariants = cva(
-  "flex items-center justify-between border-b-2 px-4 min-h-12",
+  "flex min-h-12 items-center justify-between border-b-2 px-4",
   {
     variants: {
       variant: {
@@ -180,8 +164,8 @@ const dialogHeaderVariants = cva(
       variant: "default",
       position: "static",
     },
-  },
-);
+  }
+)
 
 const DialogHeaderDefaultLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -191,11 +175,12 @@ const DialogHeaderDefaultLayout = ({ children }: { children: ReactNode }) => {
         <X />
       </DialogTrigger>
     </>
-  );
-};
+  )
+}
 
 interface IDialogHeaderProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends
+    HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof dialogHeaderVariants>,
     ReactDialog.DialogTitleProps {}
 
@@ -218,8 +203,8 @@ const DialogHeader = ({
         <DialogHeaderDefaultLayout>{children}</DialogHeaderDefaultLayout>
       )}
     </div>
-  );
-};
+  )
+}
 
 const DialogComponent = Object.assign(Dialog, {
   Trigger: DialogTrigger,
@@ -227,6 +212,6 @@ const DialogComponent = Object.assign(Dialog, {
   Content: DialogContent,
   Description: DialogDescription,
   Footer: DialogFooter,
-});
+})
 
-export { DialogComponent as Dialog };
+export { DialogComponent as Dialog }

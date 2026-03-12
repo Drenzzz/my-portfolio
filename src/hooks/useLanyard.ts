@@ -5,6 +5,7 @@ const DISCORD_ID = import.meta.env.PUBLIC_DISCORD_ID
 const MAX_ATTEMPTS = Number(import.meta.env.PUBLIC_LANYARD_MAX_ATTEMPTS || 6)
 
 const isValidDiscordId = (value: string) => /^\d{17,20}$/.test(value)
+const HAS_VALID_DISCORD_ID = Boolean(DISCORD_ID && isValidDiscordId(DISCORD_ID))
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null
@@ -115,15 +116,15 @@ export function useLanyard() {
   const [data, setData] = useState<LanyardData | null>(null)
   const [status, setStatus] = useState<
     "idle" | "connecting" | "open" | "closed" | "error"
-  >("idle")
-  const [error, setError] = useState<string | null>(null)
+  >(HAS_VALID_DISCORD_ID ? "idle" : "error")
+  const [error, setError] = useState<string | null>(
+    HAS_VALID_DISCORD_ID ? null : "PUBLIC_DISCORD_ID is missing or invalid"
+  )
   const [lastUpdated, setLastUpdated] = useState<number | null>(null)
   const attemptRef = useRef(0)
 
   useEffect(() => {
-    if (!DISCORD_ID || !isValidDiscordId(DISCORD_ID)) {
-      setError("PUBLIC_DISCORD_ID is missing or invalid")
-      setStatus("error")
+    if (!HAS_VALID_DISCORD_ID) {
       return
     }
 

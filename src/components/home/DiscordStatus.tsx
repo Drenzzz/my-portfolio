@@ -111,11 +111,10 @@ const getConnectionLabel = (status: string, error: string | null) => {
 
 export function DiscordStatus() {
   const { data, status, error, lastUpdated } = useLanyard()
-  const [now, setNow] = useState(0)
+  const [now, setNow] = useState(() => Date.now())
   const [isPageVisible, setIsPageVisible] = useState(true)
 
   useEffect(() => {
-    setNow(Date.now())
     const onVisibilityChange = () => {
       const visible = !document.hidden
       setIsPageVisible(visible)

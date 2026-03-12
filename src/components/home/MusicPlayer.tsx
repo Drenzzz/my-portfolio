@@ -150,11 +150,6 @@ export function MusicPlayer() {
   }, [volume, isMuted])
 
   useEffect(() => {
-    setProgress(0)
-    setDuration(0)
-  }, [currentTrackIdx])
-
-  useEffect(() => {
     if (!audioRef.current) return
 
     if (!hasInteracted || !isPlaying) return
@@ -166,11 +161,15 @@ export function MusicPlayer() {
 
   const handlePrev = useCallback(() => {
     setHasInteracted(true)
+    setProgress(0)
+    setDuration(0)
     setCurrentTrackIdx((prev) => (prev - 1 + playlist.length) % playlist.length)
   }, [])
 
   const handleNext = useCallback(() => {
     setHasInteracted(true)
+    setProgress(0)
+    setDuration(0)
     setCurrentTrackIdx((prev) => {
       if (isShuffle && playlist.length > 1) {
         let next = prev
@@ -353,7 +352,7 @@ export function MusicPlayer() {
           <div className="relative flex-grow">
             <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border-2 border-black bg-[#F4F4F5]">
               <div
-                className="h-full bg-[#C4A1FF] transition-all border-r-2 border-black"
+                className="h-full border-r-2 border-black bg-[#C4A1FF] transition-all"
                 style={{ width: `${(progress / (duration || 1)) * 100}%` }}
               ></div>
             </div>
