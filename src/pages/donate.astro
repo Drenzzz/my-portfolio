@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import PaymentGrid from "@/components/donate/PaymentGrid.astro"
 import { ViewCounter } from "@/components/islands/ViewCounter"
+import { Coffee } from "lucide-react"
 
 export const prerender = true
 
@@ -16,7 +17,9 @@ const description = "Support my open-source work and content creation."
   
   <main class="flex-1 container mx-auto py-12 md:py-20 px-4 min-h-[80vh] flex flex-col items-center">
     <div class="text-center space-y-4 mb-12 max-w-2xl">
-      <h1 class="font-head text-4xl md:text-5xl font-black uppercase tracking-tight">☕ Buy Me a Coffee</h1>
+      <h1 class="font-head text-4xl md:text-5xl font-black uppercase tracking-tight flex items-center justify-center gap-3">
+        <Coffee className="w-10 h-10 md:w-12 md:h-12" /> Buy Me a Coffee
+      </h1>
       <p class="text-lg text-muted-foreground font-medium leading-relaxed">
         Dukungan Anda sangat berarti untuk keberlangsungan server dan pengembangan project open source kedepannya.
       </p>
