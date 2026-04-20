@@ -4,59 +4,87 @@ import { Badge } from "@/components/retroui/Badge"
 import { GitBranch, Mail, UserRound, ArrowUpRight } from "lucide-react"
 ---
 
-<div class="w-full h-full bg-[#F4F4F5] border-4 border-black rounded-xl shadow-[8px_8px_0px_rgba(0,0,0,1)] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden group gap-8">
+<div
+  id="hero-motion-root"
+  class="w-full h-full bg-[#F4F4F5] border-4 border-black rounded-xl shadow-[8px_8px_0px_rgba(0,0,0,1)] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden group gap-8"
+>
   <!-- Subtle pattern -->
   <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
 
   <div class="flex-1 flex flex-col justify-center relative z-10 w-full">
-    <Badge variant="default" className="w-fit text-sm font-bold px-4 py-1.5 mb-6">
+    <Badge
+      variant="default"
+      className="w-fit text-sm font-bold px-4 py-1.5 mb-6"
+      data-motion
+    >
       Hello World!
     </Badge>
 
-    <h1 class="font-head text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4">
+    <h1
+      class="font-head text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4"
+      data-motion
+      style="--motion-offset-y: 18px;"
+    >
       I'm <span class="text-primary">Drenzzz</span>.
     </h1>
-    <typewriter-effect data-words='["Fullstack Developer", "System Enthusiast", "Open Source", "Web Developer"]' class="font-head text-lg md:text-xl font-bold text-muted-foreground mb-6 flex items-center min-h-[28px] md:min-h-[32px]">
+    <typewriter-effect
+      data-words='["Fullstack Developer", "System Enthusiast", "Open Source", "Web Developer"]'
+      class="font-head text-lg md:text-xl font-bold text-muted-foreground mb-6 flex items-center min-h-[28px] md:min-h-[32px]"
+      data-motion
+      style="--motion-offset-y: 20px;"
+    >
       <span class="typewriter-text"></span>
       <span class="w-[2px] h-[1em] bg-muted-foreground animate-blink ml-1 inline-block"></span>
     </typewriter-effect>
 
-    <p class="text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl font-medium mb-8">
+    <p
+      class="text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl font-medium mb-8"
+      data-motion
+      style="--motion-offset-y: 22px;"
+    >
       Cuma seseorang Developer pemula yang selalu ingin mencari tahu dan ingin belajar. Spesialis Web Developer
     </p>
 
-    <div class="flex flex-wrap items-center gap-4">
+    <div
+      class="flex flex-wrap items-center gap-4"
+      data-motion
+      style="--motion-offset-y: 26px;"
+    >
       <a href="/project">
-        <Button variant="default" size="lg" className="shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+        <Button variant="default" size="lg" className="shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all transition-neo-fast">
           Explore Projects <ArrowUpRight className="ml-2 w-4 h-4" />
         </Button>
       </a>
       <div class="flex items-center gap-3 md:ml-4">
         <a href="https://github.com/drenzzz" target="_blank" rel="noreferrer" aria-label="GitHub"
-           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all">
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all transition-neo-fast">
           <GitBranch className="w-5 h-5" />
         </a>
         <a href="https://linkedin.com/in/muhammad-naufal-nazya-azzharif" target="_blank" rel="noreferrer" aria-label="LinkedIn"
-           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all">
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all transition-neo-fast">
           <UserRound className="w-5 h-5" />
         </a>
         <a href="https://facebook.com/realdrenzzz/" target="_blank" rel="noreferrer" aria-label="Facebook"
-           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all transition-neo-fast">
+           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
         </a>
         <a href="https://t.me/realdrenzzz" target="_blank" rel="noreferrer" aria-label="Telegram"
-           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all transition-neo-fast">
+           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
         </a>
         <a href="https://discordapp.com/users/realdrenzzz" target="_blank" rel="noreferrer" aria-label="Discord"
-           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all">
+           class="p-2 border-2 border-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-sm hover:bg-[#C4A1FF] hover:-translate-y-[2px] hover:shadow-none transition-all transition-neo-fast">
            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.89,105.89,0,0,0,126.6,80.22c2.91-27.55-13.53-51.36-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
         </a>
       </div>
     </div>
   </div>
 
-  <div class="hidden md:block relative z-10 w-48 h-48 lg:w-64 lg:h-64 shrink-0 transition-transform duration-500 hover:-translate-y-2 hover:translate-x-2 group-hover:rotate-2">
+  <div
+    class="hidden md:block relative z-10 w-48 h-48 lg:w-64 lg:h-64 shrink-0 transition-transform duration-500 hover:-translate-y-2 hover:translate-x-2 group-hover:rotate-2 transition-neo"
+    data-motion
+    style="--motion-offset-x: 20px; --motion-offset-y: 12px; --motion-scale: 0.96;"
+  >
     <div class="absolute inset-0 bg-[#C4A1FF] border-4 border-black translate-x-3 translate-y-3 rounded-2xl"></div>
     <img
       src="https://github.com/drenzzz.png"
@@ -66,7 +94,7 @@ import { GitBranch, Mail, UserRound, ArrowUpRight } from "lucide-react"
       loading="eager"
       decoding="async"
       fetchpriority="high"
-      class="relative w-full h-full object-cover border-4 border-black rounded-2xl bg-white grayscale-[20%] hover:grayscale-0 transition-all duration-300"
+      class="relative w-full h-full object-cover border-4 border-black rounded-2xl bg-white grayscale-[20%] hover:grayscale-0 transition-all duration-300 transition-neo-fast"
     />
   </div>
 </div>
@@ -82,6 +110,8 @@ import { GitBranch, Mail, UserRound, ArrowUpRight } from "lucide-react"
 </style>
 
 <script>
+  import { revealMotionGroup, revealMotionTargets } from "@/lib/animation/motion"
+
   class TypewriterEffect extends HTMLElement {
     constructor() {
       super();
@@ -127,5 +157,31 @@ import { GitBranch, Mail, UserRound, ArrowUpRight } from "lucide-react"
   
   if (!customElements.get('typewriter-effect')) {
     customElements.define('typewriter-effect', TypewriterEffect);
+  }
+
+  const heroRoot = document.getElementById("hero-motion-root")
+
+  if (heroRoot) {
+    const contentTargets = heroRoot.querySelectorAll(".flex-1 [data-motion]")
+    const portraitTarget = heroRoot.querySelector("[data-motion][style*='--motion-offset-x']")
+
+    contentTargets.forEach((target) => target.classList.add("is-visible"))
+
+    revealMotionGroup(contentTargets, {
+      delay: 0.12,
+      duration: 0.42,
+      staggerDelay: 0.07,
+      offsetY: 18,
+    })
+
+    if (portraitTarget) {
+      revealMotionTargets(portraitTarget, {
+        delay: 0.34,
+        duration: 0.5,
+        offsetX: 20,
+        offsetY: 12,
+        scale: 0.96,
+      })
+    }
   }
 </script>
