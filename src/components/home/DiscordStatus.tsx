@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState } from "react"
 import { useLanyard } from "@/hooks/useLanyard"
-import type { Activity } from "@/types"
+import {
+  DEFAULT_CUSTOM_STATUS,
+  DISCORD_STATUS_META,
+  DEFAULT_SPOTIFY_SONG,
+  getActivityImage,
+  getConnectionLabel,
+  getGameFallbackImage,
+  isCodingActivity,
+} from "@/lib/discord-presence"
 import { cn } from "@/lib/utils"
 import {
   Code2,
@@ -13,60 +21,6 @@ import {
 } from "lucide-react"
 
 const PROFILE_DISCORD_ID = import.meta.env.PUBLIC_DISCORD_ID
-
-const STATUS_COLORS: Record<string, string> = {
-  online: "bg-green-500",
-  idle: "bg-yellow-500",
-  dnd: "bg-red-500",
-  offline: "bg-gray-500",
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  online: "Online",
-  idle: "Idle",
-  dnd: "Do Not Disturb",
-  offline: "Offline",
-}
-
-const getActivityImage = (activity: Activity) => {
-  const appId = activity.application_id
-  const assetId = activity.assets?.large_image
-  if (!assetId) return null
-
-  if (assetId.startsWith("mp:external/")) {
-    return `https://media.discordapp.net/${assetId.replace("mp:", "")}`
-  }
-
-  if (appId) {
-    return `https://cdn.discordapp.com/app-assets/${appId}/${assetId}.png`
-  }
-
-  return null
-}
-
-const getGameFallback = (name: string) => {
-  const normalizedName = name.toLowerCase()
-  const gameMap: Array<{ keywords: string[]; image: string }> = [
-    {
-      keywords: ["counter", "cs2", "counter-strike"],
-      image: "https://upload.wikimedia.org/wikipedia/en/f/f2/CS2_Cover_Art.jpg",
-    },
-    {
-      keywords: ["minecraft", "prism launcher"],
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/b/b6/Minecraft_2024_cover_art.png",
-    },
-    {
-      keywords: ["valorant"],
-      image: "https://cdn.simpleicons.org/valorant/white",
-    },
-  ]
-
-  const matched = gameMap.find((entry) =>
-    entry.keywords.some((keyword) => normalizedName.includes(keyword))
-  )
-  return matched?.image ?? null
-}
 
 const formatTime = (ms: number) => {
   const safeMs = Math.max(ms, 0)
@@ -101,14 +55,6 @@ const calculateProgress = (now: number, start: number, end: number) => {
   return Math.min(Math.max((elapsed / total) * 100, 0), 100)
 }
 
-const getConnectionLabel = (status: string, error: string | null) => {
-  if (error) return error
-  if (status === "connecting") return "Connecting to Lanyard"
-  if (status === "open") return "Connection stable"
-  if (status === "closed") return "Reconnecting"
-  return "Waiting for presence"
-}
-
 export function DiscordStatus() {
   const { data, status, error, lastUpdated } = useLanyard()
   const [now, setNow] = useState(() => Date.now())
@@ -138,20 +84,14 @@ export function DiscordStatus() {
   }, [isPageVisible])
 
   const discordStatus = data?.discord_status || "offline"
-  const statusColor = STATUS_COLORS[discordStatus] || STATUS_COLORS.offline
-  const statusLabel = STATUS_LABELS[discordStatus] || STATUS_LABELS.offline
+  const statusMeta =
+    DISCORD_STATUS_META[discordStatus] || DISCORD_STATUS_META.offline
+  const statusColor = statusMeta.color
+  const statusLabel = statusMeta.label
   const connectionLabel = getConnectionLabel(status, error)
 
   const codingActivity = useMemo(
-    () =>
-      data?.activities.find((activity) =>
-        [
-          "Visual Studio Code",
-          "IntelliJ IDEA",
-          "Android Studio",
-          "Neovim",
-        ].includes(activity.name)
-      ),
+    () => data?.activities.find((activity) => isCodingActivity(activity)),
     [data]
   )
 
@@ -173,7 +113,7 @@ export function DiscordStatus() {
                 end: spotifyActivity.timestamps.end,
               }
             : null,
-        song: spotifyActivity.details || "Listening on Spotify",
+        song: spotifyActivity.details || DEFAULT_SPOTIFY_SONG,
         artist: spotifyActivity.state || "",
         album_art_url: spotifyActivity.assets?.large_image
           ? spotifyActivity.assets.large_image.startsWith("spotify:")
@@ -205,7 +145,9 @@ export function DiscordStatus() {
 
   const gameImage = useMemo(() => {
     if (!gameActivity) return null
-    return getActivityImage(gameActivity) || getGameFallback(gameActivity.name)
+    return (
+      getActivityImage(gameActivity) || getGameFallbackImage(gameActivity.name)
+    )
   }, [gameActivity])
 
   const avatarUrl = data
@@ -441,7 +383,7 @@ export function DiscordStatus() {
               <div className="flex w-full items-center gap-2 rounded-lg border border-white/5 bg-black/20 px-3 py-4 text-white/65">
                 <Moon className="h-4 w-4" />
                 <p className="truncate text-xs italic">
-                  &quot;{customStatus?.state || "Currently chilling..."}&quot;
+                  &quot;{customStatus?.state || DEFAULT_CUSTOM_STATUS}&quot;
                 </p>
               </div>
             )}

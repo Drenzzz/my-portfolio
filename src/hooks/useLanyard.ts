@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react"
+import {
+  DEFAULT_SPOTIFY_SONG,
+  LANYARD_RETRY_LIMITS,
+  LANYARD_SOCKET_URL,
+  isKnownDiscordStatus,
+  isValidDiscordId,
+} from "@/lib/discord-presence"
 import type { Activity, LanyardData } from "@/types"
 
 const DISCORD_ID = import.meta.env.PUBLIC_DISCORD_ID
 const MAX_ATTEMPTS = Number(import.meta.env.PUBLIC_LANYARD_MAX_ATTEMPTS || 6)
 
-const isValidDiscordId = (value: string) => /^\d{17,20}$/.test(value)
 const HAS_VALID_DISCORD_ID = Boolean(DISCORD_ID && isValidDiscordId(DISCORD_ID))
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
@@ -72,7 +78,7 @@ const toSafeLanyardData = (value: unknown): LanyardData | null => {
   const spotify = isObject(value.spotify)
     ? {
         track_id: toSafeString(value.spotify.track_id),
-        song: toSafeString(value.spotify.song) || "Listening on Spotify",
+        song: toSafeString(value.spotify.song) || DEFAULT_SPOTIFY_SONG,
         artist: toSafeString(value.spotify.artist),
         album_art_url: toSafeString(value.spotify.album_art_url),
         album: toSafeString(value.spotify.album),
@@ -89,13 +95,7 @@ const toSafeLanyardData = (value: unknown): LanyardData | null => {
     : null
 
   const status = toSafeString(value.discord_status)
-  const discordStatus =
-    status === "online" ||
-    status === "idle" ||
-    status === "dnd" ||
-    status === "offline"
-      ? status
-      : "offline"
+  const discordStatus = isKnownDiscordStatus(status) ? status : "offline"
 
   return {
     discord_user: {
@@ -134,7 +134,10 @@ export function useLanyard() {
     let stopped = false
 
     const maxAttempts = Number.isFinite(MAX_ATTEMPTS)
-      ? Math.min(Math.max(Math.floor(MAX_ATTEMPTS), 1), 20)
+      ? Math.min(
+          Math.max(Math.floor(MAX_ATTEMPTS), LANYARD_RETRY_LIMITS.minAttempts),
+          LANYARD_RETRY_LIMITS.maxAttempts
+        )
       : 6
 
     const clearTimers = () => {
@@ -155,7 +158,11 @@ export function useLanyard() {
         return
       }
 
-      const delay = Math.min(3000 * 1.5 ** attemptRef.current, 20000)
+      const delay = Math.min(
+        LANYARD_RETRY_LIMITS.baseDelayMs *
+          LANYARD_RETRY_LIMITS.backoffMultiplier ** attemptRef.current,
+        LANYARD_RETRY_LIMITS.maxDelayMs
+      )
       reconnectTimeout = setTimeout(connect, delay)
     }
 
@@ -166,7 +173,7 @@ export function useLanyard() {
       setStatus("connecting")
       setError(null)
       attemptRef.current += 1
-      socket = new WebSocket("wss://api.lanyard.rest/socket")
+      socket = new WebSocket(LANYARD_SOCKET_URL)
 
       socket.onmessage = (event) => {
         let message: { op?: number; d?: unknown; t?: string }
