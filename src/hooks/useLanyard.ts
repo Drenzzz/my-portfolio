@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import {
   DEFAULT_SPOTIFY_SONG,
+  LANYARD_REST_URL,
   LANYARD_RETRY_LIMITS,
   LANYARD_SOCKET_URL,
   isKnownDiscordStatus,
@@ -115,13 +116,14 @@ const toSafeLanyardData = (value: unknown): LanyardData | null => {
 export function useLanyard() {
   const [data, setData] = useState<LanyardData | null>(null)
   const [status, setStatus] = useState<
-    "idle" | "connecting" | "open" | "closed" | "error"
+    "idle" | "connecting" | "open" | "closed" | "error" | "stale"
   >(HAS_VALID_DISCORD_ID ? "idle" : "error")
   const [error, setError] = useState<string | null>(
     HAS_VALID_DISCORD_ID ? null : "PUBLIC_DISCORD_ID is missing or invalid"
   )
   const [lastUpdated, setLastUpdated] = useState<number | null>(null)
   const attemptRef = useRef(0)
+  const latestDataRef = useRef<LanyardData | null>(null)
 
   useEffect(() => {
     if (!HAS_VALID_DISCORD_ID) {
@@ -132,6 +134,17 @@ export function useLanyard() {
     let heartbeatInterval: ReturnType<typeof setInterval> | null = null
     let reconnectTimeout: ReturnType<typeof setTimeout> | null = null
     let stopped = false
+    const snapshotController = new AbortController()
+
+    const applyPresenceData = (
+      nextData: LanyardData,
+      nextStatus: typeof status
+    ) => {
+      latestDataRef.current = nextData
+      setData(nextData)
+      setStatus(nextStatus)
+      setLastUpdated(Date.now())
+    }
 
     const maxAttempts = Number.isFinite(MAX_ATTEMPTS)
       ? Math.min(
@@ -153,7 +166,7 @@ export function useLanyard() {
 
     const scheduleReconnect = () => {
       if (stopped || attemptRef.current >= maxAttempts) {
-        setStatus("error")
+        setStatus(latestDataRef.current ? "stale" : "error")
         setError("Unable to connect to Lanyard after multiple attempts")
         return
       }
@@ -164,6 +177,53 @@ export function useLanyard() {
         LANYARD_RETRY_LIMITS.maxDelayMs
       )
       reconnectTimeout = setTimeout(connect, delay)
+    }
+
+    const fetchSnapshot = async () => {
+      try {
+        const response = await fetch(`${LANYARD_REST_URL}/${DISCORD_ID}`, {
+          signal: snapshotController.signal,
+        })
+
+        if (!response.ok) {
+          return
+        }
+
+        const payload = (await response.json()) as {
+          success?: boolean
+          data?: unknown
+        }
+
+        if (!payload.success) {
+          return
+        }
+
+        const snapshotData = toSafeLanyardData(payload.data)
+        if (!snapshotData || stopped) {
+          return
+        }
+
+        setError(null)
+        setData((currentData) => {
+          const nextData = currentData ?? snapshotData
+          latestDataRef.current = nextData
+          return nextData
+        })
+        setLastUpdated((currentTimestamp) => currentTimestamp ?? Date.now())
+        setStatus((currentStatus) =>
+          currentStatus === "open" ? currentStatus : "stale"
+        )
+      } catch (fetchError) {
+        if (snapshotController.signal.aborted) {
+          return
+        }
+
+        if (!(fetchError instanceof Error)) {
+          return
+        }
+
+        setError((currentError) => currentError ?? fetchError.message)
+      }
     }
 
     const connect = () => {
@@ -211,29 +271,37 @@ export function useLanyard() {
           const safeData = toSafeLanyardData(message.d)
           if (!safeData) return
 
-          setStatus("open")
-          setData(safeData)
-          setLastUpdated(Date.now())
+          applyPresenceData(safeData, "open")
           attemptRef.current = 0
         }
       }
 
       socket.onerror = () => {
-        setStatus("closed")
+        setStatus((currentStatus) =>
+          latestDataRef.current || currentStatus === "stale"
+            ? "stale"
+            : "closed"
+        )
         setError("WebSocket connection failed")
       }
 
       socket.onclose = () => {
         if (stopped) return
-        setStatus("closed")
+        setStatus((currentStatus) =>
+          latestDataRef.current || currentStatus === "stale"
+            ? "stale"
+            : "closed"
+        )
         scheduleReconnect()
       }
     }
 
+    void fetchSnapshot()
     connect()
 
     return () => {
       stopped = true
+      snapshotController.abort()
       clearTimers()
       socket?.close()
     }

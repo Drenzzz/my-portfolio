@@ -1,6 +1,7 @@
 import type { Activity, LanyardData } from "@/types"
 
 export const LANYARD_SOCKET_URL = "wss://api.lanyard.rest/socket"
+export const LANYARD_REST_URL = "https://api.lanyard.rest/v1/users"
 
 export const DISCORD_ID_PATTERN = /^\d{17,20}$/
 
@@ -54,6 +55,7 @@ export const CONNECTION_STATUS_LABELS = {
   open: "Connection stable",
   closed: "Reconnecting",
   error: "Presence unavailable",
+  stale: "Using last known activity",
 } as const
 
 export const DEFAULT_SPOTIFY_SONG = "Listening on Spotify"
