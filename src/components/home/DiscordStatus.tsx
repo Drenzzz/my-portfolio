@@ -3,12 +3,10 @@ import { useLanyard } from "@/hooks/useLanyard"
 import {
   DEFAULT_CUSTOM_STATUS,
   DISCORD_STATUS_META,
-  DEFAULT_SPOTIFY_SONG,
   getActivityImage,
   getConnectionLabel,
-  getGameFallbackImage,
-  isCodingActivity,
 } from "@/lib/discord-presence"
+import { deriveDiscordPresenceView } from "@/lib/discord-presence-view"
 import { cn } from "@/lib/utils"
 import {
   Code2,
@@ -90,69 +88,14 @@ export function DiscordStatus() {
   const statusLabel = statusMeta.label
   const connectionLabel = getConnectionLabel(status, error)
 
-  const codingActivity = useMemo(
-    () => data?.activities.find((activity) => isCodingActivity(activity)),
-    [data]
-  )
-
-  const spotifyActivity = useMemo(
-    () =>
-      data?.activities.find(
-        (activity) => activity.type === 2 && activity.name === "Spotify"
-      ),
-    [data]
-  )
-
-  const spotifyFromActivity = spotifyActivity
-    ? {
-        track_id: spotifyActivity.sync_id || "",
-        timestamps:
-          spotifyActivity.timestamps?.start && spotifyActivity.timestamps?.end
-            ? {
-                start: spotifyActivity.timestamps.start,
-                end: spotifyActivity.timestamps.end,
-              }
-            : null,
-        song: spotifyActivity.details || DEFAULT_SPOTIFY_SONG,
-        artist: spotifyActivity.state || "",
-        album_art_url: spotifyActivity.assets?.large_image
-          ? spotifyActivity.assets.large_image.startsWith("spotify:")
-            ? `https://i.scdn.co/image/${spotifyActivity.assets.large_image.replace("spotify:", "")}`
-            : getActivityImage(spotifyActivity) || ""
-          : "",
-        album: spotifyActivity.assets?.large_text || "",
-      }
-    : null
-
-  const spotify = data?.spotify || spotifyFromActivity
-
-  const gameActivity = useMemo(
-    () =>
-      data?.activities.find(
-        (activity) =>
-          activity.type === 0 &&
-          !codingActivity &&
-          activity.name !== "Custom Status" &&
-          activity.name !== "Spotify"
-      ),
-    [codingActivity, data]
-  )
-
-  const customStatus = useMemo(
-    () => data?.activities.find((activity) => activity.type === 4),
-    [data]
-  )
-
-  const gameImage = useMemo(() => {
-    if (!gameActivity) return null
-    return (
-      getActivityImage(gameActivity) || getGameFallbackImage(gameActivity.name)
-    )
-  }, [gameActivity])
-
-  const avatarUrl = data
-    ? `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=512`
-    : null
+  const {
+    avatarUrl,
+    codingActivity,
+    customStatus,
+    gameActivity,
+    gameImage,
+    spotify,
+  } = useMemo(() => deriveDiscordPresenceView(data), [data])
   const codingElapsed =
     codingActivity?.timestamps?.start !== undefined
       ? formatTime(now - codingActivity.timestamps.start)
