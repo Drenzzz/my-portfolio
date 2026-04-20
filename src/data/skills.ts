@@ -12,11 +12,14 @@ export const skills = [
       "Tailwind CSS",
       "Hono.js",
       "shadcn/ui",
+      "Elysia.js",
+      "Fiber",
+      "Wails"
     ],
   },
   {
     category: "Database & ORM",
-    items: ["PostgreSQL", "Supabase"],
+    items: ["PostgreSQL","MySQL", "Supabase"],
   },
   {
     category: "Tools & Environment",
@@ -24,11 +27,15 @@ export const skills = [
       "Git",
       "Linux",
       "Vite",
+      "Docker",
+      "Vercel",
+      "Netlify",
+      "Cloudflare",
     ],
   },
   {
     category: "Runtimes & Package Managers",
-    items: ["Node.js"],
+    items: ["Node.js", "Bun"],
   },
   {
     category: "Design",

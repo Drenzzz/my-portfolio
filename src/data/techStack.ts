@@ -1,4 +1,4 @@
-import type { TechItem } from "@/types";
+import type { TechItem } from "@/types"
 
 export const techStack: TechItem[] = [
   { id: "go", name: "Go" },
@@ -8,14 +8,22 @@ export const techStack: TechItem[] = [
   { id: "nextdotjs", name: "Next.js" },
   { id: "astro", name: "Astro" },
   { id: "wails", name: "Wails" },
+  { id: "hono", name: "Hono.js" },
+  { id: "elysia", name: "Elysia.js" },
+  { id: "gofiber", name: "Fiber" },
+  { id: "vite", name: "Vite" },
   { id: "tailwindcss", name: "Tailwind CSS" },
   { id: "shadcnui", name: "shadcn/ui" },
-  { id: "hono", name: "Hono.js" },
-  { id: "postgresql", name: "PostgreSQL" },
   { id: "git", name: "Git" },
   { id: "linux", name: "Linux" },
-  { id: "vite", name: "Vite" },
   { id: "nodedotjs", name: "Node.js" },
+  { id: "bun", name: "Bun" },
+  { id: "postgresql", name: "PostgreSQL" },
+  { id: "mysql", name: "MySQL" },
   { id: "supabase", name: "Supabase" },
+  { id: "docker", name: "Docker" },
+  { id: "vercel", name: "Vercel" },
+  { id: "netlify", name: "Netlify" },
+  { id: "cloudflare", name: "Cloudflare" },
   { id: "figma", name: "Figma" },
-];
+]
