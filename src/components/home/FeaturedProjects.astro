@@ -10,9 +10,9 @@ const featured = allProjects
   .slice(0, 3)
 ---
 
-<section class="container mx-auto px-4 py-12 md:py-20">
-  <div class="flex items-center justify-between mb-8">
-    <div class="flex items-center gap-3">
+<section id="featured-projects-motion-root" class="container mx-auto px-4 py-12 md:py-20">
+  <div class="flex items-center justify-between mb-8" data-motion-group="projects-header">
+    <div class="flex items-center gap-3" data-motion>
       <div class="p-2.5 bg-[#C4A1FF] border-2 border-black rounded-lg shadow-brutal">
         <Folder className="w-5 h-5" />
       </div>
@@ -21,14 +21,14 @@ const featured = allProjects
         <p class="text-sm text-muted-foreground font-medium">Latest & greatest</p>
       </div>
     </div>
-    <a href="/project" class="flex items-center gap-1 text-sm font-bold font-head hover:underline transition-colors">
+    <a href="/project" class="flex items-center gap-1 text-sm font-bold font-head hover:underline transition-colors transition-neo-fast" data-motion>
       View all <ArrowUpRight className="w-4 h-4" />
     </a>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {featured.map((project) => (
-      <article class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all flex flex-col">
+      <article data-motion-group="projects-card" data-motion class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all transition-neo flex flex-col">
         <div class="relative w-full h-40 bg-muted overflow-hidden border-b-[3px] border-black shrink-0">
           <a href={`/project/${getProjectSlug(project.id)}`} class="block w-full h-full" tabindex="-1">
             {project.data.image ? (
@@ -83,3 +83,28 @@ const featured = allProjects
     ))}
   </div>
 </section>
+
+<script>
+  import { bindInViewReveal } from "@/lib/animation/motion"
+
+  const featuredProjectsRoot = document.getElementById("featured-projects-motion-root")
+
+  if (featuredProjectsRoot) {
+    bindInViewReveal(featuredProjectsRoot, "[data-motion-group='projects-header'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.36,
+      staggerDelay: 0.08,
+      offsetY: 14,
+    })
+
+    bindInViewReveal(featuredProjectsRoot, "[data-motion-group='projects-card']", {
+      amount: 0.18,
+      delay: 0.14,
+      duration: 0.42,
+      staggerDelay: 0.08,
+      offsetY: 22,
+      scale: 0.98,
+    })
+  }
+</script>

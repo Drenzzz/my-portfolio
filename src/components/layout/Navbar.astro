@@ -36,13 +36,13 @@ import { Menu, X } from "lucide-react"
   {/* Mobile Menu Overlay */}
   <div 
     id="mobile-menu-overlay"
-    class="fixed inset-0 top-[83px] bg-background/80 backdrop-blur-md flex-col z-40 hidden border-t-[3px] border-black transition-opacity duration-300 opacity-0"
+    class="fixed inset-0 top-[83px] bg-background/80 backdrop-blur-md flex-col z-40 hidden border-t-[3px] border-black opacity-0"
   >
-    <nav class="flex flex-col items-center justify-center p-8 gap-6 h-full font-head font-black text-3xl overflow-y-auto pb-32">
+    <nav id="mobile-menu-content" class="flex flex-col items-center justify-center p-8 gap-6 h-full font-head font-black text-3xl overflow-y-auto pb-32">
       {navItems.map((item) => (
         <a 
           href={item.path}
-          class="w-full text-center py-4 border-4 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-[#C4A1FF] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-all uppercase tracking-widest menu-item"
+          class="w-full text-center py-4 border-4 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-[#C4A1FF] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-all transition-neo uppercase tracking-widest menu-item"
         >
           {item.title}
         </a>
@@ -52,63 +52,109 @@ import { Menu, X } from "lucide-react"
 </header>
 
 <script>
+  import { animate, stagger } from "motion"
+  import { shouldReduceMotion } from "@/lib/animation/motion"
+
   const setupMobileMenu = () => {
     const toggleBtn = document.getElementById('mobile-menu-toggle');
     const overlay = document.getElementById('mobile-menu-overlay');
+    const content = document.getElementById('mobile-menu-content');
     const iconOpen = toggleBtn?.querySelector('.menu-icon-open');
     const iconClose = toggleBtn?.querySelector('.menu-icon-close');
     const menuItems = overlay?.querySelectorAll('.menu-item');
     let isMenuOpen = false;
+    let isAnimating = false;
 
-    if (!toggleBtn || !overlay) return;
+    if (!toggleBtn || !overlay || !content || toggleBtn.dataset.motionBound === 'true') return;
 
-    let closeTimeout = null;
+    toggleBtn.dataset.motionBound = 'true';
 
-    const toggleMenu = () => {
+    const openMenu = async () => {
+      if (isAnimating) return;
+      isAnimating = true;
       isMenuOpen = !isMenuOpen;
       toggleBtn.setAttribute('aria-expanded', isMenuOpen.toString());
-      
-      if (isMenuOpen) {
-        if (closeTimeout !== null) {
-          clearTimeout(closeTimeout);
-          closeTimeout = null;
-        }
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
 
-        // Open menu
-        overlay.classList.remove('hidden');
-        // Small delay to allow display block to apply before opacity transition
-        setTimeout(() => {
-          overlay.classList.remove('opacity-0');
-          overlay.classList.add('opacity-100');
-        }, 10);
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
-        
-        iconOpen?.classList.add('hidden');
-        iconClose?.classList.remove('hidden');
-        toggleBtn.classList.replace('bg-[#C4A1FF]', 'bg-[#F31260]');
-        toggleBtn.classList.add('text-white');
-      } else {
-        // Close menu
+      iconOpen?.classList.add('hidden');
+      iconClose?.classList.remove('hidden');
+      toggleBtn.classList.replace('bg-[#C4A1FF]', 'bg-[#F31260]');
+      toggleBtn.classList.add('text-white');
+
+      if (shouldReduceMotion()) {
+        overlay.classList.remove('opacity-0');
+        overlay.classList.add('opacity-100');
+        isAnimating = false;
+        return;
+      }
+
+      await Promise.all([
+        animate(overlay, { opacity: [0, 1] }, { duration: 0.22, ease: 'easeOut' }).finished,
+        animate(content, { y: [-18, 0] }, { duration: 0.28, ease: [0.22, 1, 0.36, 1] }).finished,
+        animate(
+          menuItems ?? [],
+          { opacity: [0, 1], y: [16, 0], x: [-8, 0] },
+          { delay: stagger(0.05, { startDelay: 0.04 }), duration: 0.28, ease: [0.22, 1, 0.36, 1] }
+        ).finished,
+      ]);
+
+      overlay.classList.remove('opacity-0');
+      overlay.classList.add('opacity-100');
+      isAnimating = false;
+    };
+
+    const closeMenu = async () => {
+      if (isAnimating) return;
+      isAnimating = true;
+      isMenuOpen = !isMenuOpen;
+      toggleBtn.setAttribute('aria-expanded', isMenuOpen.toString());
+
+      if (shouldReduceMotion()) {
+        overlay.classList.add('hidden');
         overlay.classList.remove('opacity-100');
         overlay.classList.add('opacity-0');
-        
-        // Wait for transition to finish before hiding
-        closeTimeout = window.setTimeout(() => {
-          overlay.classList.add('hidden');
-          closeTimeout = null;
-        }, 300);
-        document.body.style.overflow = ''; // Restore scrolling
-        
+        document.body.style.overflow = '';
         iconOpen?.classList.remove('hidden');
         iconClose?.classList.add('hidden');
         toggleBtn.classList.replace('bg-[#F31260]', 'bg-[#C4A1FF]');
         toggleBtn.classList.remove('text-white');
+        isAnimating = false;
+        return;
       }
+
+      await Promise.all([
+        animate(
+          Array.from(menuItems ?? []).reverse(),
+          { opacity: [1, 0], y: [0, 10] },
+          { delay: stagger(0.035), duration: 0.18, ease: 'easeIn' }
+        ).finished,
+        animate(content, { y: [0, -12] }, { duration: 0.18, ease: 'easeIn' }).finished,
+        animate(overlay, { opacity: [1, 0] }, { duration: 0.18, ease: 'easeIn' }).finished,
+      ]);
+
+      overlay.classList.add('hidden');
+      overlay.classList.remove('opacity-100');
+      overlay.classList.add('opacity-0');
+      document.body.style.overflow = '';
+      iconOpen?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+      toggleBtn.classList.replace('bg-[#F31260]', 'bg-[#C4A1FF]');
+      toggleBtn.classList.remove('text-white');
+      isAnimating = false;
+    };
+
+    const toggleMenu = () => {
+      if (isMenuOpen) {
+        void closeMenu();
+        return;
+      }
+
+      void openMenu();
     };
 
     toggleBtn.addEventListener('click', toggleMenu);
 
-    // Close menu when a link is clicked
     menuItems?.forEach(item => {
       item.addEventListener('click', () => {
         if (isMenuOpen) toggleMenu();
