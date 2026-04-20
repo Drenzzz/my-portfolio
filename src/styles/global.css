@@ -7,30 +7,34 @@
 
 :root {
   --radius: 0;
-  --background: #F9F5F2;
+  --background: #f9f5f2;
   --foreground: #000000;
-  --muted: #EDE3FF;
-  --muted-foreground: #5B3B98;
-  --card: #FFFFFF;
+  --muted: #ede3ff;
+  --muted-foreground: #5b3b98;
+  --card: #ffffff;
   --card-foreground: #000000;
-  --popover: #FFFFFF;
+  --popover: #ffffff;
   --popover-foreground: #000000;
   --border: #000000;
-  --input: #FFFFFF;
-  --primary: #C4A1FF;
-  --primary-hover: #9678FF;
+  --input: #ffffff;
+  --primary: #c4a1ff;
+  --primary-hover: #9678ff;
   --primary-foreground: #000000;
-  --secondary: #E7F193;
+  --secondary: #e7f193;
   --secondary-foreground: #000000;
-  --accent: #FE91E9;
+  --accent: #fe91e9;
   --accent-foreground: #000000;
-  --destructive: #FE3B3B;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #fe3b3b;
+  --destructive-foreground: #ffffff;
   --ring: #000000;
 
   --shadow-brutal: 3px 3px 0px 0px rgba(0, 0, 0, 1);
   --shadow-brutal-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
   --shadow-brutal-lg: 5px 5px 0px 0px rgba(0, 0, 0, 1);
+  --motion-duration-fast: 180ms;
+  --motion-duration-base: 320ms;
+  --motion-duration-slow: 480ms;
+  --motion-ease-neo: cubic-bezier(0.22, 1, 0.36, 1);
 
   --tag-go: #93c5fd;
   --tag-kotlin: #c084fc;
@@ -49,20 +53,24 @@
   --popover-foreground: #ffffff;
   --border: #2a2a2e;
   --input: #2a2a2e;
-  --primary: #C4A1FF;
-  --primary-hover: #9678FF;
+  --primary: #c4a1ff;
+  --primary-hover: #9678ff;
   --primary-foreground: #000000;
-  --secondary: #E7F193;
+  --secondary: #e7f193;
   --secondary-foreground: #000000;
-  --accent: #FE91E9;
+  --accent: #fe91e9;
   --accent-foreground: #000000;
-  --destructive: #FE3B3B;
+  --destructive: #fe3b3b;
   --destructive-foreground: #ffffff;
-  --ring: #C4A1FF;
+  --ring: #c4a1ff;
 
   --shadow-brutal: 3px 3px 0px 0px rgba(255, 255, 255, 1);
   --shadow-brutal-sm: 2px 2px 0px 0px rgba(255, 255, 255, 1);
   --shadow-brutal-lg: 5px 5px 0px 0px rgba(255, 255, 255, 1);
+  --motion-duration-fast: 180ms;
+  --motion-duration-base: 320ms;
+  --motion-duration-slow: 480ms;
+  --motion-ease-neo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -111,6 +119,35 @@
   }
 }
 
+@layer utilities {
+  [data-motion] {
+    opacity: 0;
+    transform: translate3d(
+        var(--motion-offset-x, 0px),
+        var(--motion-offset-y, 18px),
+        0
+      )
+      scale(var(--motion-scale, 1));
+    transform-origin: top left;
+    will-change: transform, opacity;
+  }
+
+  [data-motion].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .transition-neo {
+    transition-duration: var(--motion-duration-base);
+    transition-timing-function: var(--motion-ease-neo);
+  }
+
+  .transition-neo-fast {
+    transition-duration: var(--motion-duration-fast);
+    transition-timing-function: var(--motion-ease-neo);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -119,5 +156,11 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  [data-motion] {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
   }
 }
