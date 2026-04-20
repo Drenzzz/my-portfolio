@@ -89,7 +89,9 @@ const featured = allProjects
 
   const featuredProjectsRoot = document.getElementById("featured-projects-motion-root")
 
-  if (featuredProjectsRoot) {
+  if (featuredProjectsRoot && featuredProjectsRoot.dataset.motionBound !== "true") {
+    featuredProjectsRoot.dataset.motionBound = "true"
+
     bindInViewReveal(featuredProjectsRoot, "[data-motion-group='projects-header'] [data-motion]", {
       amount: 0.2,
       delay: 0.04,

@@ -72,7 +72,7 @@ import { Menu, X } from "lucide-react"
     const openMenu = async () => {
       if (isAnimating) return;
       isAnimating = true;
-      isMenuOpen = !isMenuOpen;
+      isMenuOpen = true;
       toggleBtn.setAttribute('aria-expanded', isMenuOpen.toString());
       overlay.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
@@ -107,7 +107,7 @@ import { Menu, X } from "lucide-react"
     const closeMenu = async () => {
       if (isAnimating) return;
       isAnimating = true;
-      isMenuOpen = !isMenuOpen;
+      isMenuOpen = false;
       toggleBtn.setAttribute('aria-expanded', isMenuOpen.toString());
 
       if (shouldReduceMotion()) {
@@ -153,11 +153,27 @@ import { Menu, X } from "lucide-react"
       void openMenu();
     };
 
+    const handleEscape = (event) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        void closeMenu();
+      }
+    };
+
+    const handleOverlayPointer = (event) => {
+      if (event.target === overlay && isMenuOpen) {
+        void closeMenu();
+      }
+    };
+
     toggleBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', handleOverlayPointer);
+    document.addEventListener('keydown', handleEscape);
 
     menuItems?.forEach(item => {
       item.addEventListener('click', () => {
-        if (isMenuOpen) toggleMenu();
+        if (isMenuOpen) {
+          void closeMenu();
+        }
       });
     });
   };

@@ -111,47 +111,51 @@ import { GitBranch, Mail, UserRound, ArrowUpRight } from "lucide-react"
 
 <script>
   import { revealMotionGroup, revealMotionTargets } from "@/lib/animation/motion"
+  import { shouldReduceMotion } from "@/lib/animation/motion"
 
   class TypewriterEffect extends HTMLElement {
-    constructor() {
-      super();
+    timeoutId = 0;
+
+    connectedCallback() {
       const words = JSON.parse(this.dataset.words || '[]');
+      const span = this.querySelector('.typewriter-text');
+
+      if (!span || !words.length) return;
+
+      if (shouldReduceMotion()) {
+        span.textContent = words[0];
+        return;
+      }
+
       let wordIndex = 0;
       let charIndex = 0;
       let isDeleting = false;
-      let timeout;
-      const span = this.querySelector('.typewriter-text');
-      
+
       const type = () => {
-        if (!span) return;
         const currentWord = words[wordIndex];
-        
-        if (isDeleting) {
-          charIndex--;
-        } else {
-          charIndex++;
-        }
-        
+
+        charIndex += isDeleting ? -1 : 1;
         span.textContent = currentWord.substring(0, charIndex);
-        
+
         let typeSpeed = isDeleting ? 50 : 100;
-        
+
         if (!isDeleting && charIndex === currentWord.length) {
-          // Pause at the end of word before starting to delete
           typeSpeed = 2000;
           isDeleting = true;
         } else if (isDeleting && charIndex === 0) {
-          // Move to next word when entirely deleted
           isDeleting = false;
           wordIndex = (wordIndex + 1) % words.length;
-          // Pause before typing the new word
           typeSpeed = 500;
         }
-        
-        timeout = setTimeout(type, typeSpeed);
+
+        this.timeoutId = window.setTimeout(type, typeSpeed);
       };
-      
+
       type();
+    }
+
+    disconnectedCallback() {
+      window.clearTimeout(this.timeoutId);
     }
   }
   
@@ -161,7 +165,8 @@ import { GitBranch, Mail, UserRound, ArrowUpRight } from "lucide-react"
 
   const heroRoot = document.getElementById("hero-motion-root")
 
-  if (heroRoot) {
+  if (heroRoot && heroRoot.dataset.motionBound !== "true") {
+    heroRoot.dataset.motionBound = "true"
     const contentTargets = heroRoot.querySelectorAll(".flex-1 [data-motion]")
     const portraitTarget = heroRoot.querySelector("[data-motion][style*='--motion-offset-x']")
 
