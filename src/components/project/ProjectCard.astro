@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry } from "astro:content"
-import { Github, ExternalLink, Folder } from "lucide-react"
+import { GitBranch, ExternalLink, Folder } from "lucide-react"
 
 interface Props {
   project: CollectionEntry<"projects">
@@ -8,12 +8,13 @@ interface Props {
 
 const { project } = Astro.props
 const data = project.data
+const projectSlug = project.id.replace(/\.(md|mdx)$/, "")
 ---
 
 <article
   class="group border-[3px] border-black bg-white shadow-brutal rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-none transition-all cursor-pointer flex flex-col"
   data-tags={data.tags.join(",")}
-  onclick={`window.location.href='/project/${project.slug}'`}
+  onclick={`window.location.href='/project/${projectSlug}'`}
 >
   <div class="relative w-full h-44 bg-muted overflow-hidden border-b-[3px] border-black shrink-0">
     {data.image ? (
@@ -62,7 +63,7 @@ const data = project.data
           class="inline-flex items-center gap-1.5 text-xs font-bold font-head hover:text-primary transition-colors"
           onclick="event.stopPropagation()"
         >
-          <Github className="w-3.5 h-3.5" />
+          <GitBranch className="w-3.5 h-3.5" />
           Source Code
         </a>
       )}

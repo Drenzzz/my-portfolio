@@ -1,19 +1,26 @@
-import { defineCollection, z } from 'astro:content';
+import { glob } from "astro/loaders"
+import { defineCollection, z } from "astro:content"
 
 const projectsCollection = defineCollection({
-  type: 'content',
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "./src/content/projects",
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    publishDate: z.string().or(z.date()).transform((val) => new Date(val)),
+    publishDate: z
+      .string()
+      .or(z.date())
+      .transform((val) => new Date(val)),
     image: z.string().optional(),
     tags: z.array(z.string()).default([]),
     link: z.string().url().optional(),
     github: z.string().url().optional(),
     featured: z.boolean().default(false),
   }),
-});
+})
 
 export const collections = {
-  'projects': projectsCollection,
-};
+  projects: projectsCollection,
+}

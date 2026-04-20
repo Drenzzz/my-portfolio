@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import type { GithubStats } from "@/types"
 import {
-  Github,
+  GitBranch,
   Star,
   GitCommitVertical,
   GitPullRequest,
@@ -67,7 +67,7 @@ export function GitHubStats({ initialData }: Props) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] text-black shadow-brutal-sm">
-            <Github className="h-5 w-5" />
+            <GitBranch className="h-5 w-5" />
           </div>
           <div className="flex flex-col">
             <h3 className="font-head text-lg leading-none font-black text-black">

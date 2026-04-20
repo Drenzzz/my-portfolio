@@ -20,5 +20,4 @@ if (method.imageKey) {
 }
 ---
 
-<DonateCardIsland method={method} qrImageSrc={qrImageAsset?.src} client:visible />
-
+<DonateCardIsland method={method} qrImageSrc={qrImageAsset?.src} client:only="react" />
