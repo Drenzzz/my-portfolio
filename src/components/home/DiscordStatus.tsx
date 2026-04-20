@@ -15,6 +15,7 @@ import {
   Laptop,
   Loader2,
   Moon,
+  RotateCw,
   Smartphone,
 } from "lucide-react"
 
@@ -54,7 +55,8 @@ const calculateProgress = (now: number, start: number, end: number) => {
 }
 
 export function DiscordStatus() {
-  const { data, status, error, lastUpdated } = useLanyard()
+  const { connectionMeta, data, error, lastUpdated, retry, status } =
+    useLanyard()
   const [now, setNow] = useState(() => Date.now())
   const [isPageVisible, setIsPageVisible] = useState(true)
 
@@ -169,6 +171,14 @@ export function DiscordStatus() {
               {statusLabel}
             </span>
             <span className="text-[10px] text-white/60">{connectionLabel}</span>
+            <span
+              className={cn(
+                "text-[10px] font-semibold uppercase",
+                connectionMeta.color
+              )}
+            >
+              {connectionMeta.badge}
+            </span>
 
             {data && (
               <div className="ml-auto flex items-center gap-1 border-l border-white/10 pl-2 text-white/55">
@@ -180,6 +190,17 @@ export function DiscordStatus() {
                 )}
                 {data.active_on_discord_web && <Globe className="h-3 w-3" />}
               </div>
+            )}
+
+            {(status === "error" || status === "stale") && (
+              <button
+                type="button"
+                onClick={retry}
+                className="ml-2 inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-semibold text-white/75 transition hover:bg-white/10 hover:text-white"
+              >
+                <RotateCw className="h-3 w-3" />
+                Retry
+              </button>
             )}
           </div>
 

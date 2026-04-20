@@ -58,8 +58,34 @@ export const CONNECTION_STATUS_LABELS = {
   stale: "Using last known activity",
 } as const
 
+export const CONNECTION_STATUS_META = {
+  idle: { badge: "Idle", color: "text-white/45" },
+  connecting: { badge: "Syncing", color: "text-sky-300" },
+  open: { badge: "Live", color: "text-emerald-300" },
+  closed: { badge: "Retrying", color: "text-amber-300" },
+  error: { badge: "Error", color: "text-rose-300" },
+  stale: { badge: "Stale", color: "text-amber-300" },
+} as const
+
 export const DEFAULT_SPOTIFY_SONG = "Listening on Spotify"
 export const DEFAULT_CUSTOM_STATUS = "Currently chilling..."
+
+const toFiniteNumber = (value: string | undefined, fallback: number) => {
+  const parsedValue = Number(value)
+  return Number.isFinite(parsedValue) ? parsedValue : fallback
+}
+
+export const DISCORD_RUNTIME_CONFIG = {
+  snapshotEnabled: import.meta.env.PUBLIC_LANYARD_ENABLE_SNAPSHOT !== "false",
+  retryBaseDelayMs: toFiniteNumber(
+    import.meta.env.PUBLIC_LANYARD_RETRY_BASE_DELAY_MS,
+    LANYARD_RETRY_LIMITS.baseDelayMs
+  ),
+  retryJitterMs: Math.max(
+    0,
+    toFiniteNumber(import.meta.env.PUBLIC_LANYARD_RETRY_JITTER_MS, 250)
+  ),
+} as const
 
 export const isValidDiscordId = (value: string) =>
   DISCORD_ID_PATTERN.test(value)

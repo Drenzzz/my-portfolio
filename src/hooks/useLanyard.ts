@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
+  CONNECTION_STATUS_META,
   DEFAULT_SPOTIFY_SONG,
+  DISCORD_RUNTIME_CONFIG,
   LANYARD_REST_URL,
   LANYARD_RETRY_LIMITS,
   LANYARD_SOCKET_URL,
@@ -124,6 +126,12 @@ export function useLanyard() {
   const [lastUpdated, setLastUpdated] = useState<number | null>(null)
   const attemptRef = useRef(0)
   const latestDataRef = useRef<LanyardData | null>(null)
+  const [retrySignal, setRetrySignal] = useState(0)
+
+  const retry = useCallback(() => {
+    attemptRef.current = 0
+    setRetrySignal((currentValue) => currentValue + 1)
+  }, [])
 
   useEffect(() => {
     if (!HAS_VALID_DISCORD_ID) {
@@ -171,15 +179,24 @@ export function useLanyard() {
         return
       }
 
+      const jitter =
+        DISCORD_RUNTIME_CONFIG.retryJitterMs > 0
+          ? Math.random() * DISCORD_RUNTIME_CONFIG.retryJitterMs
+          : 0
+
       const delay = Math.min(
-        LANYARD_RETRY_LIMITS.baseDelayMs *
+        DISCORD_RUNTIME_CONFIG.retryBaseDelayMs *
           LANYARD_RETRY_LIMITS.backoffMultiplier ** attemptRef.current,
         LANYARD_RETRY_LIMITS.maxDelayMs
       )
-      reconnectTimeout = setTimeout(connect, delay)
+      reconnectTimeout = setTimeout(connect, delay + jitter)
     }
 
     const fetchSnapshot = async () => {
+      if (!DISCORD_RUNTIME_CONFIG.snapshotEnabled) {
+        return
+      }
+
       try {
         const response = await fetch(`${LANYARD_REST_URL}/${DISCORD_ID}`, {
           signal: snapshotController.signal,
@@ -305,7 +322,14 @@ export function useLanyard() {
       clearTimers()
       socket?.close()
     }
-  }, [])
+  }, [retrySignal])
 
-  return { data, status, error, lastUpdated }
+  return {
+    data,
+    status,
+    error,
+    lastUpdated,
+    retry,
+    connectionMeta: CONNECTION_STATUS_META[status],
+  }
 }
