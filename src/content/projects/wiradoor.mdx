@@ -1,0 +1,47 @@
+---
+title: Wiradoor Sumbar
+description: Website company profile dan e-katalog full-stack untuk distributor pintu solid wood di Sumatera Barat, lengkap dengan inquiry system, guest checkout, admin dashboard, dan manajemen pesanan.
+publishDate: 2026-02-13
+tags:
+  - Next.js
+  - TypeScript
+  - PostgreSQL
+  - Drizzle ORM
+  - Tailwind CSS
+  - React
+link: https://wiradoorsumbar.com
+github: https://github.com/Drenzzz/mitra-wiradoor-sumbar
+image: "/images/projects/wiradoor.png"
+featured: true
+---
+
+**Wiradoor Sumbar** adalah website profil perusahaan sekaligus *digital showroom* untuk **MR Konstruksi** sebagai distributor resmi **Wiradoor** di Sumatera Barat. Proyek ini dirancang untuk membantu bisnis manufaktur dan distribusi tradisional membangun kehadiran digital yang lebih modern, profesional, dan siap menerima *inquiry* maupun pesanan dari calon pelanggan.
+
+Tidak berhenti di sisi presentasi visual, aplikasi ini juga menggabungkan **e-katalog publik**, **guest checkout**, dan **panel admin internal** dalam satu sistem terpadu. Hasilnya adalah alur bisnis yang lebih efisien: pelanggan dapat menjelajahi katalog, mengirim *inquiry*, atau melakukan checkout tanpa perlu akun, sementara tim internal dapat mengelola produk, pesanan, artikel, dan laporan dari dashboard terpusat.
+
+### Fitur Utama
+
+1.  **Digital Showroom & E-Katalog**: Menampilkan koleksi produk dengan filter, pencarian, pagination, detail spesifikasi, dan galeri foto.
+2.  **Guest Checkout + WhatsApp Confirmation**: Pengguna dapat membuat pesanan tanpa registrasi, lalu diarahkan ke WhatsApp untuk konfirmasi pembayaran secara manual.
+3.  **Admin Dashboard Lengkap**: Panel internal untuk mengelola produk, kategori, artikel, *inquiry*, portfolio, user, dan data pesanan.
+4.  **Order Management Pipeline**: Status pesanan dikelola melalui alur yang jelas, dari *Pending* hingga *Completed*.
+5.  **CMS & SEO Support**: Artikel dapat dikelola melalui editor berbasis *rich text* untuk mendukung strategi SEO dan edukasi pelanggan.
+6.  **Reporting & Notifications**: Sistem mendukung ekspor laporan ke PDF/Excel serta notifikasi email untuk kebutuhan operasional.
+
+### Tantangan Teknis & Solusi
+
+Tantangan terbesar dalam proyek ini adalah menyatukan kebutuhan **website marketing** dengan kebutuhan **operasional internal** dalam satu aplikasi yang tetap nyaman digunakan oleh admin maupun pelanggan umum. Sistem harus terlihat premium di sisi publik, tetapi juga tetap stabil untuk workflow bisnis seperti manajemen produk, upload media, order tracking, dan *inquiry handling*.
+
+Solusinya adalah membangun arsitektur **full-stack modular** menggunakan **Next.js App Router**. Halaman publik dan area admin dipisahkan secara rapi melalui *route grouping*, sementara data bisnis dikelola menggunakan **PostgreSQL** dan **Drizzle ORM** agar schema tetap *type-safe* dan mudah dikembangkan. Untuk kebutuhan UX, state keranjang dikelola secara global dengan **Zustand**, sedangkan validasi form menggunakan **Zod** dan **React Hook Form** agar alur input lebih aman dan konsisten.
+
+### Tech Stack Detail
+
+- **Framework:** Next.js 16 (App Router + Turbopack)
+- **Language:** TypeScript (Strict Mode)
+- **Database:** PostgreSQL
+- **ORM:** Drizzle ORM
+- **Authentication:** NextAuth.js
+- **Styling:** Tailwind CSS v4 + shadcn/ui
+- **State Management:** Zustand + TanStack Query
+- **Media Upload:** Cloudinary
+- **Email & Reporting:** Nodemailer, React Email, jsPDF, xlsx
