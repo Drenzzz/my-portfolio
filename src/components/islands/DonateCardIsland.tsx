@@ -39,7 +39,7 @@ export function DonateCardIsland({ method, qrImageSrc }: Props) {
           </div>
         </Dialog.Header>
         
-        <div className="p-6 md:p-8 flex flex-col gap-6 items-center overflow-y-auto bg-white">
+        <div className="scrollbar-neo p-6 md:p-8 flex flex-col gap-6 items-center overflow-y-auto bg-white">
           <div className="w-24 h-24 bg-[#F4F4F5] rounded-2xl flex items-center justify-center p-4 border-[4px] border-black shrink-0 shadow-brutal-sm">
             <img src={method.icon} alt={method.name} className="w-16 h-16 object-contain" loading="lazy" />
           </div>

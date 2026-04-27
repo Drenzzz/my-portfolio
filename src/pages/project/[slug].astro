@@ -61,7 +61,7 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
                 {galleryImages.length > 0 ? (
                   <>
                     <div
-                      class="project-gallery flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                      class="project-gallery scrollbar-neo-thin flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth"
                       data-gallery
                       data-gallery-images={JSON.stringify(galleryImages)}
                       aria-label={`Gallery for ${entry.data.title}`}
@@ -163,7 +163,7 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
                         </>
                       )}
 
-                      <div class="flex h-full w-full items-center justify-center overflow-auto p-4 md:p-6">
+                      <div class="scrollbar-neo flex h-full w-full items-center justify-center overflow-auto p-4 md:p-6">
                         <img
                           src={galleryImages[0]}
                           alt={`${entry.data.title} preview`}
