@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Layout from '@/layouts/main.astro';
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
-import { ArrowLeft, Calendar, Layers, Globe, GitBranch, ExternalLink, Info } from "lucide-react";
+import { ArrowLeft, Calendar, Layers, Globe, GitBranch, ExternalLink, Info, X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { ViewCounter } from "@/components/islands/ViewCounter";
 import { ReactionBar } from "@/components/islands/ReactionBar";
 
@@ -20,6 +20,12 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const slug = entry.id.replace(/\.(md|mdx)$/, '');
 const { Content } = await render(entry);
+const galleryImages = entry.data.images?.length
+  ? entry.data.images
+  : entry.data.image
+    ? [entry.data.image]
+    : [];
+const hasGallery = galleryImages.length > 1;
 
 const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID", {
   year: "numeric",
@@ -52,8 +58,55 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
 
             <div class="mt-8">
               <div class="relative overflow-hidden rounded-lg border-[3px] border-black bg-muted aspect-video shadow-brutal-sm">
-                {entry.data.image ? (
-                  <img src={entry.data.image} alt={entry.data.title} class="w-full h-full object-cover" />
+                {galleryImages.length > 0 ? (
+                  <>
+                    <div
+                      class="project-gallery flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                      data-gallery
+                      data-gallery-images={JSON.stringify(galleryImages)}
+                      aria-label={`Gallery for ${entry.data.title}`}
+                    >
+                      {galleryImages.map((image, index) => (
+                        <div class="h-full w-full shrink-0 snap-center" aria-label={`Slide ${index + 1}`}>
+                          <button
+                            type="button"
+                            class="h-full w-full cursor-zoom-in"
+                            data-gallery-open
+                            data-gallery-index={index}
+                            aria-label={`Open ${entry.data.title} screenshot ${index + 1}`}
+                          >
+                            <img src={image} alt={`${entry.data.title} screenshot ${index + 1}`} class="h-full w-full object-cover" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {hasGallery && (
+                      <>
+                        <button
+                          type="button"
+                          class="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-sm border-2 border-black bg-white/90 px-3 py-2 text-xs font-black font-head uppercase shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[-50%] hover:shadow-none"
+                          data-gallery-prev
+                          aria-label="Previous image"
+                        >
+                          Prev
+                        </button>
+                        <button
+                          type="button"
+                          class="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-sm border-2 border-black bg-white/90 px-3 py-2 text-xs font-black font-head uppercase shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[-50%] hover:shadow-none"
+                          data-gallery-next
+                          aria-label="Next image"
+                        >
+                          Next
+                        </button>
+                        <div class="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2 rounded-full border-2 border-black bg-white/90 px-3 py-1" aria-hidden="true">
+                          {galleryImages.map((_, index) => (
+                            <span class={`h-2.5 w-2.5 rounded-full border border-black ${index === 0 ? "bg-black" : "bg-white"}`} data-gallery-dot />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
                 ) : (
                   <div class="flex h-full w-full flex-col items-center justify-center gap-3 text-muted-foreground bg-[#C4A1FF]/20">
                     <Info className="h-10 w-10 opacity-70" />
@@ -61,6 +114,67 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
                   </div>
                 )}
               </div>
+
+              {galleryImages.length > 0 && (
+                <div
+                  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4"
+                  data-lightbox
+                  aria-hidden="true"
+                >
+                  <button
+                    type="button"
+                    class="absolute inset-0 h-full w-full cursor-zoom-out"
+                    data-lightbox-backdrop
+                    aria-label="Close image preview"
+                  />
+
+                  <div class="relative z-10 flex max-h-[92vh] w-full max-w-6xl flex-col gap-4">
+                    <div class="flex items-center justify-end gap-2 self-end rounded-sm border-2 border-black bg-white/95 p-2 shadow-brutal-sm">
+                      <button type="button" class="rounded-sm border-2 border-black bg-white px-3 py-2 font-bold shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none" data-lightbox-zoom-out aria-label="Zoom out">
+                        <ZoomOut className="h-4 w-4" />
+                      </button>
+                      <button type="button" class="rounded-sm border-2 border-black bg-white px-3 py-2 font-bold shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none" data-lightbox-zoom-in aria-label="Zoom in">
+                        <ZoomIn className="h-4 w-4" />
+                      </button>
+                      <button type="button" class="rounded-sm border-2 border-black bg-white px-3 py-2 font-bold shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none" data-lightbox-close aria-label="Close image preview">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    <div class="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-black shadow-brutal">
+                      {hasGallery && (
+                        <>
+                          <button
+                            type="button"
+                            class="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-sm border-2 border-black bg-white/95 px-3 py-3 shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[-50%] hover:shadow-none"
+                            data-lightbox-prev
+                            aria-label="Previous image"
+                          >
+                            <ChevronLeft className="h-5 w-5" />
+                          </button>
+                          <button
+                            type="button"
+                            class="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-sm border-2 border-black bg-white/95 px-3 py-3 shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[-50%] hover:shadow-none"
+                            data-lightbox-next
+                            aria-label="Next image"
+                          >
+                            <ChevronRight className="h-5 w-5" />
+                          </button>
+                        </>
+                      )}
+
+                      <div class="flex h-full w-full items-center justify-center overflow-auto p-4 md:p-6">
+                        <img
+                          src={galleryImages[0]}
+                          alt={`${entry.data.title} preview`}
+                          class="max-h-full max-w-full origin-center object-contain transition-transform duration-200"
+                          data-lightbox-image
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -136,3 +250,113 @@ const formattedDate = new Date(entry.data.publishDate).toLocaleDateString("id-ID
 
   <Footer />
 </Layout>
+
+<script>
+  const gallery = document.querySelector("[data-gallery]")
+  const prevButton = document.querySelector("[data-gallery-prev]")
+  const nextButton = document.querySelector("[data-gallery-next]")
+  const dots = Array.from(document.querySelectorAll("[data-gallery-dot]"))
+  const galleryOpenButtons = Array.from(document.querySelectorAll("[data-gallery-open]"))
+  const lightbox = document.querySelector("[data-lightbox]")
+  const lightboxBackdrop = document.querySelector("[data-lightbox-backdrop]")
+  const lightboxClose = document.querySelector("[data-lightbox-close]")
+  const lightboxImage = document.querySelector("[data-lightbox-image]")
+  const lightboxPrev = document.querySelector("[data-lightbox-prev]")
+  const lightboxNext = document.querySelector("[data-lightbox-next]")
+  const lightboxZoomIn = document.querySelector("[data-lightbox-zoom-in]")
+  const lightboxZoomOut = document.querySelector("[data-lightbox-zoom-out]")
+
+  if (gallery && prevButton && nextButton && dots.length > 1) {
+    const updateDots = () => {
+      const slideWidth = gallery.clientWidth
+      const activeIndex = Math.round(gallery.scrollLeft / Math.max(slideWidth, 1))
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("bg-black", index === activeIndex)
+        dot.classList.toggle("bg-white", index !== activeIndex)
+      })
+    }
+
+    const scrollByPage = (direction) => {
+      gallery.scrollBy({ left: gallery.clientWidth * direction, behavior: "smooth" })
+    }
+
+    prevButton.addEventListener("click", () => scrollByPage(-1))
+    nextButton.addEventListener("click", () => scrollByPage(1))
+    gallery.addEventListener("scroll", updateDots, { passive: true })
+    updateDots()
+  }
+
+  if (gallery && lightbox && lightboxImage && galleryOpenButtons.length > 0) {
+    const imageSources = JSON.parse(gallery.getAttribute("data-gallery-images") || "[]")
+    let activeIndex = 0
+    let zoomLevel = 1
+
+    const applyZoom = () => {
+      lightboxImage.style.transform = `scale(${zoomLevel})`
+    }
+
+    const syncLightboxImage = () => {
+      lightboxImage.setAttribute("src", imageSources[activeIndex] || "")
+      lightboxImage.setAttribute("alt", `${document.title.replace(" | Drenzzz Projects", "")} preview ${activeIndex + 1}`)
+      zoomLevel = 1
+      applyZoom()
+    }
+
+    const openLightbox = (index) => {
+      activeIndex = index
+      syncLightboxImage()
+      lightbox.classList.remove("hidden")
+      lightbox.classList.add("flex")
+      lightbox.setAttribute("aria-hidden", "false")
+      document.body.style.overflow = "hidden"
+    }
+
+    const closeLightbox = () => {
+      lightbox.classList.add("hidden")
+      lightbox.classList.remove("flex")
+      lightbox.setAttribute("aria-hidden", "true")
+      document.body.style.overflow = ""
+      zoomLevel = 1
+      applyZoom()
+    }
+
+    const stepLightbox = (direction) => {
+      if (imageSources.length <= 1) return
+      activeIndex = (activeIndex + direction + imageSources.length) % imageSources.length
+      syncLightboxImage()
+    }
+
+    galleryOpenButtons.forEach((button) => {
+      button.addEventListener("click", () => openLightbox(Number(button.getAttribute("data-gallery-index") || "0")))
+    })
+
+    lightboxBackdrop?.addEventListener("click", closeLightbox)
+    lightboxClose?.addEventListener("click", closeLightbox)
+    lightboxPrev?.addEventListener("click", () => stepLightbox(-1))
+    lightboxNext?.addEventListener("click", () => stepLightbox(1))
+    lightboxZoomIn?.addEventListener("click", () => {
+      zoomLevel = Math.min(zoomLevel + 0.25, 3)
+      applyZoom()
+    })
+    lightboxZoomOut?.addEventListener("click", () => {
+      zoomLevel = Math.max(zoomLevel - 0.25, 1)
+      applyZoom()
+    })
+
+    document.addEventListener("keydown", (event) => {
+      if (lightbox.getAttribute("aria-hidden") === "true") return
+      if (event.key === "Escape") closeLightbox()
+      if (event.key === "ArrowLeft") stepLightbox(-1)
+      if (event.key === "ArrowRight") stepLightbox(1)
+      if ((event.key === "+" || event.key === "=") && !event.ctrlKey) {
+        zoomLevel = Math.min(zoomLevel + 0.25, 3)
+        applyZoom()
+      }
+      if (event.key === "-") {
+        zoomLevel = Math.max(zoomLevel - 0.25, 1)
+        applyZoom()
+      }
+    })
+  }
+</script>

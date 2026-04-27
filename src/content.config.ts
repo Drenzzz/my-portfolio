@@ -14,6 +14,7 @@ const projectsCollection = defineCollection({
       .or(z.date())
       .transform((val) => new Date(val)),
     image: z.string().optional(),
+    images: z.array(z.string()).optional(),
     tags: z.array(z.string()).default([]),
     link: z.string().url().optional(),
     github: z.string().url().optional(),
