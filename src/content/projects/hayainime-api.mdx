@@ -1,0 +1,43 @@
+---
+title: Hayainime API
+description: REST API backend berbasis Go untuk scraping data anime dari Otakudesu, dilengkapi contract-first API design, cache Redis, rate limiting, API key protection, dan deployment-ready workflow.
+publishDate: 2026-02-28
+tags:
+  - Go
+  - Fiber
+  - Redis
+  - Colly
+  - GoQuery
+  - REST API
+github: https://github.com/Drenzzz/Hayainime-API
+image: "/images/projects/hayainime.png"
+featured: false
+---
+
+**Hayainime API** adalah layanan backend REST API yang saya bangun untuk mengekstrak dan menyajikan data anime dari **Otakudesu** ke dalam format yang lebih konsisten, terstruktur, dan siap dikonsumsi oleh aplikasi frontend maupun client pihak ketiga. Fokus utamanya bukan sekadar melakukan scraping, tetapi membungkus sumber data yang rapuh menjadi service API yang lebih stabil, terdokumentasi, dan aman untuk dipakai sebagai fondasi produk.
+
+Project ini mencakup endpoint untuk homepage aggregation, jadwal rilis, daftar anime ongoing dan complete, genre, detail anime, daftar episode, stream mirror, pencarian, hingga batch download links. Selain itu, saya juga menambahkan helper endpoint untuk me-*resolve* token stream menjadi URL final, sehingga workflow konsumsi data menjadi jauh lebih praktis bagi client aplikasi.
+
+### Fitur Utama
+
+1.  **Anime Scraping Backend**: Mengambil data anime, episode, genre, schedule, dan batch link dari sumber web pihak ketiga lalu menyajikannya sebagai REST API.
+2.  **Stream Resolution Helpers**: Menyediakan endpoint untuk me-*resolve* token stream tunggal maupun massal menjadi URL final yang siap digunakan.
+3.  **Contract-First API Design**: API didesain dengan response envelope yang konsisten, dokumentasi human-readable, dan spesifikasi OpenAPI terpisah.
+4.  **Operational Hardening**: Proteksi API key, rate limiting per-IP, validasi request, dan taxonomy error yang seragam untuk mempermudah debugging client.
+5.  **Redis Caching Layer**: Hasil scraping dapat di-cache untuk mengurangi beban request berulang ke sumber eksternal dan meningkatkan respons service.
+6.  **Deployment-Ready Setup**: Sudah dilengkapi script deploy VPS, update binary, environment contract, dan quality gate untuk workflow produksi yang lebih rapi.
+
+### Tantangan Teknis & Solusi
+
+Tantangan terbesar dalam proyek ini adalah mengubah data dari sumber scraping yang rentan berubah menjadi API yang tetap **predictable** untuk consumer. Struktur HTML target bisa berubah sewaktu-waktu, response scraping bisa lambat atau gagal, dan endpoint yang menyajikan stream mirror membutuhkan penanganan ekstra agar tetap aman dan nyaman dipakai oleh client.
+
+Solusinya adalah memisahkan arsitektur backend ke dalam lapisan **Handler -> Service -> Repository Interface -> Scraper Implementation** agar logika HTTP, business flow, dan scraper tidak saling bercampur. Di sisi reliability, saya menambahkan **Redis** sebagai cache layer, middleware untuk API key dan rate limiting, serta error taxonomy yang memetakan kegagalan scraper ke response API yang lebih konsisten seperti `SCRAPER_UNAVAILABLE`, `VALIDATION_ERROR`, dan `RATE_LIMITED`. Pendekatan ini membuat service lebih mudah diuji, dirawat, dan dikembangkan tanpa mengunci semua logika langsung di layer route.
+
+### Tech Stack Detail
+
+* **Language:** Go
+* **HTTP Framework:** Fiber
+* **Scraping:** Colly, GoQuery
+* **Caching:** Redis
+* **Validation:** go-playground/validator
+* **Architecture:** Layered service with repository abstraction and contract-first API docs
