@@ -1,0 +1,41 @@
+---
+title: ranoz-go
+description: CLI uploader berbasis Go untuk mengunggah file ke Ranoz.gg dengan multi-file concurrent upload, progress bar, retry handling, dan output terminal yang terstruktur.
+publishDate: 2026-04-26
+tags:
+  - Go
+  - CLI
+  - Concurrency
+  - Terminal UI
+  - File Upload
+github: https://github.com/Drenzzz/ranoz-go
+image: "/images/projects/ranoz-go.png"
+featured: false
+---
+
+**ranoz-go** adalah tool CLI yang saya bangun untuk menyederhanakan proses upload file ke **Ranoz.gg** langsung dari terminal. Tujuan utamanya adalah memberikan workflow yang cepat, ringan, dan script-friendly untuk pengguna Linux atau developer yang lebih nyaman bekerja dari command line dibanding membuka browser hanya untuk mengunggah file satu per satu.
+
+Meski terlihat sederhana dari luar, tool ini dirancang agar tetap terasa matang untuk penggunaan sehari-hari. Pengguna dapat mengunggah banyak file sekaligus, mengatur jumlah worker sesuai kebutuhan, melihat progress upload secara real-time, serta mendapatkan output yang rapi dan mudah dipakai ulang di shell script atau pipeline otomatis.
+
+### Fitur Utama
+
+1.  **Concurrent Multi-File Upload**: Mendukung upload banyak file sekaligus dengan jumlah worker yang dapat diatur antara 1 sampai 32.
+2.  **Real-Time Progress Display**: Menampilkan progress upload di terminal agar proses file besar atau batch upload tetap mudah dipantau.
+3.  **Retry for Transient Failures**: Request upload akan dicoba ulang untuk menangani kegagalan jaringan sementara tanpa langsung memutus workflow pengguna.
+4.  **File Validation Before Upload**: File diperiksa terlebih dahulu sebelum dikirim agar error dasar bisa ditangani lebih cepat dari sisi client.
+5.  **Structured Terminal Output**: Output terminal dibuat berwarna, jelas, dan konsisten agar nyaman dibaca manusia maupun diproses lanjut di shell.
+6.  **Release-Friendly Distribution**: Sudah disiapkan untuk prebuilt binaries, metadata versioning, dan workflow release melalui GitHub Actions.
+
+### Tantangan Teknis & Solusi
+
+Tantangan terbesar dalam proyek ini adalah menjaga pengalaman CLI tetap **responsif** dan **rapi** saat menangani upload banyak file sekaligus. Pada aplikasi terminal, masalah seperti progress yang saling tumpang tindih, hasil output yang berantakan, atau retry yang tidak jelas bisa langsung merusak UX meskipun logika upload-nya sendiri berjalan benar.
+
+Solusinya adalah memisahkan parsing argumen, validasi file, dan pipeline upload ke alur yang lebih terstruktur. Saya memanfaatkan **goroutines** dan worker pool untuk menjalankan upload file secara paralel, lalu menggabungkannya dengan **progress bar** dan output terminal terformat agar pengguna tetap mendapat feedback yang jelas. Selain itu, upload dilakukan dengan pendekatan **streaming from disk** agar penggunaan RAM tetap lebih stabil saat menangani file besar, dan release build dioptimalkan dengan flag kompilasi yang lebih hemat ukuran untuk distribusi binary.
+
+### Tech Stack Detail
+
+* **Language:** Go
+* **Interface:** Native CLI
+* **Concurrency Model:** Goroutines + worker pool
+* **Terminal UX:** fatih/color, progressbar/v3
+* **Distribution:** Prebuilt binaries + GitHub Actions release workflow
