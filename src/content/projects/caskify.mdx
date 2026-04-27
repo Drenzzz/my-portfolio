@@ -1,0 +1,47 @@
+---
+title: Caskify
+description: Native PostgreSQL manager untuk Linux yang dibangun dengan Wails, Go, React, dan TypeScript, fokus pada workflow developer modern, startup cepat, dan integrasi desktop yang ringan.
+publishDate: 2026-04-21
+tags:
+  - Go
+  - React
+  - Wails
+  - TypeScript
+  - PostgreSQL
+  - Tailwind CSS
+github: https://github.com/CaskifyApp/Caskify
+image: "/images/projects/caskify1.png"
+images:
+  - "/images/projects/caskify1.png"
+  - "/images/projects/caskify2.png"
+  - "/images/projects/caskify3.png"
+featured: false
+---
+
+**Caskify** adalah aplikasi desktop native untuk Linux yang dirancang sebagai *PostgreSQL manager* modern, ringan, dan fokus pada workflow developer sehari-hari. Proyek ini lahir dari kebutuhan akan tool database yang terasa cepat saat startup, menyatu dengan desktop Linux, dan tidak membawa overhead besar seperti aplikasi berbasis Electron atau Java.
+
+Alih-alih mencoba menjadi *universal database client* untuk semua engine, Caskify sengaja difokuskan pada **PostgreSQL** agar pengalaman pengguna bisa dibuat lebih tajam dan praktis. Pengguna dapat menjelajahi database lokal, container Docker, maupun koneksi cloud dari satu antarmuka terpadu, lalu berpindah cepat antara browser schema, editor query, dan data grid tanpa friction yang tidak perlu.
+
+### Fitur Utama
+
+1.  **Source-Driven Database Discovery**: Mendeteksi database PostgreSQL dari sumber lokal, container Docker, dan profil koneksi cloud dalam satu sidebar terpadu.
+2.  **Native Query Workflow**: Editor SQL dengan shortcut keyboard, *autocomplete hints*, query history, dan saved queries untuk workflow eksplorasi yang cepat.
+3.  **Structured Data Browser**: Menampilkan database, schema, table, view, index, dan foreign key dengan navigasi yang terorganisir.
+4.  **Table Data Management**: Mendukung pagination, sorting, filtering, serta alur insert, edit, dan delete row langsung dari UI.
+5.  **Secure Local Credentials**: Password koneksi disimpan melalui integrasi keyring Linux agar tetap aman tanpa mengorbankan kenyamanan penggunaan.
+6.  **Linux Packaging Ready**: Mendukung distribusi AppImage, `.deb`, `.rpm`, dan Arch package untuk pengujian lintas distro.
+
+### Tantangan Teknis & Solusi
+
+Tantangan terbesar dalam proyek ini adalah membangun pengalaman **GUI database native** yang tetap terasa ringan meskipun harus menangani banyak state kompleks: discovery multi-sumber, tab query, navigasi schema, hasil query besar, dan penyimpanan kredensial lokal. Pada saat yang sama, aplikasi harus tetap nyaman digunakan di ekosistem Linux dengan kebutuhan packaging dan integrasi sistem yang berbeda-beda.
+
+Solusinya adalah memadukan backend **Go** untuk koneksi PostgreSQL, discovery, dan integrasi sistem dengan frontend **React + TypeScript** yang dioptimalkan untuk interaksi data-heavy. Arsitektur ini memanfaatkan **Wails** sebagai jembatan native yang jauh lebih ringan dibanding *browser wrapper* tradisional. Di sisi UI, state aplikasi dikelola dengan **Zustand**, editor SQL dibangun di atas **CodeMirror**, dan tabel data dioptimalkan menggunakan **TanStack Table** serta virtual rendering agar hasil query tetap responsif saat volume data mulai membesar.
+
+### Tech Stack Detail
+
+* **Core:** Wails v2, Go, PGX
+* **Frontend:** React 19, TypeScript, Vite
+* **UI Framework:** Tailwind CSS v4, Base UI
+* **Data UI:** CodeMirror, TanStack Table, TanStack Virtual
+* **State Management:** Zustand
+* **Platform Integration:** Linux Keyring, native packaging for AppImage, `.deb`, `.rpm`, and Arch
