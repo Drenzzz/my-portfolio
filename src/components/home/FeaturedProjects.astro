@@ -5,7 +5,10 @@ import { Folder, ArrowUpRight } from "lucide-react"
 const allProjects = await getCollection("projects")
 const getProjectSlug = (id: string) => id.replace(/\.(md|mdx)$/, "")
 const featured = allProjects
-  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .sort((a, b) => {
+    if (a.data.order !== b.data.order) return a.data.order - b.data.order
+    return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+  })
   .filter((p) => p.data.featured)
   .slice(0, 3)
 ---

@@ -19,6 +19,7 @@ const projectsCollection = defineCollection({
     link: z.string().url().optional(),
     github: z.string().url().optional(),
     featured: z.boolean().default(false),
+    order: z.number().int().positive().default(999),
   }),
 })
 

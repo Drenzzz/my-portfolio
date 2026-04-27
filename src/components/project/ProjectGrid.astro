@@ -4,8 +4,9 @@ import { SearchX } from "lucide-react"
 import ProjectCard from "@/components/project/ProjectCard.astro"
 
 const allProjects = await getCollection("projects")
-// Sort projects (featured first, then by date descending string comparison)
+// Sort projects by explicit portfolio priority, then featured, then newest.
 const projects = allProjects.sort((a, b) => {
+  if (a.data.order !== b.data.order) return a.data.order - b.data.order;
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
@@ -21,4 +22,3 @@ const projects = allProjects.sort((a, b) => {
 <p id="no-results" class="hidden text-center py-16 text-lg text-muted-foreground font-medium flex items-center justify-center gap-2">
   No projects match the selected filter. <SearchX className="w-5 h-5 text-muted-foreground" />
 </p>
-
