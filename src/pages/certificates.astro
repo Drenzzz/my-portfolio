@@ -1,0 +1,118 @@
+---
+import { getCollection } from "astro:content"
+import Layout from "@/layouts/main.astro"
+import Navbar from "@/components/layout/Navbar.astro"
+import Footer from "@/components/layout/Footer.astro"
+import { ViewCounter } from "@/components/islands/ViewCounter"
+import {
+  CertificatePreview,
+  type CertificatePreviewItem,
+} from "@/components/certificates/CertificatePreview"
+import { Award, FolderOpen } from "lucide-react"
+
+export const prerender = true
+
+const title = "Certificates | Drenzzz"
+const description =
+  "A curated collection of certificates, learning milestones, and technical achievements."
+
+const certificates = (await getCollection("certificates")).sort(
+  (a, b) => a.data.order - b.data.order
+)
+
+const certificateItems: CertificatePreviewItem[] = certificates.map(
+  (entry) => ({
+    slug: entry.id.replace(/\.(md|mdx)$/g, ""),
+    title: entry.data.title,
+    issuer: entry.data.issuer,
+    dateLabel: new Intl.DateTimeFormat("en", {
+      month: "short",
+      year: "numeric",
+    }).format(entry.data.date),
+    category: entry.data.category,
+    assetType: entry.data.assetType,
+    asset: entry.data.asset,
+    credentialUrl: entry.data.credentialUrl,
+  })
+)
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+
+  <main class="relative flex-1 overflow-hidden bg-[#f8f9fa]">
+    <div
+      class="absolute inset-0 z-0 opacity-[0.15]"
+      style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
+    >
+    </div>
+    <div
+      class="absolute top-24 right-10 z-0 h-36 w-36 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-80"
+    >
+    </div>
+    <div
+      class="absolute top-[34rem] left-8 z-0 h-24 w-24 rounded-full border-[3px] border-black bg-[#E7F193] opacity-80"
+    >
+    </div>
+
+    <section class="relative z-10 container mx-auto px-4 py-12 md:py-20">
+      <div
+        class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
+      >
+        <div>
+          <div
+            class="inline-block -rotate-2 border-4 border-black bg-white px-6 py-2 shadow-brutal transition-transform hover:rotate-0"
+          >
+            <h1
+              class="font-head text-4xl font-black tracking-tight text-black uppercase md:text-6xl"
+            >
+              Certificates
+            </h1>
+          </div>
+          <p
+            class="mt-5 max-w-2xl rounded-sm bg-white/85 p-2 text-lg font-semibold text-muted-foreground"
+          >
+            Learning milestones, technical achievements, and certification proof
+            collected across my journey.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <div
+            class="font-head w-fit rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-sm font-black shadow-brutal-sm"
+          >
+            <ViewCounter pageKey="page:/certificates" client:visible />
+          </div>
+          <div
+            class="font-head flex w-fit items-center gap-2 rounded-sm border-2 border-black bg-white px-3 py-2 text-sm font-black shadow-brutal-sm"
+          >
+            <FolderOpen className="h-4 w-4" />
+            <span>{certificateItems.length} Certificates</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-6 flex items-center gap-3">
+        <div
+          class="flex h-11 w-11 items-center justify-center rounded-xl border-[3px] border-black bg-[#C4A1FF] shadow-brutal-sm"
+        >
+          <Award className="h-5 w-5" />
+        </div>
+        <div>
+          <p
+            class="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase"
+          >
+            Mixed Asset Support
+          </p>
+          <h2 class="font-head text-2xl font-black text-black uppercase">
+            Preview Images and PDFs
+          </h2>
+        </div>
+      </div>
+
+      <CertificatePreview items={certificateItems} client:load />
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

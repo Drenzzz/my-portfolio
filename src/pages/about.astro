@@ -3,6 +3,7 @@ import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import AboutHero from "@/components/about/AboutHero.astro"
+import CertificatesPreview from "@/components/about/CertificatesPreview.astro"
 import Timeline from "@/components/about/Timeline.astro"
 import SkillStack from "@/components/about/SkillStack.astro"
 import { ViewCounter } from "@/components/islands/ViewCounter"
@@ -11,42 +12,56 @@ import { ViewCounter } from "@/components/islands/ViewCounter"
 export const prerender = true
 
 const title = "About | Drenzzz"
-const description = "Get to know more about my background, education, and the tech stack I use to build robust applications."
+const description =
+  "Get to know more about my background, education, and the tech stack I use to build robust applications."
 ---
 
 <Layout title={title} description={description}>
   <Navbar />
-  
-  <main class="flex-1 w-full bg-[#f8f9fa] relative">
+
+  <main class="relative w-full flex-1 bg-[#f8f9fa]">
     {/* Subtle Dot Pattern Background */}
-    <div class="absolute inset-0 z-0 opacity-[0.15]" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
-    
-    <div class="container mx-auto py-12 md:py-20 px-4 relative z-10">
+    <div
+      class="absolute inset-0 z-0 opacity-[0.15]"
+      style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
+    >
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-12 md:py-20">
       <div class="mb-12">
-        <div class="inline-block bg-white text-black border-4 border-black px-6 py-2 shadow-brutal transform -rotate-2 hover:rotate-0 transition-transform cursor-default">
-          <h1 class="font-head text-4xl md:text-6xl font-black uppercase tracking-tight">
+        <div
+          class="inline-block -rotate-2 transform cursor-default border-4 border-black bg-white px-6 py-2 text-black shadow-brutal transition-transform hover:rotate-0"
+        >
+          <h1
+            class="font-head text-4xl font-black tracking-tight uppercase md:text-6xl"
+          >
             About Me
           </h1>
         </div>
-        <p class="text-lg text-muted-foreground font-medium max-w-2xl mt-4 bg-white/80 p-2 inline-block rounded">
+        <p
+          class="mt-4 inline-block max-w-2xl rounded bg-white/80 p-2 text-lg font-medium text-muted-foreground"
+        >
           Get to know more about my background and coding journey.
         </p>
         <div class="mt-4">
           <ViewCounter pageKey="page:/about" client:visible />
         </div>
       </div>
-    
-    <AboutHero />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Timeline />
-      <SkillStack />
-    </div>
+      <AboutHero />
 
-    <!-- <div class="mt-8">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <Timeline />
+        <SkillStack />
+      </div>
+
+      <CertificatesPreview />
+
+      <!-- <div class="mt-8">
       <Guestbook pageKey="page:/about" client:visible />
     </div> -->
-  </main>
+    </div>
 
-  <Footer />
+    <Footer />
+  </main>
 </Layout>
