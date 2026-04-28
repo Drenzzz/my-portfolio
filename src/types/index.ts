@@ -73,6 +73,15 @@ export interface GithubStats {
   topLanguages: { name: string; color: string; percentage: number }[]
 }
 
+export interface GithubRecentCommit {
+  id: string
+  repoName: string
+  commitMessage: string
+  commitUrl: string
+  committedAt: string
+  shortSha: string
+}
+
 export interface WakaTimeLanguageStat {
   name: string
   totalSeconds: number

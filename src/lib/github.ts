@@ -1,4 +1,4 @@
-import type { GithubStats } from "@/types"
+import type { GithubRecentCommit, GithubStats } from "@/types"
 import { buildKvKey, getJson, setJson } from "@/lib/kv"
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN
@@ -36,6 +36,10 @@ const toSafeInt = (value: unknown) => {
 }
 
 let githubStatsCache: { value: GithubStats; expiresAt: number } | null = null
+let githubRecentCommitsCache: {
+  value: GithubRecentCommit[]
+  expiresAt: number
+} | null = null
 
 const QUERY = `
 query($login: String!) {
@@ -172,5 +176,151 @@ export async function fetchGithubStatsWithCache(): Promise<GithubStats> {
     return fresh
   } catch {
     return cached?.stats || EMPTY_STATS
+  }
+}
+
+const EMPTY_RECENT_COMMITS: GithubRecentCommit[] = []
+
+interface GithubRecentCommitsCachePayload {
+  commits: GithubRecentCommit[]
+  updatedAt: number
+}
+
+interface GithubPublicEvent {
+  id?: unknown
+  type?: unknown
+  created_at?: unknown
+  repo?: {
+    name?: unknown
+  }
+  payload?: {
+    commits?: Array<{
+      sha?: unknown
+      message?: unknown
+    }>
+  }
+}
+
+const toCommitUrl = (repoName: string, sha: string) => {
+  return `https://github.com/${repoName}/commit/${sha}`
+}
+
+export async function fetchGithubRecentCommits(): Promise<GithubRecentCommit[]> {
+  const now = Date.now()
+  if (githubRecentCommitsCache && githubRecentCommitsCache.expiresAt > now) {
+    return githubRecentCommitsCache.value
+  }
+
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+
+    const response = await fetch(
+      `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`,
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+          ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+        },
+        signal: controller.signal,
+      }
+    ).finally(() => {
+      clearTimeout(timeout)
+    })
+
+    if (!response.ok) throw new Error(`GitHub API returned ${response.status}`)
+
+    const events = (await response.json()) as GithubPublicEvent[]
+    const seen = new Set<string>()
+    const commits: GithubRecentCommit[] = []
+
+    for (const event of events) {
+      if (event.type !== "PushEvent") continue
+
+      const repoName =
+        typeof event.repo?.name === "string" ? event.repo.name : ""
+      const committedAt =
+        typeof event.created_at === "string" ? event.created_at : ""
+      const pushCommits = Array.isArray(event.payload?.commits)
+        ? event.payload.commits
+        : []
+
+      if (!repoName || !committedAt || pushCommits.length === 0) continue
+
+      for (const commit of [...pushCommits].reverse()) {
+        const sha = typeof commit.sha === "string" ? commit.sha : ""
+        const commitMessage =
+          typeof commit.message === "string" ? commit.message.trim() : ""
+        const id = `${repoName}:${sha}`
+
+        if (!sha || !commitMessage || seen.has(id)) continue
+
+        seen.add(id)
+        commits.push({
+          id,
+          repoName,
+          commitMessage,
+          commitUrl: toCommitUrl(repoName, sha),
+          committedAt,
+          shortSha: sha.slice(0, 7),
+        })
+
+        if (commits.length >= 5) {
+          githubRecentCommitsCache = {
+            value: commits,
+            expiresAt: Date.now() + CACHE_TTL_MS,
+          }
+          return commits
+        }
+      }
+    }
+
+    githubRecentCommitsCache = {
+      value: commits,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    }
+
+    return commits
+  } catch {
+    return EMPTY_RECENT_COMMITS
+  }
+}
+
+export async function fetchGithubRecentCommitsWithCache(): Promise<
+  GithubRecentCommit[]
+> {
+  const cacheKey = buildKvKey("github", "recent-commits", GITHUB_USERNAME)
+  const cached = await getJson<GithubRecentCommitsCachePayload>(cacheKey)
+  const now = Date.now()
+
+  if (cached && now - cached.updatedAt < CACHE_TTL_MS) {
+    githubRecentCommitsCache = {
+      value: cached.commits,
+      expiresAt: now + CACHE_TTL_MS,
+    }
+    return cached.commits
+  }
+
+  try {
+    const fresh = await fetchGithubRecentCommits()
+    const ttlSeconds = Math.max(Math.floor(CACHE_TTL_MS / 1000), 60)
+
+    await setJson(
+      cacheKey,
+      {
+        commits: fresh,
+        updatedAt: Date.now(),
+      },
+      ttlSeconds
+    )
+
+    githubRecentCommitsCache = {
+      value: fresh,
+      expiresAt: now + CACHE_TTL_MS,
+    }
+
+    return fresh
+  } catch {
+    return cached?.commits || EMPTY_RECENT_COMMITS
   }
 }
