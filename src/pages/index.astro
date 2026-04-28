@@ -9,8 +9,10 @@ import AvailabilityCard from "@/components/home/AvailabilityCard.astro"
 import { DiscordStatus } from "@/components/home/DiscordStatus"
 import { GitHubStats } from "@/components/home/GitHubStats"
 import { GuestbookPreview } from "@/components/home/GuestbookPreview"
+import { LatestCommitsCard } from "@/components/home/LatestCommitsCard"
 import { LocationCard } from "@/components/home/LocationCard"
 import { MusicPlayer } from "@/components/home/MusicPlayer"
+import { WakaTimeCard } from "@/components/home/WakaTimeCard"
 import { ViewCounter } from "@/components/islands/ViewCounter"
 
 export const prerender = true
@@ -72,10 +74,19 @@ export const prerender = true
       </div>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
+        <div class="min-h-[220px] lg:col-span-2">
+          <WakaTimeCard client:visible />
+        </div>
         <div class="min-h-[220px] lg:col-span-1">
           <AvailabilityCard />
         </div>
-        <div class="min-h-[220px] lg:col-span-2">
+        <div class="min-h-[220px] lg:col-span-1">
+          <LatestCommitsCard client:visible />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        <div class="min-h-[220px]">
           <GuestbookPreview pageKey="page:/about" client:visible />
         </div>
       </div>
