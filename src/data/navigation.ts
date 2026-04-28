@@ -5,5 +5,6 @@ export const navItems: NavItem[] = [
   { title: "Projects", path: "/project" },
   { title: "About", path: "/about" },
   { title: "Guestbook", path: "/guestbook" },
+  { title: "Uses", path: "/uses" },
   { title: "Donate", path: "/donate" },
 ]

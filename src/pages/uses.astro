@@ -1,0 +1,219 @@
+---
+import Layout from "@/layouts/main.astro"
+import Navbar from "@/components/layout/Navbar.astro"
+import Footer from "@/components/layout/Footer.astro"
+import { ViewCounter } from "@/components/islands/ViewCounter"
+import { uses } from "@/data/uses"
+import {
+  ArrowUpRight,
+  Boxes,
+  BriefcaseBusiness,
+  Code2,
+  Cpu,
+  MonitorCog,
+  ServerCog,
+  TerminalSquare,
+} from "lucide-react"
+
+export const prerender = true
+
+const title = "Uses | Drenzzz"
+const description =
+  "Tools, devices, and services I use for development, Android testing, and daily workflow."
+const totalItems = uses.reduce(
+  (total, category) => total + category.items.length,
+  0
+)
+
+const categoryIcons = {
+  Hardware: Cpu,
+  "Operating System & Shell": TerminalSquare,
+  "Development Environment": Code2,
+  "Apps & Workflow": MonitorCog,
+  "Services & Infrastructure": ServerCog,
+}
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+
+  <main class="relative flex-1 overflow-hidden bg-[#f8f9fa]">
+    <div
+      class="absolute inset-0 z-0 opacity-[0.15]"
+      style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
+    >
+    </div>
+    <div
+      class="absolute top-24 right-10 z-0 h-36 w-36 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-80"
+    >
+    </div>
+    <div
+      class="absolute top-[34rem] left-8 z-0 h-24 w-24 rounded-full border-[3px] border-black bg-[#E7F193] opacity-80"
+    >
+    </div>
+
+    <section class="relative z-10 container mx-auto px-4 py-12 md:py-20">
+      <div
+        class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
+      >
+        <div>
+          <div
+            class="inline-block -rotate-2 border-4 border-black bg-white px-6 py-2 shadow-brutal transition-transform hover:rotate-0"
+          >
+            <h1
+              class="font-head text-4xl font-black tracking-tight text-black uppercase md:text-6xl"
+            >
+              Uses
+            </h1>
+          </div>
+          <p
+            class="mt-5 max-w-2xl rounded-sm bg-white/85 p-2 text-lg font-semibold text-muted-foreground"
+          >
+            Tools, devices, and services I use for development, Android testing,
+            and daily workflow.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <div
+            class="font-head w-fit rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-sm font-black shadow-brutal-sm"
+          >
+            <ViewCounter pageKey="page:/uses" client:visible />
+          </div>
+          <div
+            class="font-head flex w-fit items-center gap-2 rounded-sm border-2 border-black bg-white px-3 py-2 text-sm font-black shadow-brutal-sm"
+          >
+            <Boxes className="h-4 w-4" />
+            <span>{totalItems} Items</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-10 grid grid-cols-2 gap-3 md:grid-cols-5">
+        {
+          uses.map((category) => {
+            const Icon = categoryIcons[category.category] ?? BriefcaseBusiness
+            return (
+              <a
+                href={`#${category.category
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/(^-|-$)/g, "")}`}
+                data-uses-section-link
+                class="group flex flex-col gap-2 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal-sm transition-all hover:-translate-y-1 hover:bg-[#C4A1FF] hover:shadow-none"
+              >
+                <Icon className="h-5 w-5" />
+                <span class="font-head text-xs leading-tight font-black text-black uppercase">
+                  {category.category}
+                </span>
+                <span class="text-xs font-bold text-muted-foreground group-hover:text-black">
+                  {category.items.length} items
+                </span>
+              </a>
+            )
+          })
+        }
+      </div>
+
+      <div class="space-y-12">
+        {
+          uses.map((category) => {
+            const Icon = categoryIcons[category.category] ?? BriefcaseBusiness
+            const id = category.category
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/(^-|-$)/g, "")
+
+            return (
+              <section id={id} class="scroll-mt-28">
+                <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                  <div class="flex items-start gap-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-[3px] border-black bg-[#C4A1FF] shadow-brutal-sm">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h2 class="font-head text-2xl font-black tracking-tight text-black uppercase md:text-4xl">
+                        {category.category}
+                      </h2>
+                      <p class="mt-1 max-w-2xl text-sm font-semibold text-muted-foreground md:text-base">
+                        {category.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="font-head w-fit rounded-sm border-2 border-black bg-white px-3 py-1.5 text-xs font-black uppercase shadow-brutal-sm">
+                    {category.items.length} items
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4">
+                  {category.items.map((item) => (
+                    <article class="group flex min-h-[190px] w-full flex-col justify-between rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none md:w-[calc((100%_-_1rem)_/_2)] xl:w-[calc((100%_-_2rem)_/_3)]">
+                      <div>
+                        <div class="mb-4 flex items-start justify-between gap-3">
+                          <div class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-black bg-[#F4F4F5] shadow-brutal-sm transition-colors group-hover:bg-[#C4A1FF]">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          {item.badge && (
+                            <span class="rounded-full border-2 border-black bg-[#E7F193] px-2.5 py-1 text-[10px] font-black uppercase shadow-brutal-sm">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 class="font-head text-xl leading-tight font-black text-black">
+                          {item.name}
+                        </h3>
+                        <p class="mt-3 text-sm leading-relaxed font-semibold text-muted-foreground">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      {item.link && (
+                        <a
+                          href={item.link}
+                          target={
+                            item.link.startsWith("http") ? "_blank" : undefined
+                          }
+                          rel={
+                            item.link.startsWith("http")
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                          class="mt-5 inline-flex w-fit items-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-xs font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+                        >
+                          View Resource
+                          <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )
+          })
+        }
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const sectionLinks = document.querySelectorAll<HTMLAnchorElement>(
+    "[data-uses-section-link]"
+  )
+
+  sectionLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const hash = link.hash
+      const target = hash ? document.querySelector(hash) : null
+      if (!target) return
+
+      event.preventDefault()
+      target.scrollIntoView({ behavior: "smooth", block: "start" })
+      window.history.pushState(null, "", hash)
+    })
+  })
+</script>
