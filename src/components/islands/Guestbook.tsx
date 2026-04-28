@@ -115,7 +115,7 @@ export function Guestbook({ pageKey }: Props) {
 
       {error && <p className="mb-2 text-xs font-bold text-red-600">{error}</p>}
 
-      <div className="space-y-2">
+      <div className="scrollbar-neo-thin max-h-[420px] space-y-2 overflow-y-auto pr-1">
         {entries.length === 0 ? (
           <p className="text-sm font-medium text-muted-foreground">
             No messages yet.
