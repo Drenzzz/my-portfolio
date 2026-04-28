@@ -73,6 +73,28 @@ export interface GithubStats {
   topLanguages: { name: string; color: string; percentage: number }[]
 }
 
+export interface WakaTimeLanguageStat {
+  name: string
+  totalSeconds: number
+  percent: number
+  text: string
+  hours: number
+  minutes: number
+  seconds: number
+}
+
+export interface WakaTimeStats {
+  totalSeconds: number
+  humanReadableTotal: string
+  dailyAverageSeconds: number
+  humanReadableDailyAverage: string
+  range: string
+  humanReadableRange: string
+  percentCalculated: number
+  isUpToDate: boolean
+  languages: WakaTimeLanguageStat[]
+}
+
 export interface GuestbookEntry {
   id: string
   name: string
