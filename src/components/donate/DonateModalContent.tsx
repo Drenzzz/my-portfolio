@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { ArrowLeft, Copy, ExternalLink, Globe, Wallet } from "lucide-react"
 import { donationMethods } from "@/data/donation"
 import type { InternationalDonation, LocalDonation } from "@/types"
@@ -17,11 +17,7 @@ const copyToClipboard = async (value: string) => {
 
 export function DonateModalContent() {
   const [selectedMethod, setSelectedMethod] = useState<LocalDonation | null>(null)
-
-  const qrImageSrc = useMemo(
-    () => getQrImageSrc(selectedMethod?.imageKey),
-    [selectedMethod?.imageKey]
-  )
+  const qrImageSrc = getQrImageSrc(selectedMethod?.imageKey)
 
   if (selectedMethod) {
     return (
@@ -123,8 +119,8 @@ export function DonateModalContent() {
           </h3>
         </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {donationMethods.local.map((method) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {donationMethods.local.map((method) => (
             <button
               key={method.name}
               type="button"
@@ -180,14 +176,14 @@ function InternationalSupportCard({
   return (
     <div className="group flex items-center justify-between rounded-xl border-4 border-black bg-white p-4 shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(0,0,0,1)]">
       <div className="flex items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-lg border-2 border-black bg-[#F4F4F5] p-2">
-            <img
-              src={method.icon}
-              alt={method.name}
-              className="h-full w-full object-contain"
-              loading="lazy"
-            />
-          </div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg border-2 border-black bg-[#F4F4F5] p-2">
+          <img
+            src={method.icon}
+            alt={method.name}
+            className="h-full w-full object-contain"
+            loading="lazy"
+          />
+        </div>
         <span className="text-lg font-bold">{method.name}</span>
       </div>
 

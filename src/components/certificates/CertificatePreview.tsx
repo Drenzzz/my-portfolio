@@ -90,66 +90,69 @@ export function CertificatePreview({
               className="w-full md:max-w-[calc(50%-0.5rem)] md:flex-[0_1_calc(50%-0.5rem)] xl:max-w-[calc((100%-2rem)/3)] xl:flex-[0_1_calc((100%-2rem)/3)]"
             >
               <article
-            key={item.slug}
                 className="group flex min-h-[320px] flex-col overflow-hidden rounded-xl border-[3px] border-black bg-white shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none"
-          >
-            <button
-              type="button"
-              onClick={() => setSelectedSlug(item.slug)}
-              className="flex flex-1 flex-col text-left"
-            >
-              <div className="flex h-52 items-center justify-center border-b-[3px] border-black bg-[#F4F4F5] p-3">
-                {item.assetType === "image" && item.asset ? (
-                  <img
-                    src={item.asset}
-                    alt={item.title}
-                    className="h-full w-full rounded-sm border-2 border-black object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-black bg-white p-4">
-                    {item.assetType === "pdf" ? (
-                      <FileText className="h-10 w-10" />
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedSlug(item.slug)}
+                  className="flex flex-1 flex-col text-left"
+                >
+                  <div className="flex h-52 items-center justify-center border-b-[3px] border-black bg-[#F4F4F5] p-3">
+                    {item.assetType === "image" && item.asset ? (
+                      <img
+                        src={item.asset}
+                        alt={item.title}
+                        className="h-full w-full rounded-sm border-2 border-black object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
-                      <ImageIcon className="h-10 w-10" />
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-black bg-white p-4">
+                        {item.assetType === "pdf" ? (
+                          <FileText className="h-10 w-10" />
+                        ) : (
+                          <ImageIcon className="h-10 w-10" />
+                        )}
+                        <span className="font-head text-sm font-black uppercase">
+                          {assetLabels[item.assetType]} Preview
+                        </span>
+                      </div>
                     )}
-                    <span className="font-head text-sm font-black uppercase">
-                      {assetLabels[item.assetType]} Preview
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-1 flex-col p-4">
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase">
-                      {item.issuer}
-                    </p>
-                    <h3 className="font-head mt-1 text-xl leading-tight font-black text-black">
-                      {item.title}
-                    </h3>
                   </div>
 
-                  <span
-                    className={cn(
-                      "rounded-full border-2 border-black px-2.5 py-1 text-[10px] font-black uppercase shadow-brutal-sm",
-                      item.assetType === "pdf" ? "bg-[#E7F193]" : "bg-[#C4A1FF]"
-                    )}
-                  >
-                    {assetLabels[item.assetType]}
-                  </span>
-                </div>
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="mb-3 flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase">
+                          {item.issuer}
+                        </p>
+                        <h3 className="font-head mt-1 text-xl leading-tight font-black text-black">
+                          {item.title}
+                        </h3>
+                      </div>
 
-                <div className="mt-auto flex items-center justify-between gap-3 border-t-2 border-black/10 pt-3 text-xs font-bold uppercase">
-                  <span className="text-muted-foreground">{item.category}</span>
-                  <span className="text-muted-foreground">
-                    {item.dateLabel}
-                  </span>
-                </div>
-              </div>
-            </button>
+                      <span
+                        className={cn(
+                          "rounded-full border-2 border-black px-2.5 py-1 text-[10px] font-black uppercase shadow-brutal-sm",
+                          item.assetType === "pdf"
+                            ? "bg-[#E7F193]"
+                            : "bg-[#C4A1FF]"
+                        )}
+                      >
+                        {assetLabels[item.assetType]}
+                      </span>
+                    </div>
+
+                    <div className="mt-auto flex items-center justify-between gap-3 border-t-2 border-black/10 pt-3 text-xs font-bold uppercase">
+                      <span className="text-muted-foreground">
+                        {item.category}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {item.dateLabel}
+                      </span>
+                    </div>
+                  </div>
+                </button>
               </article>
             </motion.div>
           ))}

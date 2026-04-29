@@ -1,4 +1,9 @@
-export const donationMethods = {
+import type { InternationalDonation, LocalDonation } from "@/types"
+
+export const donationMethods: {
+  local: LocalDonation[]
+  international: InternationalDonation[]
+} = {
   local: [
     {
       name: "QRIS",
