@@ -16,8 +16,8 @@ export function DonateCardIsland({ method, qrImageSrc }: Props) {
         <button 
           className="w-full h-full p-6 bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_rgba(0,0,0,1)] flex flex-col items-center justify-center text-center group hover:-translate-y-2 hover:shadow-[10px_10px_0px_rgba(0,0,0,1)] transition-all cursor-pointer"
         >
-          <div className="w-20 h-20 bg-[#F4F4F5] rounded-xl flex items-center justify-center p-3 mb-5 border-4 border-black group-hover:bg-[#C4A1FF] transition-colors">
-            <img src={method.icon} alt={method.name} className="w-12 h-12 object-contain" loading="lazy" />
+          <div className="mb-5 flex h-24 w-24 items-center justify-center rounded-xl border-4 border-black bg-[#F4F4F5] p-3 transition-colors group-hover:bg-[#C4A1FF]">
+            <img src={method.icon} alt={method.name} className="h-full w-full object-contain" loading="lazy" />
           </div>
           
           <h4 className="font-head text-xl font-black mb-2 leading-tight uppercase text-black">{method.name}</h4>
@@ -40,8 +40,8 @@ export function DonateCardIsland({ method, qrImageSrc }: Props) {
         </Dialog.Header>
         
         <div className="scrollbar-neo p-6 md:p-8 flex flex-col gap-6 items-center overflow-y-auto bg-white">
-          <div className="w-24 h-24 bg-[#F4F4F5] rounded-2xl flex items-center justify-center p-4 border-[4px] border-black shrink-0 shadow-brutal-sm">
-            <img src={method.icon} alt={method.name} className="w-16 h-16 object-contain" loading="lazy" />
+          <div className="flex h-28 w-28 items-center justify-center rounded-2xl border-[4px] border-black bg-[#F4F4F5] p-3 shadow-brutal-sm">
+            <img src={method.icon} alt={method.name} className="h-full w-full object-contain" loading="lazy" />
           </div>
 
           <div className="text-center w-full">

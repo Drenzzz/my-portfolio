@@ -1,5 +1,6 @@
 ---
 import { GitBranch, UserRound, Mail } from "lucide-react"
+import DonateModal from "@/components/donate/DonateModal.astro"
 
 const currentYear = new Date().getFullYear()
 ---
@@ -19,12 +20,7 @@ const currentYear = new Date().getFullYear()
         </p>
       </div>
 
-      <a
-        href="/donate"
-        class="inline-flex items-center justify-center rounded-sm border-2 border-black bg-[#C4A1FF] px-4 py-3 text-xs font-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-      >
-        Support My Work
-      </a>
+      <DonateModal />
     </div>
 
     <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">

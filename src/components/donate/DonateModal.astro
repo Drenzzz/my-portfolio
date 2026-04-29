@@ -1,0 +1,118 @@
+---
+import DonateModalContent from "@/components/donate/DonateModalContent.astro"
+import { Coffee, X } from "lucide-react"
+
+const modalId = "donate-modal"
+---
+
+<>
+  <button
+    type="button"
+    data-dialog-open={modalId}
+    class="inline-flex items-center justify-center rounded-sm border-2 border-black bg-[#C4A1FF] px-4 py-3 text-xs font-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+  >
+    Support My Work
+  </button>
+
+  <dialog
+    id={modalId}
+    class="m-auto h-[min(92vh,980px)] w-[min(96vw,1200px)] max-w-none overflow-hidden rounded-2xl border-4 border-black bg-white p-0 text-black shadow-[12px_12px_0px_rgba(0,0,0,1)]"
+  >
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between gap-4 border-b-4 border-black bg-[#C4A1FF] p-5">
+        <div class="flex items-center gap-3">
+          <div class="rounded-xl border-2 border-black bg-white p-2 shadow-brutal-sm">
+            <Coffee className="h-6 w-6" />
+          </div>
+          <div>
+            <p class="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase">
+              Support
+            </p>
+            <h2 class="font-head text-2xl font-black uppercase">
+              Buy Me a Coffee
+            </h2>
+          </div>
+        </div>
+
+        <form method="dialog">
+          <button
+            type="submit"
+            class="rounded-sm border-2 border-black bg-white p-2 text-black shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+            aria-label="Close donate modal"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </form>
+      </div>
+
+      <div class="scrollbar-neo flex-1 overflow-y-auto p-6 md:p-8">
+        <div class="mb-8 max-w-2xl">
+          <p class="text-base font-medium leading-relaxed text-muted-foreground">
+            Support helps keep the server running and gives me more room to keep
+            building open-source projects and developer tools.
+          </p>
+        </div>
+
+        <DonateModalContent />
+      </div>
+    </div>
+  </dialog>
+</>
+
+<style is:global>
+  #donate-modal::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(8px);
+  }
+</style>
+
+<script is:inline>
+  const setupDonateModal = () => {
+    const modal = document.getElementById("donate-modal")
+    const openButtons = document.querySelectorAll('[data-dialog-open="donate-modal"]')
+
+    if (!(modal instanceof HTMLDialogElement) || modal.dataset.bound === "true") {
+      return
+    }
+
+    modal.dataset.bound = "true"
+
+    const openModal = () => {
+      if (!modal.open) {
+        modal.showModal()
+      }
+    }
+
+    const handleBackdropClick = (event) => {
+      const target = event.target
+      if (!(target instanceof HTMLDialogElement)) return
+
+      const rect = target.getBoundingClientRect()
+      const isInDialog =
+        rect.top <= event.clientY &&
+        event.clientY <= rect.top + rect.height &&
+        rect.left <= event.clientX &&
+        event.clientX <= rect.left + rect.width
+
+      if (!isInDialog) {
+        target.close()
+      }
+    }
+
+    openButtons.forEach((button) => {
+      button.addEventListener("click", openModal)
+    })
+
+    modal.addEventListener("click", handleBackdropClick)
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupDonateModal, {
+      once: true,
+    })
+  } else {
+    setupDonateModal()
+  }
+
+  document.addEventListener("astro:page-load", setupDonateModal)
+</script>

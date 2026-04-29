@@ -45,12 +45,12 @@ export const donationMethods = {
     {
       name: "PayPal",
       url: "https://bit.ly/paypaldrenzzz",
-      icon: "/images/donations/paypal.svg",
+      icon: "https://cdn.simpleicons.org/paypal/003087",
     },
     {
       name: "Ko-fi",
       url: "https://ko-fi.com/drenzzz",
-      icon: "/images/donations/kofi.svg",
+      icon: "https://cdn.simpleicons.org/kofi/ff5f5f",
     },
     {
       name: "SociaBuzz",

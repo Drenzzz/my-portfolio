@@ -7,17 +7,9 @@ interface Props {
 }
 
 const { method } = Astro.props
-
-// Import images dynamically based on imageKey
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*-qr.png')
-
-let qrImageAsset: ImageMetadata | null = null
-if (method.imageKey) {
-  const imagePath = `/src/assets/images/${method.imageKey}-qr.png`
-  if (images[imagePath]) {
-    qrImageAsset = (await images[imagePath]()).default
-  }
-}
+const qrImageSrc = method.imageKey
+  ? `/images/donations/${method.imageKey}-qr.png`
+  : undefined
 ---
 
-<DonateCardIsland method={method} qrImageSrc={qrImageAsset?.src} client:only="react" />
+<DonateCardIsland method={method} qrImageSrc={qrImageSrc} client:only="react" />
