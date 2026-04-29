@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { ArrowUpRight, FileText, ImageIcon, X } from "lucide-react"
+import { ArrowUpRight, ChevronDown, FileText, ImageIcon, X } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 import { cn } from "@/lib/utils"
 
 export interface CertificatePreviewItem {
@@ -17,6 +18,11 @@ export interface CertificatePreviewItem {
 
 interface Props {
   items: CertificatePreviewItem[]
+  initialVisibleCount?: number
+  toggleLabels?: {
+    expand: string
+    collapse: string
+  }
 }
 
 const assetLabels = {
@@ -25,8 +31,22 @@ const assetLabels = {
   external: "External",
 } as const
 
-export function CertificatePreview({ items }: Props) {
+export function CertificatePreview({
+  items,
+  initialVisibleCount,
+  toggleLabels = {
+    expand: "Show All Certificates",
+    collapse: "Show Less",
+  },
+}: Props) {
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const canToggle = Boolean(
+    initialVisibleCount && items.length > initialVisibleCount
+  )
+  const visibleItems =
+    canToggle && !isExpanded ? items.slice(0, initialVisibleCount) : items
 
   const selectedItem = useMemo(
     () => items.find((item) => item.slug === selectedSlug) ?? null,
@@ -53,11 +73,25 @@ export function CertificatePreview({ items }: Props) {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((item) => (
-          <article
+      <motion.div
+        layout
+        className="flex flex-wrap justify-center gap-4"
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          {visibleItems.map((item) => (
+            <motion.div
+              key={item.slug}
+              layout
+              initial={{ opacity: 0, y: 16, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full md:max-w-[calc(50%-0.5rem)] md:flex-[0_1_calc(50%-0.5rem)] xl:max-w-[calc((100%-2rem)/3)] xl:flex-[0_1_calc((100%-2rem)/3)]"
+            >
+              <article
             key={item.slug}
-            className="group flex min-h-[320px] flex-col overflow-hidden rounded-xl border-[3px] border-black bg-white shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none"
+                className="group flex min-h-[320px] flex-col overflow-hidden rounded-xl border-[3px] border-black bg-white shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none"
           >
             <button
               type="button"
@@ -116,9 +150,29 @@ export function CertificatePreview({ items }: Props) {
                 </div>
               </div>
             </button>
-          </article>
-        ))}
-      </div>
+              </article>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      {canToggle && (
+        <div className="mt-5 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setIsExpanded((currentValue) => !currentValue)}
+            className="inline-flex items-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-4 py-3 text-xs font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+          >
+            {isExpanded ? toggleLabels.collapse : toggleLabels.expand}
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 transition-transform",
+                isExpanded && "rotate-180"
+              )}
+            />
+          </button>
+        </div>
+      )}
 
       {selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
