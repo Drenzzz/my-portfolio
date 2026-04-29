@@ -79,10 +79,10 @@ export function GuestbookPreview({
         </div>
 
         <a
-          href="/guestbook"
+          href="/about"
           className="inline-flex items-center gap-1 rounded-sm border-2 border-black bg-[#F4F4F5] px-3 py-1.5 text-[10px] font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:bg-[#C4A1FF] hover:shadow-none"
         >
-          View All
+          View About
           <ArrowUpRight className="h-3.5 w-3.5" />
         </a>
       </div>
