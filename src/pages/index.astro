@@ -22,27 +22,37 @@ export const prerender = true
   <Navbar />
 
   <main class="flex-1">
-    <section class="container mx-auto px-4 py-8 md:py-12">
-      <div class="flex justify-end">
+    <section class="container mx-auto px-4 py-8 md:py-12" aria-labelledby="home-intro-title">
+      <h2 id="home-intro-title" class="sr-only">Home introduction</h2>
+      <div class="mb-4 flex justify-end">
         <ViewCounter pageKey="page:/" client:visible />
       </div>
-    </section>
 
-    <section class="container mx-auto px-4 pb-10 md:pb-14" aria-labelledby="home-intro-title">
-      <h2 id="home-intro-title" class="sr-only">Home introduction</h2>
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
-        <div class="min-h-[400px] lg:col-span-3">
+      <div class="grid grid-cols-1 gap-6 xl:grid-cols-4">
+        <div class="min-h-[640px] xl:col-span-3">
           <HeroSection />
         </div>
-        <div class="min-h-[350px] lg:col-span-1 lg:min-h-[400px]">
-          <DiscordStatus client:visible>
-            <div
-              slot="fallback"
-              class="h-full w-full animate-pulse rounded-xl border-[3px] border-black bg-zinc-900"
-              aria-hidden="true"
-            >
-            </div>
-          </DiscordStatus>
+        <div class="grid gap-6 xl:col-span-1 xl:grid-rows-[1fr_auto]">
+          <div class="min-h-[320px] xl:min-h-[360px]">
+            <DiscordStatus client:visible>
+              <div
+                slot="fallback"
+                class="h-full w-full animate-pulse rounded-xl border-[3px] border-black bg-zinc-900"
+                aria-hidden="true"
+              >
+              </div>
+            </DiscordStatus>
+          </div>
+          <div class="min-h-[180px]">
+            <LocationCard client:visible>
+              <div
+                slot="fallback"
+                class="h-full w-full animate-pulse rounded-xl border-4 border-black bg-[#F4F4F5]"
+                aria-hidden="true"
+              >
+              </div>
+            </LocationCard>
+          </div>
         </div>
       </div>
     </section>
@@ -110,17 +120,7 @@ export const prerender = true
             </div>
           </MusicPlayer>
         </div>
-        <div class="max-h-min min-h-[220px] lg:col-span-1">
-          <LocationCard client:visible>
-            <div
-              slot="fallback"
-              class="h-full w-full animate-pulse rounded-xl border-4 border-black bg-[#F4F4F5]"
-              aria-hidden="true"
-            >
-            </div>
-          </LocationCard>
-        </div>
-        <div class="min-h-[220px] lg:col-span-2">
+        <div class="min-h-[220px] lg:col-span-3">
           <GuestbookPreview pageKey="page:/about" client:visible />
         </div>
       </div>
