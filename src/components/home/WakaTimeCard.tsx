@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Activity, Clock3, Loader2, TimerReset } from "lucide-react"
+import { Activity, Loader2 } from "lucide-react"
 import type { WakaTimeStats } from "@/types"
 
 interface Props {
@@ -19,6 +19,14 @@ const FALLBACK: WakaTimeStats = {
   isUpToDate: false,
   languages: [],
 }
+
+const LANGUAGE_COLORS = [
+  "#3B82F6",
+  "#06B6D4",
+  "#F97316",
+  "#84CC16",
+  "#EAB308",
+] as const
 
 export function WakaTimeCard({ initialData }: Props) {
   const [stats, setStats] = useState<WakaTimeStats>(initialData || FALLBACK)
@@ -56,19 +64,6 @@ export function WakaTimeCard({ initialData }: Props) {
     }
   }, [])
 
-  const statItems = [
-    {
-      label: "Total Time",
-      value: stats.humanReadableTotal,
-      icon: <Clock3 className="h-4 w-4" />,
-    },
-    {
-      label: "Daily Average",
-      value: stats.humanReadableDailyAverage,
-      icon: <TimerReset className="h-4 w-4" />,
-    },
-  ]
-
   const hasLanguages = stats.languages.length > 0
 
   return (
@@ -83,37 +78,30 @@ export function WakaTimeCard({ initialData }: Props) {
               WakaTime
             </h3>
             <p className="mt-0.5 text-xs font-bold text-muted-foreground">
-              Weekly Coding Activity
+              Weekly coding rhythm
             </p>
           </div>
         </div>
-
-        <span
-          className={
-            stats.isUpToDate
-              ? "inline-flex items-center gap-1 rounded-full border-2 border-black bg-[#E7F193] px-3 py-1 text-[10px] font-black uppercase shadow-brutal-sm"
-              : "inline-flex items-center gap-1 rounded-full border-2 border-black bg-[#F4F4F5] px-3 py-1 text-[10px] font-black uppercase shadow-brutal-sm"
-          }
-        >
-          {stats.isUpToDate ? "Live" : "Cached"}
-        </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
-        {statItems.map((item) => (
-          <div
-            key={item.label}
-            className="flex min-h-[92px] flex-col justify-center gap-1.5 rounded-xl border-2 border-black bg-[#F4F4F5] p-3 shadow-brutal-sm"
-          >
-            <div className="font-head flex items-center gap-1.5 text-xs font-bold tracking-widest text-muted-foreground uppercase">
-              {item.icon}
-              <span className="pt-0.5">{item.label}</span>
-            </div>
-            <p className="font-head text-xl leading-tight font-black text-black sm:text-2xl">
-              {isLoading ? "Loading..." : item.value}
-            </p>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 gap-3 rounded-xl border-2 border-black bg-[#F4F4F5] p-4 shadow-brutal-sm lg:grid-cols-2">
+        <div className="flex flex-col gap-1">
+          <p className="font-head text-xs font-black tracking-widest text-muted-foreground uppercase">
+            Total Time
+          </p>
+          <p className="font-head text-2xl leading-tight font-black text-black sm:text-3xl">
+            {isLoading ? "Loading..." : stats.humanReadableTotal}
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-1 lg:border-l-2 lg:border-black lg:pl-4">
+          <p className="font-head text-xs font-black tracking-widest text-muted-foreground uppercase">
+            Daily Average
+          </p>
+          <p className="font-head text-2xl leading-tight font-black text-black sm:text-3xl">
+            {isLoading ? "Loading..." : stats.humanReadableDailyAverage}
+          </p>
+        </div>
       </div>
 
       <div className="rounded-xl border-2 border-black bg-white p-3 shadow-brutal-sm">
@@ -141,34 +129,49 @@ export function WakaTimeCard({ initialData }: Props) {
             {error}
           </div>
         ) : hasLanguages ? (
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             <div className="flex h-2.5 w-full overflow-hidden rounded-full border-2 border-black bg-neutral-100">
-              {stats.languages.map((language) => (
+              {stats.languages.map((language, index) => (
                 <div
                   key={language.name}
-                  className="h-full border-r-[1.5px] border-black bg-[#C4A1FF] last:border-0"
-                  style={{ width: `${Math.max(language.percent, 4)}%` }}
+                  className="h-full border-r-[1.5px] border-black last:border-0"
+                  style={{
+                    width: `${Math.max(language.percent, 4)}%`,
+                    backgroundColor:
+                      LANGUAGE_COLORS[index % LANGUAGE_COLORS.length],
+                  }}
                 />
               ))}
             </div>
 
-            <div className="space-y-2">
-              {stats.languages.map((language) => (
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-5">
+              {stats.languages.slice(0, 5).map((language, index) => (
                 <article
                   key={language.name}
-                  className="flex items-center justify-between gap-3 rounded-xl border-2 border-black bg-[#F4F4F5] p-3 shadow-brutal-sm"
+                  className="rounded-xl border-2 border-black bg-[#F4F4F5] p-2.5 shadow-brutal-sm"
                 >
-                  <div className="min-w-0">
-                    <p className="font-head truncate text-xs font-black tracking-wider text-black uppercase">
-                      {language.name}
-                    </p>
-                    <p className="text-xs font-bold text-muted-foreground">
-                      {language.text}
-                    </p>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="h-3.5 w-3.5 shrink-0 rounded-full border-2 border-black shadow-[1px_1px_0px_rgba(0,0,0,1)]"
+                          style={{
+                            backgroundColor:
+                              LANGUAGE_COLORS[index % LANGUAGE_COLORS.length],
+                          }}
+                        />
+                        <p className="font-head min-w-0 truncate text-[13px] font-black tracking-wider text-black uppercase">
+                          {language.name}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="shrink-0 rounded-full border-2 border-black bg-white px-2 py-0.5 text-[11px] font-black uppercase shadow-brutal-sm">
+                      {Math.round(language.percent)}%
+                    </span>
                   </div>
-                  <span className="shrink-0 rounded-full border-2 border-black bg-white px-2.5 py-1 text-[10px] font-black uppercase shadow-brutal-sm">
-                    {Math.round(language.percent)}%
-                  </span>
+                  <p className="mt-2 text-[13px] font-bold text-muted-foreground">
+                    {language.text}
+                  </p>
                 </article>
               ))}
             </div>

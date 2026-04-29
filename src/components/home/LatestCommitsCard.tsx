@@ -61,7 +61,7 @@ export function LatestCommitsCard({ initialData }: Props) {
 
   return (
     <section className="flex h-full flex-col gap-4 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal xl:p-5">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-[#E7F193] text-black shadow-brutal-sm">
             <GitCommitHorizontal className="h-5 w-5" />
@@ -76,10 +76,16 @@ export function LatestCommitsCard({ initialData }: Props) {
           </div>
         </div>
 
-        {isLoading && <Loader2 className="h-4 w-4 animate-spin text-black" />}
+        <div className="flex items-center gap-3">
+          <span className="rounded-full border-2 border-black bg-[#F4F4F5] px-3 py-1 text-[10px] font-black uppercase shadow-brutal-sm">
+            Activity Feed
+          </span>
+          {isLoading && <Loader2 className="h-4 w-4 animate-spin text-black" />}
+        </div>
       </div>
 
-      <div className="grid flex-1 gap-2.5">
+      <div className="rounded-xl border-2 border-black bg-white p-2 shadow-brutal-sm">
+        <div className="scrollbar-neo-thin grid max-h-[330px] gap-2.5 overflow-y-auto pr-1">
         {isLoading ? (
           Array.from({ length: 5 }).map((_, index) => (
             <div
@@ -129,6 +135,7 @@ export function LatestCommitsCard({ initialData }: Props) {
             </a>
           ))
         )}
+        </div>
       </div>
     </section>
   )

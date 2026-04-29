@@ -63,8 +63,8 @@ export function GitHubStats({ initialData }: Props) {
   ]
 
   return (
-    <div className="flex h-full flex-col justify-between gap-4 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal xl:p-5">
-      <div className="flex items-center justify-between">
+    <section className="flex h-full flex-col gap-4 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal xl:p-5">
+      <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] text-black shadow-brutal-sm">
             <GitBranch className="h-5 w-5" />
@@ -74,13 +74,16 @@ export function GitHubStats({ initialData }: Props) {
               GitHub
             </h3>
             <p className="mt-0.5 text-xs font-bold text-muted-foreground">
-              Cached Live Statistics
+              Public reputation snapshot
             </p>
           </div>
         </div>
+        <span className="rounded-full border-2 border-black bg-[#F4F4F5] px-3 py-1 text-[10px] font-black uppercase shadow-brutal-sm">
+          GitHub
+        </span>
       </div>
 
-      <div className="grid flex-grow grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-2.5">
         {statItems.map((item) => (
           <div
             key={item.label}
@@ -97,7 +100,16 @@ export function GitHubStats({ initialData }: Props) {
       </div>
 
       {stats.topLanguages.length > 0 && (
-        <div className="mt-2 space-y-2 rounded-xl border-2 border-black bg-white p-3 shadow-brutal-sm">
+        <div className="mt-auto space-y-2 rounded-xl border-2 border-black bg-white p-3 shadow-brutal-sm">
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-head text-[11px] font-black uppercase tracking-[0.22em] text-muted-foreground">
+              Top Languages
+            </p>
+            <p className="text-[10px] font-black uppercase text-muted-foreground">
+              Share of recent work
+            </p>
+          </div>
+
           <div className="flex h-2.5 w-full overflow-hidden rounded-full border-2 border-black bg-neutral-100">
             {stats.topLanguages.map((lang) => (
               <div
@@ -111,8 +123,8 @@ export function GitHubStats({ initialData }: Props) {
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
-            {stats.topLanguages.map((lang) => (
+          <div className="grid gap-2 text-xs">
+            {stats.topLanguages.slice(0, 4).map((lang) => (
               <div key={lang.name} className="flex items-center gap-1.5">
                 <span
                   className="h-3 w-3 rounded-full border-2 border-black shadow-[1px_1px_0px_rgba(0,0,0,1)]"
@@ -129,6 +141,6 @@ export function GitHubStats({ initialData }: Props) {
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
