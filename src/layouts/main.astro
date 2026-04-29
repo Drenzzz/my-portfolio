@@ -1,5 +1,6 @@
 ---
 import { KeyboardShortcuts } from "@/components/islands/KeyboardShortcuts"
+import { MusicPlayer } from "@/components/home/MusicPlayer"
 import SEO from "@/components/global/SEO.astro"
 import "@/styles/global.css"
 
@@ -32,6 +33,7 @@ const {
     <div class="relative flex min-h-screen flex-col">
       <slot />
     </div>
+    <MusicPlayer client:load />
     <KeyboardShortcuts client:load />
   </body>
 </html>

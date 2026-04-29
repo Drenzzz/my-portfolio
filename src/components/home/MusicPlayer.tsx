@@ -9,7 +9,7 @@ import {
   type KeyboardEvent,
 } from "react"
 import {
-  Music,
+  Minimize2,
   Pause,
   Play,
   Repeat,
@@ -115,6 +115,7 @@ export function MusicPlayer() {
   const [repeatMode, setRepeatMode] = useState<RepeatMode>(() =>
     readRepeatMode()
   )
+  const [isExpanded, setIsExpanded] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const currentTrack = useMemo(
@@ -274,179 +275,235 @@ export function MusicPlayer() {
         ? "Repeat All"
         : "Repeat One"
 
+  const volumePercent = `${Math.round(volume)}%`
+
   return (
-    <div
-      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl border-4 border-black bg-[#F4F4F5] p-3 shadow-[8px_8px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)]"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      aria-label="Music player"
-    >
-      <div className="pointer-events-none absolute -right-6 -bottom-6 -rotate-12 transform opacity-10 transition-transform duration-500 group-hover:rotate-0">
-        <Music className="h-48 w-48" />
-      </div>
-
-      <div className="z-10 mb-2.5 flex items-center justify-between">
-        <h3 className="font-head flex items-center gap-1.5 text-xl font-black tracking-tight text-black uppercase">
-          <span
-            className="h-2.5 w-2.5 animate-pulse rounded-full bg-black"
-            style={{ animationDuration: isPlaying ? "1s" : "0s" }}
-          ></span>
-          Now Playing
-        </h3>
-
-        <div className="flex rounded-sm border-2 border-black bg-white shadow-brutal-sm">
-          <button
-            type="button"
-            onClick={() => setIsMuted((prev) => !prev)}
-            className="border-r-2 border-black p-1.5 transition-colors hover:bg-black hover:text-white"
-            aria-label={isMuted || volume === 0 ? "Unmute" : "Mute"}
-          >
-            {isMuted || volume === 0 ? (
-              <VolumeX className="h-4 w-4" />
-            ) : (
-              <Volume2 className="h-4 w-4" />
-            )}
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={volume}
-            onChange={(event) =>
-              setVolume(clamp(Number(event.target.value), 0, 100))
-            }
-            className="mx-2 w-16 accent-black"
-            aria-label="Volume"
-          />
-        </div>
-      </div>
-
-      <div className="z-10 mb-2.5 flex flex-1 items-center gap-3 rounded-xl border-4 border-black bg-white p-2.5 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+    <div className="fixed bottom-4 right-4 z-50" aria-label="Music player overlay">
+      <div className="relative">
         <div
           className={cn(
-            "flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-[3px] border-black bg-neutral-900 shadow-inner",
-            isPlaying && "animate-spin"
+            "origin-bottom-right overflow-hidden rounded-2xl border-[3px] border-black bg-white px-4 py-4 shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all transition-neo",
+            "w-[min(92vw,360px)]",
+            isExpanded
+              ? "pointer-events-auto relative opacity-100 translate-y-0 scale-100"
+              : "pointer-events-none absolute bottom-0 right-0 opacity-0 translate-y-4 scale-90"
           )}
-          style={{ animationDuration: "3s" }}
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          aria-hidden={!isExpanded}
         >
-          <div className="h-4 w-4 rounded-full border-[2px] border-black bg-[#C4A1FF]"></div>
-        </div>
-
-        <div className="w-full overflow-hidden">
-          <div className="mb-0.5 truncate text-lg leading-none font-black text-black">
-            {currentTrack.title}
-          </div>
-          <div className="truncate text-xs font-bold tracking-widest text-muted-foreground uppercase">
-            {currentTrack.artist}
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 rounded-xl border-4 border-black bg-white p-2 text-black">
-        <div className="absolute inset-0 -z-10 translate-x-1 translate-y-1 rounded-xl border-4 border-black bg-[#C4A1FF]"></div>
-
-        <div className="mb-1.5 flex items-center gap-2 px-1">
-          <span className="text-[10px] font-black tabular-nums">
-            {formatTime(progress)}
-          </span>
-          <div className="relative flex-grow">
-            <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border-2 border-black bg-[#F4F4F5]">
-              <div
-                className="h-full border-r-2 border-black bg-[#C4A1FF] transition-all"
-                style={{ width: `${(progress / (duration || 1)) * 100}%` }}
-              ></div>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={duration || 0}
-              step={0.1}
-              value={progress}
-              onChange={(event) => handleSeek(Number(event.target.value))}
-              className="relative z-10 h-5 w-full cursor-pointer appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-0 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-0 [&::-webkit-slider-thumb]:appearance-none"
-              aria-label="Seek track"
-            />
-          </div>
-          <span className="text-[10px] font-black tabular-nums">
-            {formatTime(duration)}
-          </span>
-        </div>
-
-        <div className="mb-1.5 flex items-center justify-between px-1">
-          <button
-            type="button"
-            onClick={() => setIsShuffle((prev) => !prev)}
-            className={cn(
-              "rounded border-2 px-1.5 py-0.5 text-[10px] font-bold transition-all",
-              isShuffle
-                ? "border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
-                : "border-transparent text-black/70 hover:border-black hover:bg-black hover:text-white"
-            )}
-            aria-label="Toggle shuffle"
-            aria-pressed={isShuffle}
-          >
-            <span className="inline-flex items-center gap-1">
-              <Shuffle className="h-3 w-3" />
-              Shuffle
-            </span>
-          </button>
-
-          <span className="text-[10px] font-black text-black">
-            {currentTrackIdx + 1}/{playlist.length}
-          </span>
-
-          <button
-            type="button"
-            onClick={handleCycleRepeatMode}
-            className={cn(
-              "rounded border-2 px-1.5 py-0.5 text-[10px] font-bold transition-all",
-              repeatMode !== "off"
-                ? "border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
-                : "border-transparent text-black/70 hover:border-black hover:bg-black hover:text-white"
-            )}
-            aria-label={repeatLabel}
-          >
-            <span className="inline-flex items-center gap-1">
-              {repeatMode === "one" ? (
-                <Repeat1 className="h-3 w-3" />
-              ) : (
-                <Repeat className="h-3 w-3" />
+          <div className="flex items-center gap-3">
+            <div
+              className={cn(
+                "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-[3px] border-black bg-neutral-900 transition-all",
+                isPlaying && "animate-spin"
               )}
-              {repeatMode === "one" ? "One" : "Repeat"}
-            </span>
-          </button>
+              style={{ animationDuration: "3s" }}
+            >
+              <div className="h-5 w-5 rounded-full border-[2px] border-black bg-[#C4A1FF]" />
+              {isPlaying && (
+                <div className="pointer-events-none absolute -right-3 -top-1 flex items-end gap-0.5">
+                  <span className="h-2 w-1 animate-pulse rounded-full bg-[#C4A1FF]" style={{ animationDuration: "0.8s" }} />
+                  <span className="h-3 w-1 animate-pulse rounded-full bg-[#C4A1FF]" style={{ animationDuration: "1.1s" }} />
+                  <span className="h-1.5 w-1 animate-pulse rounded-full bg-[#C4A1FF]" style={{ animationDuration: "0.9s" }} />
+                </div>
+              )}
+            </div>
+
+            <div className="min-w-0 flex-1 text-left">
+              <p className="font-head text-[11px] font-black uppercase tracking-[0.22em] text-muted-foreground">
+                Now Playing
+              </p>
+              <p className="truncate font-head text-lg font-black text-black transition-all">
+                {currentTrack.title}
+              </p>
+              <p className="truncate text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                {currentTrack.artist}
+              </p>
+              <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">
+                Track {currentTrackIdx + 1} of {playlist.length}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handlePlayPause}
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] shadow-brutal-sm transition-all hover:-translate-y-[1px] hover:shadow-none"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? (
+                <Pause className="h-4 w-4 fill-black" />
+              ) : (
+                <Play className="ml-0.5 h-4 w-4 fill-black" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsExpanded(false)}
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-[#F4F4F5] shadow-brutal-sm transition-all hover:-translate-y-[1px] hover:shadow-none"
+              aria-expanded={isExpanded}
+              aria-label="Collapse music player"
+            >
+              <Minimize2 className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="mt-4 grid grid-rows-[1fr] transition-all duration-300" aria-hidden={!isExpanded}>
+            <div className="overflow-hidden">
+              <div className="mb-4 rounded-xl border-[3px] border-black bg-[#F4F4F5] p-3 shadow-brutal-sm">
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="text-[10px] font-black tabular-nums text-black">
+                    {formatTime(progress)}
+                  </span>
+                  <div className="relative flex-grow">
+                    <div className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 overflow-hidden rounded-full border-2 border-black bg-white">
+                      <div
+                        className="h-full border-r-2 border-black bg-[#C4A1FF] transition-all"
+                        style={{ width: `${(progress / (duration || 1)) * 100}%` }}
+                      />
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={duration || 0}
+                      step={0.1}
+                      value={progress}
+                      onChange={(event) => handleSeek(Number(event.target.value))}
+                      className="relative z-10 h-5 w-full cursor-pointer appearance-none bg-transparent opacity-0 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-0 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-0 [&::-webkit-slider-thumb]:appearance-none"
+                      aria-label="Seek track"
+                    />
+                  </div>
+                  <span className="text-[10px] font-black tabular-nums text-black">
+                    {formatTime(duration)}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    className="transition-transform hover:-translate-x-1"
+                    aria-label="Previous track"
+                  >
+                    <SkipBack className="h-4 w-4 fill-current" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handlePlayPause}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform hover:scale-105"
+                    aria-label={isPlaying ? "Pause" : "Play"}
+                  >
+                    {isPlaying ? (
+                      <Pause className="h-4 w-4 fill-black" />
+                    ) : (
+                      <Play className="ml-0.5 h-4 w-4 fill-black" />
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="transition-transform hover:translate-x-1"
+                    aria-label="Next track"
+                  >
+                    <SkipForward className="h-4 w-4 fill-current" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-[auto_1fr] items-center gap-3 rounded-xl border-[3px] border-black bg-[#F4F4F5] p-3 shadow-brutal-sm">
+                <button
+                  type="button"
+                  onClick={() => setIsMuted((prev) => !prev)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white transition-all hover:-translate-y-[1px] hover:shadow-none"
+                  aria-label={isMuted || volume === 0 ? "Unmute" : "Mute"}
+                >
+                  {isMuted || volume === 0 ? (
+                    <VolumeX className="h-4 w-4" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" />
+                  )}
+                </button>
+
+                <div className="space-y-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={volume}
+                    onChange={(event) =>
+                      setVolume(clamp(Number(event.target.value), 0, 100))
+                    }
+                    className="w-full accent-black"
+                    aria-label="Volume"
+                  />
+
+                  <div className="flex items-center justify-between gap-2 text-[10px] font-black uppercase text-muted-foreground">
+                    <button
+                      type="button"
+                      onClick={() => setIsShuffle((prev) => !prev)}
+                      className={cn(
+                        "inline-flex items-center gap-1 rounded border-2 px-2 py-1 transition-all",
+                        isShuffle
+                          ? "border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
+                          : "border-transparent text-black/70 hover:border-black hover:bg-black hover:text-white"
+                      )}
+                      aria-label="Toggle shuffle"
+                      aria-pressed={isShuffle}
+                    >
+                      <Shuffle className="h-3 w-3" />
+                      Shuffle
+                    </button>
+
+                    <span className="text-black">{volumePercent}</span>
+
+                    <button
+                      type="button"
+                      onClick={handleCycleRepeatMode}
+                      className={cn(
+                        "inline-flex items-center gap-1 rounded border-2 px-2 py-1 transition-all",
+                        repeatMode !== "off"
+                          ? "border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
+                          : "border-transparent text-black/70 hover:border-black hover:bg-black hover:text-white"
+                      )}
+                      aria-label={repeatLabel}
+                    >
+                      {repeatMode === "one" ? (
+                        <Repeat1 className="h-3 w-3" />
+                      ) : (
+                        <Repeat className="h-3 w-3" />
+                      )}
+                      {repeatMode === "one" ? "One" : "Repeat"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center justify-center gap-4">
-          <button
-            type="button"
-            onClick={handlePrev}
-            className="transition-transform hover:-translate-x-1"
-            aria-label="Previous Track"
-          >
-            <SkipBack className="h-4 w-4 fill-current" />
-          </button>
-          <button
-            type="button"
-            onClick={handlePlayPause}
-            className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-black bg-[#C4A1FF] text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform hover:scale-110"
-            aria-label={isPlaying ? "Pause" : "Play"}
-          >
-            {isPlaying ? (
-              <Pause className="h-4 w-4 fill-black" />
-            ) : (
-              <Play className="ml-1 h-4 w-4 fill-black" />
+        <button
+          type="button"
+          onClick={() => setIsExpanded(true)}
+          className={cn(
+            "group origin-bottom-right flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border-[3px] border-black bg-white shadow-[6px_6px_0px_rgba(0,0,0,1)] transition-all transition-neo",
+            isExpanded
+              ? "pointer-events-none absolute bottom-0 right-0 opacity-0 translate-y-3 scale-75 rotate-6"
+              : "pointer-events-auto relative opacity-100 translate-y-0 scale-100 hover:-translate-y-[2px] hover:shadow-none"
+          )}
+          aria-expanded={isExpanded}
+          aria-label="Open music player"
+          aria-hidden={isExpanded}
+        >
+          <div
+            className={cn(
+              "relative flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-black bg-neutral-900 transition-transform duration-300 group-hover:scale-105",
+              isPlaying && "animate-spin"
             )}
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            className="transition-transform hover:translate-x-1"
-            aria-label="Next Track"
+            style={{ animationDuration: "3s" }}
           >
-            <SkipForward className="h-4 w-4 fill-current" />
-          </button>
-        </div>
+            <div className="h-4 w-4 rounded-full border-[2px] border-black bg-[#C4A1FF]" />
+          </div>
+        </button>
       </div>
 
       <audio

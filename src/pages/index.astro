@@ -10,7 +10,6 @@ import { GitHubStats } from "@/components/home/GitHubStats"
 import { GuestbookPreview } from "@/components/home/GuestbookPreview"
 import { LatestCommitsCard } from "@/components/home/LatestCommitsCard"
 import { LocationCard } from "@/components/home/LocationCard"
-import { MusicPlayer } from "@/components/home/MusicPlayer"
 import { WakaTimeCard } from "@/components/home/WakaTimeCard"
 import { ViewCounter } from "@/components/islands/ViewCounter"
 
@@ -100,18 +99,8 @@ export const prerender = true
         </p>
       </div>
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-4">
-        <div class="max-h-min min-h-[220px] lg:col-span-1">
-          <MusicPlayer client:visible>
-            <div
-              slot="fallback"
-              class="h-full w-full animate-pulse rounded-xl border-4 border-black bg-[#F4F4F5]"
-              aria-hidden="true"
-            >
-            </div>
-          </MusicPlayer>
-        </div>
-        <div class="min-h-[220px] lg:col-span-3">
+      <div class="grid grid-cols-1 gap-6">
+        <div class="min-h-[220px]">
           <GuestbookPreview pageKey="page:/about" client:visible />
         </div>
       </div>
