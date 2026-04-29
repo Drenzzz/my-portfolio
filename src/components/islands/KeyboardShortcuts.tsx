@@ -9,11 +9,10 @@ const toastTimeoutMs = 1600
 
 const shortcuts = [
   { keys: "G H", label: "Go to Home", path: "/" },
-  { keys: "G A", label: "Go to About", path: "/about" },
   { keys: "G P", label: "Go to Projects", path: "/project" },
-  { keys: "G C", label: "Go to Contact", path: "/contact" },
   { keys: "G U", label: "Go to Uses", path: "/uses" },
-  { keys: "G G", label: "Go to Guestbook", path: "/guestbook" },
+  { keys: "G A", label: "Go to About", path: "/about" },
+  { keys: "G C", label: "Go to Contact", path: "/contact" },
 ] as const
 
 const shortcutRoutes: Record<string, string> = shortcuts.reduce(
