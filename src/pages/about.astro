@@ -7,6 +7,7 @@ import ConnectNowSection from "@/components/about/ConnectNowSection.astro"
 import JourneySection from "@/components/about/JourneySection.astro"
 import SkillsArsenalSection from "@/components/about/SkillsArsenalSection.astro"
 import CertificatesPreview from "@/components/about/CertificatesPreview.astro"
+import ClosingCTASection from "@/components/about/ClosingCTASection.astro"
 import { Guestbook } from "@/components/islands/Guestbook"
 import { ViewCounter } from "@/components/islands/ViewCounter"
 
@@ -47,9 +48,9 @@ const description =
 
       <CertificatesPreview />
 
-      <section class="container mx-auto px-4 py-16 md:py-24">
-        <Guestbook pageKey="page:/about" client:visible />
-      </section>
+      <Guestbook pageKey="page:/about" client:visible />
+
+      <ClosingCTASection />
     </div>
 
     <Footer />

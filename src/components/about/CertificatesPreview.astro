@@ -30,31 +30,67 @@ const certificateItems: CertificatePreviewItem[] = certificates.map((entry) => (
 ---
 
 <section
-  class="mt-8 rounded-xl border-[3px] border-black bg-white p-6 shadow-brutal"
+  id="certificates-motion-root"
+  class="container mx-auto px-4 py-16 md:py-24"
+  aria-labelledby="certificates-heading"
 >
-  <div class="mb-5 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div
-        class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] shadow-brutal-sm"
+  <div class="mb-8 max-w-2xl" data-motion-group="certificates-header">
+    <p
+      class="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground"
+      data-motion
+    >
+      Selected Proof
+    </p>
+    <div class="mt-2 flex items-end gap-4" data-motion-group="certificates-header">
+      <h2
+        id="certificates-heading"
+        class="font-head text-3xl font-black uppercase tracking-tight md:text-4xl"
+        data-motion
+        style="--motion-offset-y: 16px;"
       >
-        <Award className="h-5 w-5" />
-      </div>
-      <div>
-        <p
-          class="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase"
-        >
-          Selected Proof
-        </p>
-        <h2 class="font-head text-2xl font-black text-black uppercase">
-          Certificates
-        </h2>
-      </div>
+        Certificates
+      </h2>
+      <span
+        class="shrink-0 rounded bg-black px-2.5 py-1 text-xs font-black tracking-wider text-white shadow-[2px_2px_0px_rgba(0,0,0,1)]"
+        data-motion
+        style="--motion-offset-y: 16px;"
+      >
+        {certificates.length} Certificates
+      </span>
     </div>
   </div>
 
-  <CertificatePreview
-    items={certificateItems}
-    initialVisibleCount={3}
-    client:load
-  />
+  <div data-motion style="--motion-offset-y: 20px; --motion-scale: 0.98;">
+    <CertificatePreview
+      items={certificateItems}
+      initialVisibleCount={3}
+      client:load
+    />
+  </div>
 </section>
+
+<script>
+  import { bindInViewReveal } from "@/lib/animation/motion"
+
+  const root = document.getElementById("certificates-motion-root")
+  if (root && root.dataset.motionBound !== "true") {
+    root.dataset.motionBound = "true"
+
+    bindInViewReveal(root, "[data-motion-group='certificates-header'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.36,
+      staggerDelay: 0.08,
+      offsetY: 14,
+    })
+
+    bindInViewReveal(root, "[data-motion]", {
+      amount: 0.16,
+      delay: 0.08,
+      duration: 0.4,
+      staggerDelay: 0.08,
+      offsetY: 18,
+      scale: 0.98,
+    })
+  }
+</script>

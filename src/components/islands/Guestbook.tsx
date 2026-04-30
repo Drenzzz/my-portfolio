@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { MessageCirclePlus } from "lucide-react"
 import type { GuestbookEntry } from "@/types"
 
 interface Props {
@@ -76,68 +75,89 @@ export function Guestbook({ pageKey }: Props) {
   }
 
   return (
-    <section className="rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal md:p-5">
-      <div className="mb-4 flex items-center gap-2">
-        <MessageCirclePlus className="h-5 w-5" />
-        <h3 className="font-head text-lg font-black uppercase">Guestbook</h3>
+    <section
+      id="guestbook-motion-root"
+      className="container mx-auto px-4 py-16 md:py-24"
+      aria-labelledby="guestbook-heading"
+    >
+      <div className="mb-8 max-w-2xl">
+        <p className="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+          Guestbook
+        </p>
+        <h2
+          id="guestbook-heading"
+          className="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl"
+        >
+          Leave a Trace
+        </h2>
       </div>
 
-      <form onSubmit={submit} className="mb-4 grid gap-2">
-        <input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Your name"
-          className="w-full rounded-sm border-2 border-black px-3 py-2 text-sm font-medium"
-          maxLength={40}
-          required
-        />
-        <textarea
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-          placeholder="Leave a message"
-          className="h-24 w-full resize-none rounded-sm border-2 border-black px-3 py-2 text-sm font-medium"
-          maxLength={MAX_MESSAGE_LENGTH}
-          required
-        />
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-semibold text-muted-foreground">
-            {message.length}/{MAX_MESSAGE_LENGTH}
-          </span>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="rounded-sm border-2 border-black bg-[#C4A1FF] px-4 py-2 text-xs font-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none disabled:opacity-60"
-          >
-            {isLoading ? "Sending..." : "Send"}
-          </button>
-        </div>
-      </form>
-
-      {error && <p className="mb-2 text-xs font-bold text-red-600">{error}</p>}
-
-      <div className="scrollbar-neo-thin max-h-[420px] space-y-2 overflow-y-auto pr-1">
-        {entries.length === 0 ? (
-          <p className="text-sm font-medium text-muted-foreground">
-            No messages yet.
-          </p>
-        ) : (
-          entries.map((entry) => (
-            <article
-              key={entry.id}
-              className="rounded-sm border-2 border-black bg-[#F4F4F5] px-3 py-2"
-            >
-              <div className="mb-1 flex items-center justify-between gap-2">
-                <strong className="font-head text-xs uppercase">
-                  {entry.name}
-                </strong>
-                <time className="text-[10px] font-semibold text-muted-foreground">
-                  {new Date(entry.createdAt).toLocaleString("id-ID")}
-                </time>
+      <div
+        className="rounded-xl border-4 border-black bg-white p-5 shadow-brutal md:p-6"
+      >
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]">
+          <div>
+            <form onSubmit={submit} className="flex flex-col gap-3">
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Your name"
+                className="w-full rounded-sm border-2 border-black bg-[#F4F4F5] px-3 py-2.5 text-sm font-medium"
+                maxLength={40}
+                required
+              />
+              <textarea
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
+                placeholder="Leave a message"
+                className="h-32 w-full resize-none rounded-sm border-2 border-black bg-[#F4F4F5] px-3 py-2.5 text-sm font-medium"
+                maxLength={MAX_MESSAGE_LENGTH}
+                required
+              />
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-muted-foreground">
+                  {message.length}/{MAX_MESSAGE_LENGTH}
+                </span>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="rounded-sm border-2 border-black bg-[#C4A1FF] px-5 py-2 text-xs font-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none disabled:opacity-60"
+                >
+                  {isLoading ? "Sending..." : "Send"}
+                </button>
               </div>
-              <p className="text-sm font-medium">{entry.message}</p>
-            </article>
-          ))
-        )}
+            </form>
+
+            {error && (
+              <p className="mt-2 text-xs font-bold text-red-600">{error}</p>
+            )}
+          </div>
+
+          <div className="scrollbar-neo-thin max-h-[420px] space-y-2 overflow-y-auto pr-1">
+            {entries.length === 0 ? (
+              <p className="text-sm font-medium text-muted-foreground">
+                No messages yet.
+              </p>
+            ) : (
+              entries.map((entry) => (
+                <article
+                  key={entry.id}
+                  className="rounded-sm border-2 border-black bg-[#F4F4F5] px-3 py-2.5"
+                >
+                  <div className="mb-1 flex items-center justify-between gap-2">
+                    <strong className="font-head text-xs uppercase">
+                      {entry.name}
+                    </strong>
+                    <time className="text-[10px] font-semibold text-muted-foreground">
+                      {new Date(entry.createdAt).toLocaleString("id-ID")}
+                    </time>
+                  </div>
+                  <p className="text-sm font-medium">{entry.message}</p>
+                </article>
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </section>
   )

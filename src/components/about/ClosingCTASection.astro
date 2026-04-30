@@ -1,0 +1,64 @@
+---
+import { ArrowUpRight, Mail } from "lucide-react"
+---
+
+<section
+  id="closing-cta-motion-root"
+  class="container mx-auto px-4 pb-20 md:pb-28"
+>
+  <article
+    class="relative overflow-hidden rounded-xl border-4 border-black bg-white p-6 shadow-brutal transition-all transition-neo hover:-translate-y-1 hover:shadow-none md:p-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-8"
+    data-motion
+    style="--motion-offset-y: 20px; --motion-scale: 0.98;"
+  >
+    <div>
+      <h3
+        class="font-head text-3xl font-black text-black uppercase md:text-4xl lg:text-5xl"
+      >
+        Interested in Working Together?
+      </h3>
+      <p
+        class="mt-3 max-w-xl text-sm leading-relaxed font-medium text-muted-foreground md:text-base"
+      >
+        Open for internship, freelance projects, or collaboration. Let's build something great.
+      </p>
+    </div>
+
+    <div class="mt-6 flex flex-col gap-3 lg:mt-0 lg:items-end">
+      <a
+        href="mailto:contact@drenzzz.dev"
+        class="transition-neo-fast inline-flex w-fit items-center justify-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-6 py-3 text-sm font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+      >
+        <Mail className="h-4 w-4" />
+        Get in Touch
+        <ArrowUpRight className="h-4 w-4" />
+      </a>
+
+      <a
+        href="/contact"
+        class="transition-neo-fast inline-flex w-fit items-center justify-center gap-2 rounded-sm border-2 border-black bg-white px-6 py-3 text-sm font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+      >
+        View Contact
+        <ArrowUpRight className="h-4 w-4" />
+      </a>
+    </div>
+  </article>
+</section>
+
+<script>
+  import { revealMotionGroup } from "@/lib/animation/motion"
+
+  const root = document.getElementById("closing-cta-motion-root")
+  if (root && root.dataset.motionBound !== "true") {
+    root.dataset.motionBound = "true"
+    const targets = root.querySelectorAll("[data-motion]")
+    targets.forEach((t) => t.classList.add("is-visible"))
+    revealMotionGroup(targets, {
+      delay: 0.06,
+      duration: 0.42,
+      staggerDelay: 0.08,
+      offsetY: 20,
+      scale: 0.98,
+    })
+  }
+</script>
