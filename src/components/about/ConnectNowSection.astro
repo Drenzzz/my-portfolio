@@ -1,0 +1,101 @@
+---
+import { Mail, Code2 } from "lucide-react"
+
+const learningItems = [
+  { name: "Go", iconUrl: "https://cdn.simpleicons.org/go/000000" },
+  { name: "ElysiaJS", iconUrl: "https://avatars.githubusercontent.com/u/119793569?s=200&v=4" },
+  { name: "Capacitor", iconUrl: "https://cdn.simpleicons.org/capacitor/000000" },
+]
+---
+
+<section
+  id="connect-now-motion-root"
+  class="container mx-auto px-4"
+  data-motion-group="connect-now"
+>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div
+      class="flex flex-col items-center justify-between gap-6 rounded-xl border-4 border-black bg-white p-6 shadow-brutal sm:flex-row"
+      data-motion
+      style="--motion-offset-y: 20px; --motion-scale: 0.98;"
+    >
+      <div class="text-center sm:text-left">
+        <h3 class="font-head mb-1 text-2xl font-black">Let's Connect!</h3>
+        <p class="text-sm font-medium text-muted-foreground">
+          Open for internship, freelance, or friendly chat
+        </p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a
+          href="mailto:contact@drenzzz.dev"
+          class="inline-flex items-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-5 py-2.5 font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+        >
+          <Mail className="h-4 w-4" />
+          Get in Touch
+        </a>
+        <a
+          href="/files/my_cv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-sm border-2 border-black bg-[#F4F4F5] px-5 py-2.5 font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+          Preview CV
+        </a>
+        <a
+          href="/project"
+          class="inline-flex items-center gap-2 rounded-sm border-2 border-black bg-white px-5 py-2.5 font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+        >
+          <Code2 className="h-4 w-4" />
+          View Projects
+        </a>
+      </div>
+    </div>
+
+    <div
+      class="rounded-xl border-4 border-black bg-white p-4 shadow-brutal"
+      data-motion
+      style="--motion-offset-y: 20px; --motion-scale: 0.98;"
+    >
+      <h3 class="font-head text-lg font-black uppercase">Now learning</h3>
+      <div class="mt-4 grid grid-cols-3 gap-3">
+        {learningItems.map((item) => (
+          <div
+            class="flex items-center gap-3 rounded-xl border-[3px] border-black bg-[#F4F4F5] px-4 py-4 text-left transition-all transition-neo hover:-translate-y-1 hover:shadow-none"
+            data-motion
+            style="--motion-offset-y: 22px; --motion-scale: 0.98;"
+          >
+            <img
+              src={item.iconUrl}
+              alt={item.name}
+              width="28"
+              height="28"
+              class="shrink-0"
+              loading="lazy"
+            />
+
+            <h4 class="font-head text-sm font-black uppercase">{item.name}</h4>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { revealMotionGroup } from "@/lib/animation/motion"
+
+  const root = document.getElementById("connect-now-motion-root")
+  if (root && root.dataset.motionBound !== "true") {
+    root.dataset.motionBound = "true"
+    const targets = root.querySelectorAll("[data-motion]")
+    targets.forEach((t) => t.classList.add("is-visible"))
+    revealMotionGroup(targets, {
+      delay: 0.1,
+      duration: 0.42,
+      staggerDelay: 0.1,
+      offsetY: 20,
+      scale: 0.98,
+    })
+  }
+</script>

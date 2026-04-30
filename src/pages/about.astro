@@ -2,7 +2,8 @@
 import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
-import AboutHero from "@/components/about/AboutHero.astro"
+import AboutHeroSection from "@/components/about/AboutHeroSection.astro"
+import ConnectNowSection from "@/components/about/ConnectNowSection.astro"
 import CertificatesPreview from "@/components/about/CertificatesPreview.astro"
 import Timeline from "@/components/about/Timeline.astro"
 import SkillStack from "@/components/about/SkillStack.astro"
@@ -20,46 +21,36 @@ const description =
   <Navbar />
 
   <main class="relative w-full flex-1 bg-[#f8f9fa]">
-    {/* Subtle Dot Pattern Background */}
     <div
       class="absolute inset-0 z-0 opacity-[0.15]"
       style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
     >
     </div>
 
-    <div class="relative z-10 container mx-auto px-4 py-12 md:py-20">
-      <div class="mb-12">
-        <div
-          class="inline-block -rotate-2 transform cursor-default border-4 border-black bg-white px-6 py-2 text-black shadow-brutal transition-transform hover:rotate-0"
-        >
-          <h1
-            class="font-head text-4xl font-black tracking-tight uppercase md:text-6xl"
-          >
-            About Me
-          </h1>
-        </div>
-        <p
-          class="mt-4 inline-block max-w-2xl rounded bg-white/80 p-2 text-lg font-medium text-muted-foreground"
-        >
-          Get to know more about my background and coding journey.
-        </p>
-        <div class="mt-4">
+    <div class="relative z-10">
+      <section class="container mx-auto px-4 pt-12 md:pt-20">
+        <div class="mb-4 flex justify-end">
           <ViewCounter pageKey="page:/about" client:visible />
         </div>
-      </div>
+        <AboutHeroSection />
+      </section>
 
-      <AboutHero />
+      <section class="container mx-auto px-4 py-8 md:py-12">
+        <ConnectNowSection />
+      </section>
 
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Timeline />
-        <SkillStack />
-      </div>
+      <section class="container mx-auto px-4 py-16 md:py-24">
+        <div class="space-y-16">
+          <Timeline />
+          <SkillStack />
+        </div>
+      </section>
 
       <CertificatesPreview />
 
-      <div class="mt-8">
+      <section class="container mx-auto px-4 py-16 md:py-24">
         <Guestbook pageKey="page:/about" client:visible />
-      </div>
+      </section>
     </div>
 
     <Footer />
