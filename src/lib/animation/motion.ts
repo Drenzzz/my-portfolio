@@ -166,3 +166,91 @@ export const bindInViewReveal = (
 
   return () => stop()
 }
+
+export const revealMotionGroupWithRotation = (
+  targets: MotionTargetInput,
+  options?: {
+    delay?: number
+    duration?: number
+    staggerDelay?: number
+    offsetY?: number
+    scale?: number
+    rotation?: number
+  }
+) => {
+  const {
+    delay = 0,
+    duration = 0.45,
+    staggerDelay = 0.1,
+    offsetY = 20,
+    scale = 0.96,
+    rotation = -3,
+  } = options ?? {}
+  const resolvedTargets = resolveMotionTargets(targets)
+
+  if (!resolvedTargets.length) {
+    return
+  }
+
+  if (shouldReduceMotion()) {
+    resolvedTargets.forEach((target) => {
+      animate(
+        target,
+        { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 } as Record<string, number>,
+        { duration: 0.01 }
+      )
+    })
+    return
+  }
+
+  const createDelay = stagger(staggerDelay, { startDelay: delay })
+
+  resolvedTargets.forEach((target, index) => {
+    animate(
+      target,
+      {
+        opacity: [0, 1],
+        y: [offsetY, 0],
+        scale: [scale, 1],
+        rotate: [rotation, 0],
+      } as Record<string, number | number[]>,
+      {
+        delay: createDelay(index, resolvedTargets.length),
+        duration,
+        ease: NEO_MOTION_EASING,
+      }
+    )
+  })
+}
+
+export const animateTimelineLine = (
+  lineElement: Element,
+  options?: {
+    delay?: number
+    duration?: number
+  }
+) => {
+  const { delay = 0, duration = 0.8 } = options ?? {}
+
+  if (shouldReduceMotion()) {
+    animate(
+      lineElement,
+      { scaleY: 1, transformOrigin: "top" } as Record<string, number | string>,
+      { duration: 0.01 }
+    )
+    return
+  }
+
+  animate(
+    lineElement,
+    {
+      scaleY: [0, 1],
+      transformOrigin: "top",
+    } as Record<string, number | string>,
+    {
+      delay,
+      duration,
+      ease: NEO_MOTION_EASING,
+    }
+  )
+}

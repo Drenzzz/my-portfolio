@@ -31,7 +31,9 @@ import { education } from "@/data/education"
   >
     <div class="relative pl-6 md:pl-8">
       <div
+        id="journey-timeline-line"
         class="absolute top-2 bottom-2 left-0 w-1 bg-black"
+        style="transform: scaleY(0); transform-origin: top;"
       >
       </div>
 
@@ -70,7 +72,8 @@ import { education } from "@/data/education"
 </section>
 
 <script>
-  import { bindInViewReveal } from "@/lib/animation/motion"
+  import { inView } from "motion"
+  import { bindInViewReveal, animateTimelineLine } from "@/lib/animation/motion"
 
   const root = document.getElementById("journey-motion-root")
   if (root && root.dataset.motionBound !== "true") {
@@ -80,16 +83,29 @@ import { education } from "@/data/education"
       amount: 0.2,
       delay: 0.04,
       duration: 0.36,
-      staggerDelay: 0.08,
+      staggerDelay: 0.12,
       offsetY: 14,
     })
 
+    const line = document.getElementById("journey-timeline-line")
+    if (line) {
+      const stopLine = inView(
+        line,
+        () => {
+          animateTimelineLine(line, { delay: 0.1, duration: 0.8 })
+          stopLine()
+          return () => {}
+        },
+        { amount: 0.3 }
+      )
+    }
+
     bindInViewReveal(root, "[data-motion]", {
       amount: 0.15,
-      delay: 0.08,
-      duration: 0.42,
-      staggerDelay: 0.12,
-      offsetY: 20,
+      delay: 0.15,
+      duration: 0.45,
+      staggerDelay: 0.14,
+      offsetY: 22,
     })
   }
 </script>
