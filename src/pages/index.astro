@@ -7,7 +7,6 @@ import CapabilityBoard from "@/components/home/CapabilityBoard.astro"
 import FeaturedProjects from "@/components/home/FeaturedProjects.astro"
 import { DiscordStatus } from "@/components/home/DiscordStatus"
 import { GitHubStats } from "@/components/home/GitHubStats"
-import { GuestbookPreview } from "@/components/home/GuestbookPreview"
 import { LatestCommitsCard } from "@/components/home/LatestCommitsCard"
 import { LocationCard } from "@/components/home/LocationCard"
 import { WakaTimeCard } from "@/components/home/WakaTimeCard"
@@ -86,25 +85,6 @@ export const prerender = true
       </div>
     </section>
 
-    <section class="container mx-auto px-4 pb-14 md:pb-20" aria-labelledby="home-personal-title">
-      <div class="mb-6 max-w-2xl">
-        <p class="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-          Personal Layer
-        </p>
-        <h2 id="home-personal-title" class="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl">
-          The human side of the portfolio
-        </h2>
-        <p class="mt-3 text-sm font-medium leading-relaxed text-muted-foreground md:text-base">
-          A lighter section for presence, routine, and notes that add personality without taking over the main story.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 gap-6">
-        <div class="min-h-[220px]">
-          <GuestbookPreview pageKey="page:/about" client:visible />
-        </div>
-      </div>
-    </section>
   </main>
 
   <Footer />
