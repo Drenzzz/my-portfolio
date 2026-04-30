@@ -1,0 +1,96 @@
+---
+import { skills } from "@/data/skills"
+import { Code2 } from "lucide-react"
+---
+
+<section
+  id="skills-motion-root"
+  class="container mx-auto px-4 py-16 md:py-24"
+  aria-labelledby="skills-heading"
+>
+  <div class="mb-8 max-w-2xl" data-motion-group="skills-header">
+    <p
+      class="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground"
+      data-motion
+    >
+      Skills
+    </p>
+    <h2
+      id="skills-heading"
+      class="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl"
+      data-motion
+      style="--motion-offset-y: 16px;"
+    >
+      Technologies I Use
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2" data-motion-group="skills-grid">
+    {skills.map((category) => (
+      <article
+        class="group relative overflow-hidden rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal transition-all transition-neo hover:-translate-y-1 hover:shadow-none"
+        data-motion
+        style="--motion-offset-y: 22px; --motion-scale: 0.98;"
+      >
+        <p class="mb-4 font-head text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+          {category.category}
+        </p>
+
+        <div class="flex flex-wrap gap-2">
+          {category.items.map((skill) => (
+            <div
+              class="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-[#F4F4F5] px-3 py-2 shadow-brutal-sm transition-all transition-neo-fast hover:-translate-y-[2px] hover:shadow-none"
+            >
+              <img
+                src={`https://cdn.simpleicons.org/${skill.iconId}/000000`}
+                alt=""
+                width="16"
+                height="16"
+                class="shrink-0"
+                loading="lazy"
+              />
+              <span class="text-sm font-bold text-black">{skill.name}</span>
+              <div class="ml-1 flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span
+                    class:list={[
+                      "h-1.5 w-1.5 rounded-full",
+                      i < skill.level ? "bg-black" : "bg-zinc-300",
+                    ]}
+                  >
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  import { bindInViewReveal } from "@/lib/animation/motion"
+
+  const root = document.getElementById("skills-motion-root")
+  if (root && root.dataset.motionBound !== "true") {
+    root.dataset.motionBound = "true"
+
+    bindInViewReveal(root, "[data-motion-group='skills-header'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.36,
+      staggerDelay: 0.08,
+      offsetY: 14,
+    })
+
+    bindInViewReveal(root, "[data-motion-group='skills-grid'] [data-motion]", {
+      amount: 0.16,
+      delay: 0.08,
+      duration: 0.4,
+      staggerDelay: 0.08,
+      offsetY: 18,
+      scale: 0.98,
+    })
+  }
+</script>

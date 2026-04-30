@@ -1,0 +1,95 @@
+---
+import { education } from "@/data/education"
+---
+
+<section
+  id="journey-motion-root"
+  class="container mx-auto px-4"
+  aria-labelledby="journey-heading"
+>
+  <div class="mb-8 max-w-2xl" data-motion-group="journey-header">
+    <p
+      class="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground"
+      data-motion
+    >
+      Journey
+    </p>
+    <h2
+      id="journey-heading"
+      class="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl"
+      data-motion
+      style="--motion-offset-y: 16px;"
+    >
+      Academic & Beyond
+    </h2>
+  </div>
+
+  <div
+    class="rounded-xl border-4 border-black bg-white p-6 shadow-brutal md:p-8"
+    data-motion
+    style="--motion-offset-y: 20px; --motion-scale: 0.98;"
+  >
+    <div class="relative pl-6 md:pl-8">
+      <div
+        class="absolute top-2 bottom-2 left-0 w-1 bg-black"
+      >
+      </div>
+
+      {education.map((item) => (
+        <div
+          class="relative pb-10 last:pb-0"
+          data-motion
+          style="--motion-offset-y: 20px;"
+        >
+          <div class="absolute -left-6 top-1.5 md:-left-8">
+            <div class="h-4 w-4 rounded-full border-2 border-black bg-[#C4A1FF] shadow-[2px_2px_0px_rgba(0,0,0,1)]"></div>
+          </div>
+
+          <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+            <h3 class="font-head text-xl font-black uppercase md:text-2xl">
+              {item.degree}
+            </h3>
+            <span class="shrink-0 rounded bg-black px-2 py-1 text-xs font-black tracking-wider text-white shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+              {item.date}
+            </span>
+          </div>
+
+          <p class="mt-1 text-base font-semibold text-muted-foreground">
+            {item.school}
+          </p>
+
+          {item.description && (
+            <p class="mt-2 max-w-xl text-sm font-medium leading-relaxed text-muted-foreground">
+              {item.description}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { bindInViewReveal } from "@/lib/animation/motion"
+
+  const root = document.getElementById("journey-motion-root")
+  if (root && root.dataset.motionBound !== "true") {
+    root.dataset.motionBound = "true"
+
+    bindInViewReveal(root, "[data-motion-group='journey-header'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.36,
+      staggerDelay: 0.08,
+      offsetY: 14,
+    })
+
+    bindInViewReveal(root, "[data-motion]", {
+      amount: 0.15,
+      delay: 0.08,
+      duration: 0.42,
+      staggerDelay: 0.12,
+      offsetY: 20,
+    })
+  }
+</script>
