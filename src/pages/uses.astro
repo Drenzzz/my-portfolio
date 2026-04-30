@@ -54,11 +54,13 @@ const categoryIcons = {
 
     <section class="relative z-10 container mx-auto px-4 py-12 md:py-20">
       <div
+        id="uses-hero-motion-root"
         class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
       >
-        <div>
+        <div data-motion-group="uses-hero-copy">
           <div
             class="inline-block -rotate-2 border-4 border-black bg-white px-6 py-2 shadow-brutal transition-transform hover:rotate-0"
+            data-motion
           >
             <h1
               class="font-head text-4xl font-black tracking-tight text-black uppercase md:text-6xl"
@@ -68,20 +70,26 @@ const categoryIcons = {
           </div>
           <p
             class="mt-5 max-w-2xl rounded-sm bg-white/85 p-2 text-lg font-semibold text-muted-foreground"
+            data-motion
+            style="--motion-offset-y: 18px;"
           >
             Tools, devices, and services I use for development, Android testing,
             and daily workflow.
           </p>
         </div>
 
-        <div class="flex flex-wrap gap-3">
+        <div class="flex flex-wrap gap-3" data-motion-group="uses-hero-stats">
           <div
             class="font-head w-fit rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-sm font-black shadow-brutal-sm"
+            data-motion
+            style="--motion-offset-y: 18px;"
           >
             <ViewCounter pageKey="page:/uses" client:visible />
           </div>
           <div
             class="font-head flex w-fit items-center gap-2 rounded-sm border-2 border-black bg-white px-3 py-2 text-sm font-black shadow-brutal-sm"
+            data-motion
+            style="--motion-offset-y: 18px;"
           >
             <Boxes className="h-4 w-4" />
             <span>{totalItems} Items</span>
@@ -89,7 +97,11 @@ const categoryIcons = {
         </div>
       </div>
 
-      <div class="mb-10 grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div
+        id="uses-nav-motion-root"
+        class="mb-10 grid grid-cols-2 gap-3 md:grid-cols-5"
+        data-motion-group="uses-nav-grid"
+      >
         {
           uses.map((category) => {
             const Icon = categoryIcons[category.category] ?? BriefcaseBusiness
@@ -100,7 +112,9 @@ const categoryIcons = {
                   .replace(/[^a-z0-9]+/g, "-")
                   .replace(/(^-|-$)/g, "")}`}
                 data-uses-section-link
-                class="group flex flex-col gap-2 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal-sm transition-all hover:-translate-y-1 hover:bg-[#C4A1FF] hover:shadow-none"
+                data-motion
+                style="--motion-offset-y: 18px; --motion-scale: 0.98;"
+                class="group flex flex-col gap-2 rounded-xl border-[3px] border-black bg-white p-4 shadow-brutal-sm transition-all hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#C4A1FF] hover:shadow-none"
               >
                 <Icon className="h-5 w-5" />
                 <span class="font-head text-xs leading-tight font-black text-black uppercase">
@@ -125,37 +139,37 @@ const categoryIcons = {
               .replace(/(^-|-$)/g, "")
 
             return (
-              <section id={id} class="scroll-mt-28">
+              <section id={id} class="scroll-mt-28" data-uses-category>
                 <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-                  <div class="flex items-start gap-4">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-[3px] border-black bg-[#C4A1FF] shadow-brutal-sm">
+                  <div class="flex items-start gap-4" data-motion-group={`uses-${id}-header`}>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-[3px] border-black bg-[#C4A1FF] shadow-brutal-sm" data-motion style="--motion-offset-x: -20px; --motion-offset-y: 12px; --motion-scale: 0.96;">
                       <Icon className="h-6 w-6" />
                     </div>
                     <div>
-                      <h2 class="font-head text-2xl font-black tracking-tight text-black uppercase md:text-4xl">
+                      <h2 class="font-head text-2xl font-black tracking-tight text-black uppercase md:text-4xl" data-motion style="--motion-offset-x: -18px; --motion-offset-y: 12px;">
                         {category.category}
                       </h2>
-                      <p class="mt-1 max-w-2xl text-sm font-semibold text-muted-foreground md:text-base">
+                      <p class="mt-1 max-w-2xl text-sm font-semibold text-muted-foreground md:text-base" data-motion style="--motion-offset-x: -16px; --motion-offset-y: 12px;">
                         {category.description}
                       </p>
                     </div>
                   </div>
 
-                  <div class="font-head w-fit rounded-sm border-2 border-black bg-white px-3 py-1.5 text-xs font-black uppercase shadow-brutal-sm">
+                  <div class="font-head w-fit rounded-sm border-2 border-black bg-white px-3 py-1.5 text-xs font-black uppercase shadow-brutal-sm" data-motion style="--motion-offset-y: 14px; --motion-scale: 0.98;">
                     {category.items.length} items
                   </div>
                 </div>
 
-                <div class="flex flex-wrap justify-center gap-4">
+                <div class="flex flex-wrap justify-center gap-4" data-motion-group={`uses-${id}-cards`}>
                   {category.items.map((item) => (
-                    <article class="group flex min-h-[190px] w-full flex-col justify-between rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none md:w-[calc((100%_-_1rem)_/_2)] xl:w-[calc((100%_-_2rem)_/_3)]">
+                    <article data-motion style="--motion-offset-y: 22px; --motion-scale: 0.97;" class="group flex min-h-[190px] w-full flex-col justify-between rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none md:w-[calc((100%_-_1rem)_/_2)] xl:w-[calc((100%_-_2rem)_/_3)]">
                       <div>
                         <div class="mb-4 flex items-start justify-between gap-3">
                           <div class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-black bg-[#F4F4F5] shadow-brutal-sm transition-colors group-hover:bg-[#C4A1FF]">
                             <Icon className="h-5 w-5" />
                           </div>
                           {item.badge && (
-                            <span class="rounded-full border-2 border-black bg-[#E7F193] px-2.5 py-1 text-[10px] font-black uppercase shadow-brutal-sm">
+                            <span class="uses-built-badge rounded-full border-2 border-black bg-[#E7F193] px-2.5 py-1 text-[10px] font-black uppercase shadow-brutal-sm">
                               {item.badge}
                             </span>
                           )}
@@ -200,7 +214,107 @@ const categoryIcons = {
   <Footer />
 </Layout>
 
+<style>
+  .uses-built-badge {
+    animation: uses-badge-glow 2.2s ease-in-out infinite;
+  }
+
+  @keyframes uses-badge-glow {
+    0%,
+    100% {
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
+    }
+    50% {
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 1), 0 0 0 6px rgba(231, 241, 147, 0.18);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .uses-built-badge {
+      animation: none;
+    }
+  }
+</style>
+
 <script>
+  import { inView } from "motion"
+  import { bindInViewReveal, revealMotionGroupWithRotation } from "@/lib/animation/motion"
+
+  const heroRoot = document.getElementById("uses-hero-motion-root")
+  if (heroRoot && heroRoot.dataset.motionBound !== "true") {
+    heroRoot.dataset.motionBound = "true"
+
+    bindInViewReveal(heroRoot, "[data-motion-group='uses-hero-copy'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.4,
+      staggerDelay: 0.12,
+      offsetY: 16,
+    })
+
+    bindInViewReveal(heroRoot, "[data-motion-group='uses-hero-stats'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.08,
+      duration: 0.4,
+      staggerDelay: 0.12,
+      offsetY: 18,
+      scale: 0.98,
+    })
+  }
+
+  const navRoot = document.getElementById("uses-nav-motion-root")
+  if (navRoot && navRoot.dataset.motionBound !== "true") {
+    navRoot.dataset.motionBound = "true"
+
+    bindInViewReveal(navRoot, "[data-motion-group='uses-nav-grid'] [data-motion]", {
+      amount: 0.16,
+      delay: 0.08,
+      duration: 0.45,
+      staggerDelay: 0.12,
+      offsetY: 20,
+      scale: 0.98,
+    })
+  }
+
+  document.querySelectorAll("[data-uses-category]").forEach((section) => {
+    if (section.dataset.motionBound === "true") return
+    section.dataset.motionBound = "true"
+
+    const sectionId = section.getAttribute("id")
+    if (!sectionId) return
+
+    bindInViewReveal(section, `[data-motion-group='uses-${sectionId}-header'] [data-motion]`, {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.42,
+      staggerDelay: 0.12,
+      offsetX: -18,
+      offsetY: 12,
+      scale: 0.98,
+    })
+
+    const cardTargets = section.querySelectorAll(`[data-motion-group='uses-${sectionId}-cards'] [data-motion]`)
+    if (cardTargets.length) {
+      const stop = inView(
+        section,
+        () => {
+          cardTargets.forEach((target) => target.classList.add("is-visible"))
+          revealMotionGroupWithRotation(cardTargets, {
+            delay: 0.12,
+            duration: 0.45,
+            staggerDelay: 0.12,
+            offsetY: 22,
+            scale: 0.97,
+            rotation: -2,
+          })
+          stop()
+          return () => {}
+        },
+        { amount: 0.15 }
+      )
+    }
+  })
+
   const sectionLinks = document.querySelectorAll<HTMLAnchorElement>(
     "[data-uses-section-link]"
   )
