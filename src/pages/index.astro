@@ -19,8 +19,8 @@ export const prerender = true
 <Layout>
   <Navbar />
 
-  <main class="flex-1">
-    <section class="container mx-auto px-4 py-8 md:py-12" aria-labelledby="home-intro-title">
+  <main class="flex-1 pb-28 md:pb-24">
+    <section class="container mx-auto px-4 py-10 md:py-16" aria-labelledby="home-intro-title">
       <h2 id="home-intro-title" class="sr-only">Home introduction</h2>
       <div class="mb-4 flex justify-end">
         <ViewCounter pageKey="page:/" client:visible />
@@ -59,38 +59,95 @@ export const prerender = true
 
     <FeaturedProjects />
 
-    <section class="container mx-auto px-4 py-12 md:py-16" aria-labelledby="home-signals-title">
-      <div class="mb-6 max-w-2xl">
-        <p class="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+    <section id="work-signals-motion-root" class="container mx-auto px-4 py-16 md:py-24" aria-labelledby="home-signals-title">
+      <div class="mb-8 max-w-2xl" data-motion-group="work-signals-header">
+        <p class="font-head text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground" data-motion>
           Work Signals
         </p>
-        <h2 id="home-signals-title" class="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl">
+        <h2 id="home-signals-title" class="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl" data-motion style="--motion-offset-y: 16px;">
           Proof that I build consistently
         </h2>
-        <p class="mt-3 text-sm font-medium leading-relaxed text-muted-foreground md:text-base">
+        <p class="mt-3 text-sm font-medium leading-relaxed text-muted-foreground md:text-base" data-motion style="--motion-offset-y: 18px;">
           A curated snapshot of coding activity, public repository momentum, and recent commits across ongoing work.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.8fr)]">
-        <div class="min-h-[420px]">
+      <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.8fr)]" data-motion-group="work-signals-shell">
+        <div class="min-h-[420px]" data-motion style="--motion-offset-y: 20px; --motion-scale: 0.99;">
           <LatestCommitsCard client:visible />
         </div>
-        <div class="min-h-[220px] xl:min-h-[420px]">
+        <div class="min-h-[220px] xl:min-h-[420px]" data-motion style="--motion-offset-y: 24px; --motion-scale: 0.99;">
           <GitHubStats client:visible />
         </div>
       </div>
 
-      <div class="mt-6 min-h-[260px]">
+      <div class="mt-8 min-h-[260px]" data-motion-group="work-signals-support">
+        <div data-motion style="--motion-offset-y: 20px; --motion-scale: 0.99;">
         <WakaTimeCard client:visible />
+        </div>
       </div>
     </section>
 
-    <section class="container mx-auto px-4 pb-14 md:pb-20">
-      <AvailabilityCard />
+    <section id="closing-cta-motion-root" class="container mx-auto px-4 pb-20 md:pb-28">
+      <div data-motion-group="closing-cta-shell">
+        <div data-motion style="--motion-offset-y: 20px; --motion-scale: 0.99;">
+          <AvailabilityCard />
+        </div>
+      </div>
     </section>
 
   </main>
 
   <Footer />
 </Layout>
+
+<script>
+  import { bindInViewReveal } from "@/lib/animation/motion"
+
+  const workSignalsRoot = document.getElementById("work-signals-motion-root")
+
+  if (workSignalsRoot && workSignalsRoot.dataset.motionBound !== "true") {
+    workSignalsRoot.dataset.motionBound = "true"
+
+    bindInViewReveal(workSignalsRoot, "[data-motion-group='work-signals-header'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.36,
+      staggerDelay: 0.08,
+      offsetY: 14,
+    })
+
+    bindInViewReveal(workSignalsRoot, "[data-motion-group='work-signals-shell'] [data-motion]", {
+      amount: 0.16,
+      delay: 0.1,
+      duration: 0.4,
+      staggerDelay: 0.08,
+      offsetY: 20,
+      scale: 0.99,
+    })
+
+    bindInViewReveal(workSignalsRoot, "[data-motion-group='work-signals-support'] [data-motion]", {
+      amount: 0.15,
+      delay: 0.14,
+      duration: 0.42,
+      staggerDelay: 0.08,
+      offsetY: 18,
+      scale: 0.99,
+    })
+  }
+
+  const closingCtaRoot = document.getElementById("closing-cta-motion-root")
+
+  if (closingCtaRoot && closingCtaRoot.dataset.motionBound !== "true") {
+    closingCtaRoot.dataset.motionBound = "true"
+
+    bindInViewReveal(closingCtaRoot, "[data-motion-group='closing-cta-shell'] [data-motion]", {
+      amount: 0.24,
+      delay: 0.06,
+      duration: 0.42,
+      staggerDelay: 0.08,
+      offsetY: 18,
+      scale: 0.99,
+    })
+  }
+</script>

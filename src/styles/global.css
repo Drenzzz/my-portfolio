@@ -250,6 +250,22 @@
     transition-duration: var(--motion-duration-fast);
     transition-timing-function: var(--motion-ease-neo);
   }
+
+  .section-slab {
+    position: relative;
+  }
+
+  .section-slab::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -18px;
+    width: 72px;
+    height: 6px;
+    border: 2px solid var(--border);
+    background: var(--primary);
+    box-shadow: 2px 2px 0 0 var(--border);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
