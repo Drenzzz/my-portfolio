@@ -19,8 +19,22 @@ export const prerender = true
 <Layout>
   <Navbar />
 
-  <main class="flex-1 pb-28 md:pb-24">
-    <section class="container mx-auto px-4 py-10 md:py-16" aria-labelledby="home-intro-title">
+  <main class="relative flex-1 overflow-hidden bg-[#f8f9fa] pb-28 md:pb-24">
+    <div
+      class="absolute inset-0 z-0 opacity-[0.15]"
+      style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
+    >
+    </div>
+    <div
+      class="floating-circle absolute left-1/4 top-20 z-0 h-36 w-36 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-70"
+    >
+    </div>
+    <div
+      class="floating-circle absolute bottom-32 right-16 z-0 h-28 w-28 rounded-full border-[3px] border-black bg-[#E7F193] opacity-70"
+    >
+    </div>
+
+    <section class="relative z-10 container mx-auto px-4 py-10 md:py-16" aria-labelledby="home-intro-title">
       <h2 id="home-intro-title" class="sr-only">Home introduction</h2>
       <div class="mb-4 flex justify-end">
         <ViewCounter pageKey="page:/" client:visible />
@@ -151,3 +165,35 @@ export const prerender = true
     })
   }
 </script>
+
+<style>
+  .floating-circle {
+    animation: float-circle 8s ease-in-out infinite;
+  }
+
+  .floating-circle:nth-child(2) {
+    animation-delay: -2s;
+    animation-duration: 10s;
+  }
+
+  @keyframes float-circle {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-12px) translateX(4px);
+    }
+    50% {
+      transform: translateY(-6px) translateX(-6px);
+    }
+    75% {
+      transform: translateY(-16px) translateX(2px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating-circle {
+      animation: none;
+    }
+  }
+</style>

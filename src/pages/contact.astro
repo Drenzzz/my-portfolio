@@ -2,9 +2,9 @@
 import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
-import { ViewCounter } from "@/components/islands/ViewCounter"
 import { ContactForm } from "@/components/contact/ContactForm"
-import { ArrowUpRight, Mail } from "lucide-react"
+import ContactHeroSection from "@/components/contact/ContactHeroSection.astro"
+import ClosingCTASection from "@/components/contact/ClosingCTASection.astro"
 
 export const prerender = true
 
@@ -22,79 +22,54 @@ const description =
       style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
     >
     </div>
+    <div
+      class="floating-circle absolute top-28 left-10 z-0 h-32 w-32 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-70"
+    >
+    </div>
+    <div
+      class="floating-circle absolute bottom-40 right-14 z-0 h-24 w-24 rounded-full border-[3px] border-black bg-[#E7F193] opacity-70"
+    >
+    </div>
     <div class="relative z-10 container mx-auto px-4 py-12 md:py-20">
-      <div
-        class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
-      >
-        <div>
-          <div
-            class="inline-block -rotate-2 border-4 border-black bg-white px-6 py-2 shadow-brutal transition-transform hover:rotate-0"
-          >
-            <h1
-              class="font-head text-4xl font-black tracking-tight text-black uppercase md:text-6xl"
-            >
-              Contact
-            </h1>
-          </div>
-          <p
-            class="mt-5 max-w-2xl rounded-sm bg-white/85 p-2 text-lg font-semibold text-muted-foreground"
-          >
-            Projects, freelance work, internships, or collaboration ideas are
-            always welcome.
-          </p>
-        </div>
+      <ContactHeroSection />
 
-        <div
-          class="font-head w-fit rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-sm font-black shadow-brutal-sm"
-        >
-          <ViewCounter pageKey="page:/contact" client:visible />
-        </div>
-      </div>
+      <ContactForm client:load />
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <ContactForm client:load />
-
-        <aside>
-          <section
-            class="rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal md:p-6"
-          >
-            <div class="mb-5 flex items-center gap-3">
-              <div
-                class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] shadow-brutal-sm"
-              >
-                <Mail className="h-5 w-5" />
-              </div>
-              <div>
-                <p
-                  class="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase"
-                >
-                  Direct Email
-                </p>
-                <h2 class="font-head text-2xl font-black text-black uppercase">
-                  contact@drenzzz.dev
-                </h2>
-              </div>
-            </div>
-
-            <p
-              class="text-sm leading-relaxed font-semibold text-muted-foreground"
-            >
-              Prefer email or social DMs? You can also reach me directly through
-              the links here.
-            </p>
-
-            <a
-              href="mailto:contact@drenzzz.dev"
-              class="mt-5 inline-flex items-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-4 py-3 text-xs font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-            >
-              Email Me Directly
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </section>
-        </aside>
-      </div>
+      <ClosingCTASection />
     </div>
   </main>
 
   <Footer />
+
+  <style>
+    .floating-circle {
+      animation: float-circle 8s ease-in-out infinite;
+    }
+
+    .floating-circle:nth-child(2) {
+      animation-delay: -2s;
+      animation-duration: 10s;
+    }
+
+    @keyframes float-circle {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+      }
+      25% {
+        transform: translateY(-12px) translateX(4px);
+      }
+      50% {
+        transform: translateY(-6px) translateX(-6px);
+      }
+      75% {
+        transform: translateY(-16px) translateX(2px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .floating-circle {
+        animation: none;
+      }
+    }
+  </style>
 </Layout>

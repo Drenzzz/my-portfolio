@@ -30,8 +30,22 @@ const totalTags = new Set(sortedProjects.flatMap((project) => project.data.tags)
 <Layout title={title} description={description}>
   <Navbar />
 
-  <main class="flex-1 bg-[#f8f9fa]">
-    <section class="container mx-auto px-4 py-12 md:py-20">
+  <main class="relative flex-1 overflow-hidden bg-[#f8f9fa]">
+    <div
+      class="absolute inset-0 z-0 opacity-[0.15]"
+      style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"
+    >
+    </div>
+    <div
+      class="floating-circle absolute right-12 top-1/3 z-0 h-40 w-40 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-70"
+    >
+    </div>
+    <div
+      class="floating-circle absolute bottom-20 left-1/3 z-0 h-28 w-28 rounded-full border-[3px] border-black bg-[#E7F193] opacity-70"
+    >
+    </div>
+
+    <section class="relative z-10 container mx-auto px-4 py-12 md:py-20">
       <div id="projects-hero-motion-root" class="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
       <div data-motion-group="projects-hero-copy">
         <div
@@ -98,3 +112,35 @@ const totalTags = new Set(sortedProjects.flatMap((project) => project.data.tags)
     })
   }
 </script>
+
+<style>
+  .floating-circle {
+    animation: float-circle 8s ease-in-out infinite;
+  }
+
+  .floating-circle:nth-child(2) {
+    animation-delay: -2s;
+    animation-duration: 10s;
+  }
+
+  @keyframes float-circle {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-12px) translateX(4px);
+    }
+    50% {
+      transform: translateY(-6px) translateX(-6px);
+    }
+    75% {
+      transform: translateY(-16px) translateX(2px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating-circle {
+      animation: none;
+    }
+  }
+</style>

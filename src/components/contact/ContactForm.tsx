@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { useState } from "react"
 import { Loader2, Send } from "lucide-react"
 import { Select } from "@/components/retroui/Select"
@@ -8,6 +9,7 @@ import {
   contactSubjectOptions,
   type ContactFormValues,
 } from "@/lib/contact"
+import { revealMotionGroupWithRotation } from "@/lib/animation/motion"
 
 const initialValues: ContactFormValues = {
   name: "",
@@ -22,6 +24,24 @@ export function ContactForm() {
     "idle" | "loading" | "success" | "error"
   >("idle")
   const [feedback, setFeedback] = useState<string | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const targets = section.querySelectorAll(".motion-target")
+    if (!targets.length) return
+
+    revealMotionGroupWithRotation(targets, {
+      delay: 0,
+      duration: 0.5,
+      staggerDelay: 0.1,
+      offsetY: 22,
+      scale: 0.96,
+      rotation: -2,
+    })
+  }, [])
 
   const handleChange = (
     field: keyof ContactFormValues,
@@ -75,8 +95,8 @@ export function ContactForm() {
   }
 
   return (
-    <section className="rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal md:p-6">
-      <div className="mb-5">
+    <section ref={sectionRef} className="motion-target rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal md:p-6">
+      <div className="mb-5 motion-target">
         <p className="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase">
           Send a Message
         </p>
@@ -90,7 +110,7 @@ export function ContactForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="grid gap-4">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="motion-target grid gap-4 md:grid-cols-2">
           <label className="grid gap-2">
             <span className="font-head text-xs font-black tracking-wide text-black uppercase">
               Name
@@ -123,7 +143,7 @@ export function ContactForm() {
           </label>
         </div>
 
-        <div className="grid gap-2">
+        <div className="motion-target grid gap-2">
           <span className="font-head text-xs font-black tracking-wide text-black uppercase">
             Subject
           </span>
@@ -155,7 +175,7 @@ export function ContactForm() {
           </Select>
         </div>
 
-        <label className="grid gap-2">
+        <label className="motion-target grid gap-2">
           <span className="font-head text-xs font-black tracking-wide text-black uppercase">
             Message
           </span>
@@ -181,7 +201,7 @@ export function ContactForm() {
           </p>
         )}
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="motion-target flex items-center justify-between gap-4">
           <span className="text-xs font-bold text-muted-foreground uppercase">
             Replies usually go through email.
           </span>

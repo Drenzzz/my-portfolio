@@ -44,11 +44,11 @@ const categoryIcons = {
     >
     </div>
     <div
-      class="absolute top-24 right-10 z-0 h-36 w-36 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-80"
+      class="floating-circle absolute top-24 right-10 z-0 h-36 w-36 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-70"
     >
     </div>
     <div
-      class="absolute top-[34rem] left-8 z-0 h-24 w-24 rounded-full border-[3px] border-black bg-[#E7F193] opacity-80"
+      class="floating-circle absolute top-[34rem] left-8 z-0 h-24 w-24 rounded-full border-[3px] border-black bg-[#E7F193] opacity-70"
     >
     </div>
 
@@ -69,7 +69,7 @@ const categoryIcons = {
             </h1>
           </div>
           <p
-            class="mt-5 max-w-2xl rounded-sm bg-white/85 p-2 text-lg font-semibold text-muted-foreground"
+            class="mt-5 max-w-2xl rounded-sm p-2 text-lg font-semibold text-muted-foreground"
             data-motion
             style="--motion-offset-y: 18px;"
           >
@@ -231,6 +231,36 @@ const categoryIcons = {
 
   @media (prefers-reduced-motion: reduce) {
     .uses-built-badge {
+      animation: none;
+    }
+  }
+
+  .floating-circle {
+    animation: float-circle 8s ease-in-out infinite;
+  }
+
+  .floating-circle:nth-child(2) {
+    animation-delay: -2s;
+    animation-duration: 10s;
+  }
+
+  @keyframes float-circle {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-12px) translateX(4px);
+    }
+    50% {
+      transform: translateY(-6px) translateX(-6px);
+    }
+    75% {
+      transform: translateY(-16px) translateX(2px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating-circle {
       animation: none;
     }
   }

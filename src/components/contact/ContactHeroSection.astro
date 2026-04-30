@@ -1,0 +1,69 @@
+---
+import { ViewCounter } from "@/components/islands/ViewCounter"
+import { Mail } from "lucide-react"
+
+export interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = "Contact",
+  description = "Projects, freelance work, internships, or collaboration ideas are always welcome.",
+} = Astro.props
+---
+
+<section class="relative mb-12 md:mb-16">
+  <div
+    class="inline-block -rotate-2 border-4 border-black bg-white px-6 py-2 shadow-brutal transition-transform hover:rotate-0 motion-target"
+  >
+    <h1
+      class="font-head text-4xl font-black tracking-tight text-black uppercase md:text-6xl"
+    >
+      {title}
+    </h1>
+  </div>
+
+  <p
+    class="mt-5 max-w-2xl rounded-sm  p-2 text-lg font-semibold text-muted-foreground motion-target"
+  >
+    {description}
+  </p>
+
+  <div
+    class="mt-6 flex flex-wrap items-center gap-4 motion-target"
+  >
+    <div
+      class="font-head w-fit rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-sm font-black shadow-brutal-sm"
+    >
+      <ViewCounter pageKey="page:/contact" client:visible />
+    </div>
+
+    <a
+      href="mailto:contact@drenzzz.dev"
+      class="inline-flex items-center gap-2 rounded-sm border-2 border-black bg-[#E7F193] px-4 py-2 text-xs font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+    >
+      <Mail class="h-4 w-4" />
+      contact@drenzzz.dev
+    </a>
+  </div>
+</section>
+
+<script>
+  import { revealMotionGroupWithRotation } from "@/lib/animation/motion"
+
+  const section = document.querySelector("section")
+  if (section) {
+    const targets = section.querySelectorAll(".motion-target")
+    if (targets.length) {
+      revealMotionGroupWithRotation(targets, {
+        delay: 0,
+        duration: 0.5,
+        staggerDelay: 0.12,
+        offsetY: 24,
+        scale: 0.95,
+        rotation: -3,
+      })
+    }
+  }
+</script>
