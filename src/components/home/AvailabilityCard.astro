@@ -1,79 +1,39 @@
 ---
-import { ArrowUpRight, BriefcaseBusiness, Clock3, Radio } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { availability } from "@/data/availability"
 ---
 
 <article
-  class="group relative flex h-full min-h-[220px] flex-col justify-between overflow-hidden rounded-xl border-[3px] border-black bg-white p-5 shadow-brutal transition-all hover:-translate-y-1 hover:shadow-none"
+  class="relative overflow-hidden rounded-[28px] border-[3px] border-black bg-white p-6 shadow-brutal md:p-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-8"
 >
-  <div
-    class="absolute top-0 right-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full border-[3px] border-black bg-[#C4A1FF] opacity-80"
-  >
-  </div>
-  <div
-    class="pointer-events-none absolute inset-0 opacity-[0.06]"
-    style="background-image: radial-gradient(#000 1.5px, transparent 1.5px); background-size: 16px 16px;"
-  >
-  </div>
-
-  <div class="relative z-10 flex items-start justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div
-        class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-black bg-[#C4A1FF] text-black shadow-brutal-sm"
-      >
-        <BriefcaseBusiness className="h-5 w-5" />
-      </div>
-      <div>
-        <p
-          class="font-head text-[11px] font-black tracking-widest text-muted-foreground uppercase"
-        >
-          Availability
-        </p>
-        <h3 class="font-head text-xl leading-tight font-black text-black">
-          {availability.status}
-        </h3>
-      </div>
-    </div>
-
-    <span
-      class="inline-flex items-center gap-1.5 rounded-full border-2 border-black bg-[#E7F193] px-3 py-1 text-[10px] font-black uppercase shadow-brutal-sm"
+  <div>
+    <h3
+      class="font-head text-3xl font-black text-black uppercase md:text-4xl lg:text-5xl"
     >
-      <Radio className="h-3 w-3" />
-      Live
-    </span>
+      {availability.status}
+    </h3>
+    <p
+      class="mt-3 max-w-xl text-sm leading-relaxed font-medium text-muted-foreground md:text-base"
+    >
+      {availability.description}
+    </p>
   </div>
 
-  <div class="relative z-10 mt-5 space-y-4">
-    <div
-      class="rounded-xl border-2 border-black bg-[#F4F4F5] p-4 shadow-brutal-sm"
+  <div class="mt-6 flex flex-col gap-3 lg:mt-0 lg:items-end">
+    <a
+      href={availability.ctaHref}
+      class="transition-neo-fast inline-flex w-fit items-center justify-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-6 py-3 text-sm font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
     >
-      <p class="font-head text-sm font-black text-black uppercase">
-        {availability.label}
-      </p>
-      <p
-        class="mt-2 text-sm leading-relaxed font-semibold text-muted-foreground"
-      >
-        {availability.description}
-      </p>
-    </div>
+      {availability.ctaLabel}
+      <ArrowUpRight className="h-4 w-4" />
+    </a>
 
-    <div
-      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:flex-col lg:items-stretch xl:flex-row xl:items-center"
+    <a
+      href="/contact"
+      class="transition-neo-fast inline-flex w-fit items-center justify-center gap-2 rounded-sm border-2 border-black bg-white px-6 py-3 text-sm font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
     >
-      <p
-        class="inline-flex items-center gap-2 text-xs font-black text-muted-foreground uppercase"
-      >
-        <Clock3 className="h-4 w-4 text-black" />
-        {availability.responseTime}
-      </p>
-
-      <a
-        href={availability.ctaHref}
-        class="inline-flex items-center justify-center gap-2 rounded-sm border-2 border-black bg-[#C4A1FF] px-4 py-2 text-xs font-black text-black uppercase shadow-brutal-sm transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-      >
-        {availability.ctaLabel}
-        <ArrowUpRight className="h-4 w-4" />
-      </a>
-    </div>
+      View Contact
+      <ArrowUpRight className="h-4 w-4" />
+    </a>
   </div>
 </article>

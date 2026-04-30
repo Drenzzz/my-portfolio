@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer.astro"
 import HeroSection from "@/components/home/HeroSection.astro"
 import CapabilityBoard from "@/components/home/CapabilityBoard.astro"
 import FeaturedProjects from "@/components/home/FeaturedProjects.astro"
+import AvailabilityCard from "@/components/home/AvailabilityCard.astro"
 import { DiscordStatus } from "@/components/home/DiscordStatus"
 import { GitHubStats } from "@/components/home/GitHubStats"
 import { LatestCommitsCard } from "@/components/home/LatestCommitsCard"
@@ -83,6 +84,10 @@ export const prerender = true
       <div class="mt-6 min-h-[260px]">
         <WakaTimeCard client:visible />
       </div>
+    </section>
+
+    <section class="container mx-auto px-4 pb-14 md:pb-20">
+      <AvailabilityCard />
     </section>
 
   </main>
