@@ -3,22 +3,64 @@ import { getCollection } from "astro:content"
 import { SearchX } from "lucide-react"
 import ProjectCard from "@/components/project/ProjectCard.astro"
 
+interface Props {
+  projects?: Awaited<ReturnType<typeof getCollection<"projects">>>
+}
+
 const allProjects = await getCollection("projects")
+const { projects: inputProjects } = Astro.props as Props
 // Sort projects by explicit portfolio priority, then featured, then newest.
-const projects = allProjects.sort((a, b) => {
+const sortedProjects = [...allProjects].sort((a, b) => {
   if (a.data.order !== b.data.order) return a.data.order - b.data.order;
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
 });
+
+const projects = inputProjects ?? sortedProjects
 ---
 
-<div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div id="project-grid-motion-root">
+  <div id="project-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" data-motion-group="project-grid-cards">
   {projects.map((project) => (
     <ProjectCard project={project} />
   ))}
+  </div>
+
+  <p id="no-results" class="hidden py-16 text-center text-lg font-medium text-muted-foreground flex items-center justify-center gap-2">
+    No projects match the selected filter. <SearchX className="w-5 h-5 text-muted-foreground" />
+  </p>
 </div>
 
-<p id="no-results" class="hidden text-center py-16 text-lg text-muted-foreground font-medium flex items-center justify-center gap-2">
-  No projects match the selected filter. <SearchX className="w-5 h-5 text-muted-foreground" />
-</p>
+<script>
+  import { inView } from "motion"
+  import { revealMotionGroupWithRotation } from "@/lib/animation/motion"
+
+  const root = document.getElementById("project-grid-motion-root")
+
+  if (root && root.dataset.motionBound !== "true") {
+    root.dataset.motionBound = "true"
+
+    const targets = root.querySelectorAll("[data-project-card]")
+
+    if (targets.length) {
+      const stop = inView(
+        root,
+        () => {
+          targets.forEach((target) => target.classList.add("is-visible"))
+          revealMotionGroupWithRotation(targets, {
+            delay: 0.12,
+            duration: 0.45,
+            staggerDelay: 0.12,
+            offsetY: 22,
+            scale: 0.97,
+            rotation: -2,
+          })
+          stop()
+          return () => {}
+        },
+        { amount: 0.12 }
+      )
+    }
+  }
+</script>

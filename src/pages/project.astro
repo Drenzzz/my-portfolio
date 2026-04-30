@@ -3,8 +3,10 @@ import Layout from "@/layouts/main.astro"
 import Navbar from "@/components/layout/Navbar.astro"
 import Footer from "@/components/layout/Footer.astro"
 import ProjectGrid from "@/components/project/ProjectGrid.astro"
+import ProjectSpotlight from "@/components/project/ProjectSpotlight.astro"
 import { getCollection } from "astro:content"
 import { ViewCounter } from "@/components/islands/ViewCounter"
+import { Boxes, Sparkles } from "lucide-react"
 
 export const prerender = true
 
@@ -12,32 +14,87 @@ const title = "Projects | Drenzzz"
 const description = "Explore my portfolio of web applications, backend systems, and open-source contributions."
 
 const allProjects = await getCollection("projects")
-const totalProjects = allProjects.length
+const sortedProjects = [...allProjects].sort((a, b) => {
+  if (a.data.order !== b.data.order) return a.data.order - b.data.order
+  if (a.data.featured && !b.data.featured) return -1
+  if (!a.data.featured && b.data.featured) return 1
+  return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+})
+
+const featuredProjects = sortedProjects.filter((project) => project.data.featured).slice(0, 3)
+const nonFeaturedProjects = sortedProjects.filter((project) => !featuredProjects.includes(project))
+const totalProjects = sortedProjects.length
+const totalTags = new Set(sortedProjects.flatMap((project) => project.data.tags)).size
 ---
 
 <Layout title={title} description={description}>
   <Navbar />
 
-  <main class="flex-1 container mx-auto py-12 md:py-20 px-4">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-      <div>
+  <main class="flex-1 bg-[#f8f9fa]">
+    <section class="container mx-auto px-4 py-12 md:py-20">
+      <div id="projects-hero-motion-root" class="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+      <div data-motion-group="projects-hero-copy">
+        <div
+          class="inline-block -rotate-2 border-4 border-black bg-white px-6 py-2 shadow-brutal transition-transform hover:rotate-0"
+          data-motion
+        >
         <h1 class="font-head text-4xl md:text-6xl font-black uppercase tracking-tight">
           Projects
         </h1>
-        <p class="text-lg text-muted-foreground font-medium max-w-2xl mt-2">
+        </div>
+        <p class="mt-5 max-w-2xl rounded-sm p-2 text-lg font-medium text-muted-foreground" data-motion style="--motion-offset-y: 16px;">
           A collection of things I've built.
         </p>
       </div>
-      <div class="shrink-0 text-sm font-bold font-head px-3 py-1.5 border-2 border-black bg-[#C4A1FF] rounded shadow-brutal-sm">
+
+      <div class="flex flex-wrap gap-3" data-motion-group="projects-hero-stats">
+        <div class="font-head w-fit rounded-sm border-2 border-black bg-[#C4A1FF] px-3 py-2 text-sm font-black shadow-brutal-sm" data-motion style="--motion-offset-y: 18px;">
         <div class="flex items-center gap-2">
           <span>{totalProjects} Projects</span>
           <ViewCounter pageKey="page:/project" client:visible />
         </div>
       </div>
+      </div>
     </div>
 
-    <ProjectGrid />
+    <ProjectSpotlight projects={featuredProjects} />
+
+    <div class="mb-7 flex items-center justify-between gap-4">
+      <div>
+        <h2 class="mt-2 font-head text-3xl font-black uppercase tracking-tight md:text-4xl">More Builds</h2>
+      </div>
+    </div>
+
+    <ProjectGrid projects={nonFeaturedProjects} />
+    </section>
   </main>
 
   <Footer />
 </Layout>
+
+<script>
+  import { bindInViewReveal } from "@/lib/animation/motion"
+
+  const heroRoot = document.getElementById("projects-hero-motion-root")
+
+  if (heroRoot && heroRoot.dataset.motionBound !== "true") {
+    heroRoot.dataset.motionBound = "true"
+
+    bindInViewReveal(heroRoot, "[data-motion-group='projects-hero-copy'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.04,
+      duration: 0.4,
+      staggerDelay: 0.12,
+      offsetY: 16,
+    })
+
+    bindInViewReveal(heroRoot, "[data-motion-group='projects-hero-stats'] [data-motion]", {
+      amount: 0.2,
+      delay: 0.08,
+      duration: 0.4,
+      staggerDelay: 0.12,
+      offsetY: 18,
+      scale: 0.98,
+    })
+  }
+</script>
